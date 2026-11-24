@@ -66,9 +66,11 @@ func buildWorkerPrompt(t *Ticket) string {
 	}
 	b.WriteString("\n## 规则\n\n")
 	b.WriteString("- 遇到无法遵守的约束、需要用户决策的阻塞问题时，立即停止并在最后输出一行 `NEED_INPUT: <你的问题>`。\n")
+	b.WriteString("- 如果你用 create_subtask 拆分了子任务，且需要子任务结果才能继续：完成你自己能做的部分后，输出一行 `WAITING_FOR_CHILDREN` 然后结束。系统会在子任务全部完成后，把结果交还给你继续。\n")
 	b.WriteString("- 完成后输出一行 `DONE: <一句话总结>`，并在正文中说明每条验收标准的达成情况。\n")
 	b.WriteString("- 遇到无法恢复的失败，输出一行 `FAILED: <原因>`。\n")
 	b.WriteString("- 不要编造验收结果；做不到就如实报告。\n")
+	b.WriteString("- 重要：create_subtask 创建的是异步子任务，你在当前这轮拿不到它的结果。需要结果就输出 WAITING_FOR_CHILDREN，不要凭空填写子任务的答案。\n")
 	return b.String()
 }
 
@@ -153,6 +155,12 @@ func (d *Daemon) spawnPiWorkerWithPrompt(t *Ticket, prompt string) (*exec.Cmd, e
 	cmd := exec.Command("pi", args...)
 	cmd.Dir = workDir
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+	// Inject worker identity so the create_subtask tool knows its parent + depth
+	cmd.Env = append(os.Environ(),
+		"SUPER_TICKET_ID="+t.ID,
+		fmt.Sprintf("SUPER_TICKET_DEPTH=%d", t.Depth),
+		"SUPER_SOCK="+filepath.Join(d.homeDir, ".agent", "sock"),
+	)
 
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
@@ -249,6 +257,8 @@ func classifyOutcome(text string) string {
 		return "need_input"
 	case strings.Contains(upper, "FAILED:"):
 		return "failed"
+	case strings.Contains(upper, "WAITING_FOR_CHILDREN"):
+		return "wait_children"
 	case strings.Contains(upper, "DONE:"):
 		return "done"
 	default:
@@ -277,6 +287,9 @@ func extractText(content json.RawMessage) string {
 
 // finishWorker applies the worker outcome to the state machine
 func (d *Daemon) finishWorker(t *Ticket, res workerResult) {
+	// Always release resources when the worker exits, regardless of outcome.
+	defer d.rm.Release(t.ID)
+
 	ticket, err := d.sm.GetTicket(t.ID)
 	if err != nil {
 		return
@@ -294,7 +307,30 @@ func (d *Daemon) finishWorker(t *Ticket, res workerResult) {
 	})
 
 	switch res.outcome {
+	case "wait_children":
+		// Parent explicitly delegated and is waiting for children results.
+		// Mark it so the watchdog does NOT treat the exited worker as dead.
+		d.sm.SetWaitingChildren(t.ID, true)
+		d.sm.SetWorkerPID(t.ID, 0)
+		d.log("worker %s waiting for children to complete", t.ID)
+		d.ledger.Append("note", t.ID, Actor{Actor: "agentd"}, map[string]interface{}{
+			"text": "parent waiting for children",
+		})
+		return
+
 	case "done":
+		// If this worker spawned subtasks that are still running but it did NOT
+		// explicitly wait, it finished its own part. Wait for children before
+		// marking done so results can be folded in on resume.
+		if d.sm.HasUnfinishedChildren(t.ID) {
+			d.sm.SetWaitingChildren(t.ID, true)
+			d.sm.SetWorkerPID(t.ID, 0)
+			d.log("worker %s finished its part but has unfinished children; waiting", t.ID)
+			d.ledger.Append("note", t.ID, Actor{Actor: "agentd"}, map[string]interface{}{
+				"text": "parent finished own work, waiting for children",
+			})
+			return
+		}
 		d.sm.TransitionTicket(t.ID, StateDone, "worker_completed", Actor{Actor: "worker", PID: ticket.WorkerPID})
 		d.notify(t, "quiet", "done", fmt.Sprintf("✅ %s 完成", t.ID))
 		d.log("worker done for %s (cost=$%.4f model=%s)", t.ID, res.costUSD, res.model)

@@ -11,6 +11,13 @@ import (
 type Config struct {
 	Model ConfigModel  `yaml:"model"`
 	Rules []string     `yaml:"rules"` // L2 project rule files to inject into workers
+
+	// WaitingTimeoutMinutes is how long a ticket may sit in waiting_user
+	// before it is auto-failed. 0 = default 30.
+	WaitingTimeoutMinutes int `yaml:"waiting_timeout_minutes"`
+	// MaxAttempts is how many times a worker may be retried after death
+	// before the ticket is failed. 0 = default 3.
+	MaxAttempts int `yaml:"max_attempts"`
 }
 
 // ConfigModel holds model defaults

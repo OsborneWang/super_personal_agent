@@ -96,7 +96,10 @@ Worker 死亡 / agentd 被 kill -9：重启后 reconcile 自动发现孤儿，�
 - ✅ **状态机强制**：非法迁移被拒绝（closed 是终态）
 - ✅ **真实 Worker 端到端**：写文件、执行命令、逐条自检验收、输出控制标记
 - ✅ **need_input 闭环**：Worker 停下问 → 你回答 → 同 session-id 续跑（继承上下文）
+- ✅ **递归子任务**：父拆子、父等子、子继承父模型 + 独立 session-id
+- ✅ **资源互斥**：同 key 资源独占，冲突任务排队等待，释放后自动接续
 - ✅ **并发调度**：多个真实 Worker 并行执行
+- ✅ **取消回收**：cancel 时 SIGTERM→SIGKILL 进程组 + 释放资源租约
 - ✅ **诚实性**：Worker 遇到无法满足的前提会拒绝编造，如实报告
 - ✅ **账本完整**：append-only，零 torn write，可 grep、可审计
 
@@ -140,11 +143,17 @@ Router 扩展（pi）：`~/.pi/agent/extensions/super-agent-router/index.ts`
 ## 还没做（里程碑路线）
 
 - [ ] **M2 完整化**：Router 的 `/tickets` 命令、草稿持久化（draft.opened/amended）
-- [ ] **资源互斥**：`resources` 字段的同 key 独占（worktree/端口），目前在调度器里是占位
-- [ ] **三层递归的完整测试**：Worker 拆子 Ticket 的递归执行 + 三层硬限制触发 waiting_user
-- [ ] **waiting_user 超时**：超时自动 failed
-- [ ] **资源回收**：closed 时两阶段回收 worktree/端口/进程组
+- [ ] **waiting_user 超时**：已实现但超时阈值需按使用习惯调优（默认 30 分钟，`config.yaml` 的 `waiting_timeout_minutes`）
 - [ ] **通知分级调优**：基于 `notification.sent` 事件统计打扰频率
-- [ ] **子 agent**：Worker 用 pi subagent 扩展拆子任务（继承父模型 + session-id）
+- [ ] **资源回收的 worktree/端口实体清理**：目前回收的是进程组和资源租约；真实的 `git worktree remove` / 端口释放由适配器实现
 
-当前 M0/M1 完整可用，M3/M4 主流程已验证。
+## 已完成并验证
+
+- [x] **资源互斥**：`resources` 同 key 独占，调度器真实执行锁，冲突排队
+- [x] **递归子任务**：Worker 通过 `create_subtask` 拆子任务，父等子，子继承父模型 + 独立 session-id
+- [x] **三层递归硬限制**：到达上限触发 waiting_user 人工介入
+- [x] **waiting_user 超时**：超时自动 failed 并通知
+- [x] **最大尝试次数**：worker 死亡重试超限自动 failed
+- [x] **资源回收**：cancel/close 时两阶段回收（SIGTERM→SIGKILL 进程组 + 释放租约）
+
+当前 M0–M5 主流程全部验证通过。

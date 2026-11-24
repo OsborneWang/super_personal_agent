@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"sync"
+	"time"
 )
 
 // State represents the ticket state
@@ -63,8 +64,19 @@ type Ticket struct {
 	MaxAttempts int                    `json:"max_attempts"`
 	Model       *ModelSpec             `json:"model,omitempty"`
 	Rules       []string               `json:"rules,omitempty"`
+	Resources   []ResourceReq          `json:"resources,omitempty"`
+	WaitingSince string                `json:"waiting_since,omitempty"`
+	WaitingChildren bool               `json:"waiting_children,omitempty"`
 	CreatedAt   string                 `json:"created_at"`
 	UpdatedAt   string                 `json:"updated_at"`
+}
+
+// ResourceReq declares a resource the ticket needs to run.
+// Kind and Key are opaque to the kernel; Mode is exclusive|shared.
+type ResourceReq struct {
+	Kind string `json:"kind"`           // worktree | port | gpu | ...
+	Key  string `json:"key"`            // e.g. <project>:worktree:<big-change>
+	Mode string `json:"mode,omitempty"` // exclusive (default) | shared
 }
 
 // ModelSpec holds model selection for a ticket
@@ -156,7 +168,15 @@ func (sm *StateMachine) applyStateChanged(event *Event) error {
 		return fmt.Errorf("invalid transition %s -> %s", data.From, data.To)
 	}
 
+	if data.To == StateRunning && data.Reason == "resumed_after_children" {
+		ticket.WaitingChildren = false
+	}
 	ticket.State = data.To
+	if data.To == StateWaitingUser {
+		ticket.WaitingSince = event.At.Format("2006-01-02T15:04:05Z07:00")
+	} else {
+		ticket.WaitingSince = ""
+	}
 	return nil
 }
 
@@ -189,6 +209,15 @@ func (sm *StateMachine) SetWorkerPID(ticketID string, pid int) {
 	}
 }
 
+// SetWaitingChildren marks a ticket as waiting for its children to finish
+func (sm *StateMachine) SetWaitingChildren(ticketID string, waiting bool) {
+	sm.mu.Lock()
+	defer sm.mu.Unlock()
+	if t, ok := sm.tickets[ticketID]; ok {
+		t.WaitingChildren = waiting
+	}
+}
+
 // TransitionTicket attempts to transition a ticket to a new state
 func (sm *StateMachine) TransitionTicket(ticketID string, to State, reason string, by Actor) error {
 	sm.mu.Lock()
@@ -214,6 +243,11 @@ func (sm *StateMachine) TransitionTicket(ticketID string, to State, reason strin
 		return fmt.Errorf("record state change: %w", err)
 	}
 
+	if to == StateWaitingUser {
+		ticket.WaitingSince = time.Now().Format("2006-01-02T15:04:05Z07:00")
+	} else {
+		ticket.WaitingSince = ""
+	}
 	ticket.State = to
 	return nil
 }
@@ -242,6 +276,29 @@ func (sm *StateMachine) ListTickets() []*Ticket {
 	}
 
 	return tickets
+}
+
+// ChildrenOf returns all direct child tickets of a parent
+func (sm *StateMachine) ChildrenOf(parentID string) []*Ticket {
+	sm.mu.RLock()
+	defer sm.mu.RUnlock()
+	var children []*Ticket
+	for _, t := range sm.tickets {
+		if t.ParentID == parentID {
+			children = append(children, t)
+		}
+	}
+	return children
+}
+
+// HasUnfinishedChildren reports whether a ticket has children not yet done/closed
+func (sm *StateMachine) HasUnfinishedChildren(parentID string) bool {
+	for _, c := range sm.ChildrenOf(parentID) {
+		if c.State != StateDone && c.State != StateClosed && c.State != StateFailed {
+			return true
+		}
+	}
+	return false
 }
 
 // Helper function for JSON unmarshaling

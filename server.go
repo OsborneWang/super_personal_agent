@@ -150,6 +150,13 @@ func (s *Server) cmdAdmit(req *Request) Response {
 		return Response{Success: false, Error: err.Error()}
 	}
 
+	// Recursion: if this is a subtask, enforce parent + depth rules
+	if ticket.ParentID != "" {
+		if err := s.daemon.validateSubtask(&ticket); err != nil {
+			return Response{Success: false, Error: err.Error()}
+		}
+	}
+
 	if err := s.daemon.AdmitTicket(&ticket); err != nil {
 		return Response{Success: false, Error: err.Error()}
 	}
@@ -216,8 +223,7 @@ func (s *Server) cmdCancel(req *Request) Response {
 	if id == "" {
 		return Response{Success: false, Error: "missing id"}
 	}
-	err := s.daemon.sm.TransitionTicket(id, StateClosed, "user_cancel", Actor{Actor: "user", Who: "user:<name>"})
-	if err != nil {
+	if err := s.daemon.CancelTicket(id); err != nil {
 		return Response{Success: false, Error: err.Error()}
 	}
 	return Response{Success: true}
