@@ -18,21 +18,34 @@ cd /path/to/super_personal_agent
 go build -o agent .
 ```
 
-### 2. 启动后台进程
+### 2. 启动后台进程（systemd，推荐）
 
 ```bash
-./agent daemon
+./agent daemon start
 ```
 
-`daemon` 是**常驻后台进程**，启动后就挂在那儿调度，**本身没有交互**（这是设计如此，不是卡死）。看到这个提示就说明它活着：
+第一次运行会自动安装一个 systemd **用户服务**（`super-agent.service`）并启动。之后它就常驻后台、由 systemd 托管，**你不用再开窗口守着它**：
 
+- **崩溃自动拉起**：kill -9 之后 systemd 会 3 秒内重启它（`Restart=on-failure`）
+- **登录自启**：`./agent daemon enable` 后，每次登录自动启动
+
+常用管理命令：
+
+```bash
+./agent daemon status    # 查看运行状态
+./agent daemon logs -f   # 跟踪日志
+./agent daemon stop      # 停止
+./agent daemon restart   # 重启
+./agent daemon enable    # 登录自启
+./agent daemon           # 前台运行（调试用，Ctrl+C 停）
+./agent daemon uninstall # 卸载服务
 ```
-[08:32:27] agentd started, socket=/home/<user>/.agent/sock
-```
 
-> **注意**：这个窗口要一直开着。想后台跑可以用 `./agent daemon &` 或 nohup，停掉就 `Ctrl+C` 或 `kill` 对应进程。
+> **说明**：worker 需要执行 `pi`（一个依赖 node 的脚本），而 systemd 环境的 PATH 默认不含它。`install` 时会自动探测 `pi` 和 `node` 的实际路径注入到服务里，所以你无需手工配 PATH。
+>
+> **进阶**：如果你希望 daemon 在**完全登出**（没有任何登录会话）后也继续跑，执行一次 `loginctl enable-linger $USER`。
 
-### 3. 另开一个终端，开 pi 对话
+### 3. 开一个终端，开 pi 对话
 
 ```bash
 pi        # 开 Router 会话（会自动加载 file_ticket 工具）
@@ -89,7 +102,9 @@ rules: []           # 全局规则，所有项目的 Worker 都会注入
 
 | 命令 | 作用 |
 |---|---|
-| `agent daemon` | 启动后台进程（前台运行，Ctrl+C 停止） |
+| `agent daemon start` | 后台启动（systemd 托管，自动安装服务） |
+| `agent daemon status` / `logs [-f]` / `stop` / `restart` / `enable` | 管理 daemon 服务 |
+| `agent daemon` | 前台运行（调试，Ctrl+C 停止） |
 | `agent ls` | **看板**：所有 Ticket 状态，按项目分组 |
 | `agent show <id>` | 单张 Ticket 的细节 |
 | `agent follow <id>` | 实时盯住一张 Ticket 的状态变化 |
@@ -215,17 +230,10 @@ pi 扩展：
 
 ## 关于 daemon 的使用体验
 
-`./agent daemon` 是**前台常驻进程**，启动后没有交互输出是正常的（它在后台调度）。如果你希望它后台运行：
+`agent daemon start` 之后 daemon 由 systemd 托管，**没有交互输出是正常的**（它在后台调度）。
+- 看状态：`agent daemon status`
+- 看日志：`agent daemon logs -f`
+- 崩溃自愈：kill -9 后 systemd 自动拉起，且 reconcile 恢复任务状态
+- 完全登出也活着：`loginctl enable-linger $USER`
 
-```bash
-# 方式 1：shell 后台
-./agent daemon &
-
-# 方式 2：nohup（关终端也活着）
-nohup ./agent daemon > ~/.agent/daemon.log 2>&1 &
-
-# 停止
-pkill -f "agent daemon"
-```
-
-后续可以加 `agent daemon start/stop/status/logs` 子命令把这个包装起来，让你一个终端搞定。需要的话告诉我。
+你日常只需要：`agent daemon start`（一次）→ 开 pi 对话 → `agent ls` 看进度。
