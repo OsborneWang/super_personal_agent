@@ -3,33 +3,85 @@
 一个只在终端里用的个人 AI 任务指挥系统。
 你只和一个 Router 对话；它把任务写成 Ticket；Worker 执行；Worker 可以自己再拆子 Ticket 递归解决（最多三层）；一个常驻进程 `agentd` 负责调度、计时、监管、记账。
 
+**支持多项目并行**：一个全局 daemon，可在任意多个项目目录里发起任务，Worker 在对应项目目录里干活、用对应项目的规则和模型，但你能在同一个看板看到所有任务。
+
 > 设计文档：[DESIGN.md](DESIGN.md) · 架构图：[ARCHITECTURE.md](ARCHITECTURE.md)
 
 ---
 
-## 快速开始
+## 启动服务（三步）
+
+### 1. 构建
 
 ```bash
-# 1. 构建
-cd super_personal_agent
+cd /path/to/super_personal_agent
 go build -o agent .
+```
 
-# 2. （可选）配置模型与项目规则
-cat > ~/.agent/config.yaml <<'EOF'
-model:
-  router: ""        # 你用的 Router 模型（留空=pi 当前模型）
-  worker: ""        # Worker 默认模型（留空=pi 当前模型）
-  subagent: inherit # 子 agent 继承父模型
-rules: []           # L2 项目规则文件，会被注入每个 Worker 的上下文
-#  - <project>/AGENTS.md
-EOF
+### 2. 启动后台进程
 
-# 3. 启动后台进程
+```bash
 ./agent daemon
 ```
 
-启动后，Router 会话（pi）里会自动加载 `file_ticket` 工具。
-你和 Router 聊出一张草稿、确认后，任务就进入系统，Worker 自动开始执行。
+`daemon` 是**常驻后台进程**，启动后就挂在那儿调度，**本身没有交互**（这是设计如此，不是卡死）。看到这个提示就说明它活着：
+
+```
+[08:32:27] agentd started, socket=/home/<user>/.agent/sock
+```
+
+> **注意**：这个窗口要一直开着。想后台跑可以用 `./agent daemon &` 或 nohup，停掉就 `Ctrl+C` 或 `kill` 对应进程。
+
+### 3. 另开一个终端，开 pi 对话
+
+```bash
+pi        # 开 Router 会话（会自动加载 file_ticket 工具）
+```
+
+然后正常聊天：`帮我做 X`。Router 会跟你多轮确认需求、弹出草稿让你确认，确认后任务自动进入系统、Worker 在后台开跑。
+
+**监视进度**（再开一个终端，或复用）：
+
+```bash
+./agent ls          # 看板：所有任务（按项目分组）
+./agent follow <id> # 实时盯住某个任务
+```
+
+---
+
+## 多项目使用
+
+daemon 是全局唯一的，你可以在**任意多个项目目录**开 pi 发起任务。
+任务在哪个目录发起，就归属哪个项目：Worker 在那个项目目录里干活、用那个项目的规则和模型。
+
+### 项目级配置（覆盖全局）
+
+在项目目录下放 `.agent/config.yaml`：
+
+```yaml
+# <project>/.agent/config.yaml
+model:
+  worker: ""          # 这个项目 Worker 用的模型（覆盖全局）
+rules:
+  - <project>/AGENTS.md      # 项目规则，注入该项目所有 Worker
+  - <project>/MODULE-CONVENTIONS.md
+waiting_timeout_minutes: 60               # 这个项目 waiting_user 超时时间
+max_attempts: 3                            # worker 死亡重试上限
+```
+
+**优先级**：项目配置 > 全局配置（`~/.agent/config.yaml`）。标量字段（模型、超时、重试次数）项目覆盖全局；**规则（rules）是拼接**——全局和项目规则都会注入 Worker。
+
+### 全局配置（兜底）
+
+`~/.agent/config.yaml`（可选，没有也行）：
+
+```yaml
+model:
+  router: ""        # Router 模型（留空 = pi 当前模型）
+  worker: ""        # Worker 默认模型（留空 = pi 当前模型）
+  subagent: inherit # 子 agent 继承父模型
+rules: []           # 全局规则，所有项目的 Worker 都会注入
+```
 
 ---
 
@@ -38,28 +90,29 @@ EOF
 | 命令 | 作用 |
 |---|---|
 | `agent daemon` | 启动后台进程（前台运行，Ctrl+C 停止） |
-| `agent ls` | 管理视角：所有 Ticket 的状态 |
+| `agent ls` | **看板**：所有 Ticket 状态，按项目分组 |
 | `agent show <id>` | 单张 Ticket 的细节 |
 | `agent follow <id>` | 实时盯住一张 Ticket 的状态变化 |
 | `agent answer <id> <text>` | 回答 Worker 抛给你的问题 |
-| `agent cancel <id>` | 强制终止一张 Ticket |
-| `agent ping` | 健康检查 |
+| `agent cancel <id>` | 强制终止一张 Ticket（回收进程组 + 资源） |
+| `agent ping` | 健康检查（daemon 是否在跑） |
 
 ---
 
 ## 一张 Ticket 的一生
 
 ```
-你 ⇄ Router（多轮对话）
+你在某个项目目录 ⇄ Router（多轮对话）
       → 草稿确认（工具内人工门禁，模型伪造不了）
-      → file_ticket → agentd 校验 5 条硬约束
-      → pending → ready（资源可用）→ running（spawn pi worker）
-      → Worker 干活（事件流写入 trace.jsonl）
+      → file_ticket（自动带上 project = 当前目录）
+      → agentd 校验 5 条硬约束
+      → pending → ready（资源互斥检查）→ running（在项目目录 spawn worker）
+      → Worker 干活（事件流写入 <项目>/.agent/tickets/<id>/trace.jsonl）
       → 三种结局：
           done          → 通知你验收
           need_input    → 通知你 → 你 answer → 同 session-id 续跑
           failed        → 通知你
-      → 你验收 → closed（资源两阶段回收）
+      → 你验收 → closed（回收进程组 + 释放资源租约）
 ```
 
 Worker 死亡 / agentd 被 kill -9：重启后 reconcile 自动发现孤儿，转 ready 用同一 session-id 重试，不丢上下文。
@@ -82,23 +135,46 @@ Worker 死亡 / agentd 被 kill -9：重启后 reconcile 自动发现孤儿，�
 | 层 | 内容 | 内核处理 |
 |---|---|---|
 | **L1 通用内核** | goal 非空、最多三层递归、同 key 资源互斥、closed 终态 | 系统强制 |
-| **L2 项目规则** | 项目特有的约束（如"禁主库""必须用某脚本"） | 注入 Worker 上下文，不解析 |
-| **L3 单任务约束** | 这张票不许碰前端、必须写报告等 | 注入 Worker 上下文，不解析 |
+| **L2 项目规则** | 项目特有的约束（如"禁主库""必须用某脚本"） | 注入该项目 Worker 上下文，不解析 |
+| **L3 单任务约束** | 这张票不许碰前端、必须写报告等 | 注入该 Worker 上下文，不解析 |
 
 系统管"规则必须在场 + 结果必须交代"，不管"规则是什么"。
-所以换项目不用改内核——改 `config.yaml` 的 `rules` 列表即可。
+规则跟着项目走（项目 config 的 `rules`），所以不同项目的 Worker 各用各的规则，互不冲突。
+
+---
+
+## 数据布局
+
+```
+~/.agent/                              ← 全局：系统的运行记录
+  sock                                  # daemon 的 unix socket（全局唯一）
+  config.yaml                           # 全局配置（兜底）
+  control/YYYY-MM-DD.jsonl              # 控制账本（唯一真相，append-only，含所有项目）
+
+<项目目录>/.agent/                      ← 每个项目：物理工作区
+  config.yaml                           # 项目配置（覆盖全局）
+  tickets/<id>/
+    trace.jsonl                         # 该项目 Worker 的事件流（证据，可审计）
+    .sysprompt.txt                      # 注入该 Worker 的系统提示（L2 规则）
+    work/                               # Worker 的工作目录（能直接读写项目文件）
+```
+
+**关键**：Worker 在 `<项目目录>/.agent/tickets/<id>/work/` 里跑，cwd 就是项目内的沙箱，能直接用相对/绝对路径访问项目文件。资源 key 自动加项目前缀，两个项目用同名资源不冲突。
 
 ---
 
 ## 验证过的属性
 
-- ✅ **kill -9 后自愈**：reconcile 检测孤儿 worker，同 session-id 重试，无死亡检测死循环
+- ✅ **多项目并行**：一个 daemon，多项目目录发起，Worker 在对应项目目录干活，零交叉污染
+- ✅ **规则隔离**：项目 A 的规则只注入 A 的 Worker，不泄漏到 B
+- ✅ **配置分层**：项目配置覆盖全局（模型/超时/重试），规则拼接
+- ✅ **资源命名空间**：资源 key 自动加项目前缀，跨项目同名资源不冲突
+- ✅ **kill -9 后自愈**：reconcile 检测孤儿 worker，同 session-id 重试，无死循环
 - ✅ **状态机强制**：非法迁移被拒绝（closed 是终态）
 - ✅ **真实 Worker 端到端**：写文件、执行命令、逐条自检验收、输出控制标记
 - ✅ **need_input 闭环**：Worker 停下问 → 你回答 → 同 session-id 续跑（继承上下文）
-- ✅ **递归子任务**：父拆子、父等子、子继承父模型 + 独立 session-id
+- ✅ **递归子任务**：父拆子、父等子（子结果回填）、子继承父模型 + 独立 session-id
 - ✅ **资源互斥**：同 key 资源独占，冲突任务排队等待，释放后自动接续
-- ✅ **并发调度**：多个真实 Worker 并行执行
 - ✅ **取消回收**：cancel 时 SIGTERM→SIGKILL 进程组 + 释放资源租约
 - ✅ **诚实性**：Worker 遇到无法满足的前提会拒绝编造，如实报告
 - ✅ **账本完整**：append-only，零 torn write，可 grep、可审计
@@ -113,47 +189,43 @@ Worker 死亡 / agentd 被 kill -9：重启后 reconcile 自动发现孤儿，�
 | `ledger.go` | append-only 账本、高水位恢复、不完整行截断 |
 | `state.go` | 状态机（迁移表强制）、replay、Ticket 模型 |
 | `reconcile.go` | 启动自愈、孤儿检测（/proc 判活） |
-| `daemon.go` | 常驻进程、调度循环、watchdog、answer 恢复 |
+| `daemon.go` | 常驻进程、调度循环、watchdog、answer/子任务恢复、配置分层、资源回收 |
 | `server.go` | unix socket 服务、命令分发、file_ticket 5 条硬校验 |
 | `client.go` | socket 客户端 |
-| `worker.go` | spawn pi、事件流落 trace、结局分类（done/failed/need_input） |
-| `config.go` | `~/.agent/config.yaml` 加载 |
+| `worker.go` | spawn pi（按项目目录）、事件流落 trace、结局分类 |
+| `config.go` | 全局/项目配置加载与合并（项目优先） |
+| `resource.go` | 资源租约管理（同 key 互斥） |
 | `notify.go` | 三级通知（interrupt/quiet/none） |
 
-Router 扩展（pi）：`~/.pi/agent/extensions/super-agent-router/index.ts`
-注册 `file_ticket` 工具（唯一入档入口，含人工确认门禁）。
-
----
-
-## 数据布局
-
-```
-~/.agent/
-  sock                          # agentd 的 unix socket
-  config.yaml                   # 你的部署配置（模型/规则）
-  control/YYYY-MM-DD.jsonl      # 控制账本（唯一真相，append-only）
-  tickets/<id>/
-    trace.jsonl                 # Worker 的 pi 事件流（证据，可审计）
-    .sysprompt.txt              # 注入该 Worker 的系统提示（L2 规则）
-    work/                       # Worker 的工作目录（沙箱）
-```
+pi 扩展：
+- Router：`~/.pi/agent/extensions/super-agent-router/index.ts`（`file_ticket` 工具，含人工确认门禁）
+- Worker：`~/.pi/agent/extensions/super-agent-worker/index.ts`（`create_subtask` 工具，仅在 worker 环境注册）
 
 ---
 
 ## 还没做（里程碑路线）
 
 - [ ] **M2 完整化**：Router 的 `/tickets` 命令、草稿持久化（draft.opened/amended）
-- [ ] **waiting_user 超时**：已实现但超时阈值需按使用习惯调优（默认 30 分钟，`config.yaml` 的 `waiting_timeout_minutes`）
+- [ ] **waiting_user 超时**：已实现，阈值需按使用习惯调优（项目 config 的 `waiting_timeout_minutes`）
 - [ ] **通知分级调优**：基于 `notification.sent` 事件统计打扰频率
-- [ ] **资源回收的 worktree/端口实体清理**：目前回收的是进程组和资源租约；真实的 `git worktree remove` / 端口释放由适配器实现
+- [ ] **资源回收的实体清理**：目前回收进程组和资源租约；真实的 `git worktree remove` / 端口释放由项目适配器实现
+- [ ] **daemon 后台化管理**：`daemon start/stop/status/logs`，免去手动开窗口（见下方说明）
 
-## 已完成并验证
+---
 
-- [x] **资源互斥**：`resources` 同 key 独占，调度器真实执行锁，冲突排队
-- [x] **递归子任务**：Worker 通过 `create_subtask` 拆子任务，父等子，子继承父模型 + 独立 session-id
-- [x] **三层递归硬限制**：到达上限触发 waiting_user 人工介入
-- [x] **waiting_user 超时**：超时自动 failed 并通知
-- [x] **最大尝试次数**：worker 死亡重试超限自动 failed
-- [x] **资源回收**：cancel/close 时两阶段回收（SIGTERM→SIGKILL 进程组 + 释放租约）
+## 关于 daemon 的使用体验
 
-当前 M0–M5 主流程全部验证通过。
+`./agent daemon` 是**前台常驻进程**，启动后没有交互输出是正常的（它在后台调度）。如果你希望它后台运行：
+
+```bash
+# 方式 1：shell 后台
+./agent daemon &
+
+# 方式 2：nohup（关终端也活着）
+nohup ./agent daemon > ~/.agent/daemon.log 2>&1 &
+
+# 停止
+pkill -f "agent daemon"
+```
+
+后续可以加 `agent daemon start/stop/status/logs` 子命令把这个包装起来，让你一个终端搞定。需要的话告诉我。
