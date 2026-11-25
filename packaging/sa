@@ -57,7 +57,11 @@ fi
 # Without this, the model tends to just do the work inline instead of routing.
 export SA_MODE=1
 
-# If the caller already passed --tools, respect it; otherwise restrict.
+# Router tool restriction (design J1: Router 是纯传话筒，绝不调查、绝不干活)。
+# The Router's ONLY action is file_ticket. It does NOT read files, run commands,
+# or investigate — all investigation belongs to background Workers. If a request
+# is ambiguous, the Router asks YOU to clarify (dialogue), it does not go look
+# things up itself. So the Router gets exactly ONE tool: file_ticket.
 has_tools=0
 for a in "$@"; do
   case "$a" in
@@ -67,8 +71,13 @@ for a in "$@"; do
   esac
 done
 
+# Inject the Router role system-prompt so the model behaves as a dispatcher,
+# not an assistant that answers/investigates inline.
+SA_HOME="${SA_HOME:-/path/to/super_personal_agent}"
+ROUTER_PROMPT="$SA_HOME/packaging/router-system-prompt.txt"
+
 if [ "$has_tools" -eq 1 ]; then
-  exec pi "$@"
+  exec pi --append-system-prompt "$ROUTER_PROMPT" "$@"
 else
-  exec pi --tools read,grep,find,ls,file_ticket "$@"
+  exec pi --append-system-prompt "$ROUTER_PROMPT" --tools file_ticket "$@"
 fi
