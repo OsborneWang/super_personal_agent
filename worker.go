@@ -289,10 +289,27 @@ func extractText(content json.RawMessage) string {
 	return b.String()
 }
 
+// writeResult saves the worker's final output as a stable artifact next to
+// the trace, so `sa result <id>` can show it without parsing the event stream.
+func (d *Daemon) writeResult(t *Ticket, res workerResult) {
+	if res.finalText == "" {
+		return
+	}
+	dir := filepath.Join(d.projectRoot(t), ".agent", "tickets", t.ID)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return
+	}
+	path := filepath.Join(dir, "result.md")
+	_ = os.WriteFile(path, []byte(res.finalText), 0644)
+}
+
 // finishWorker applies the worker outcome to the state machine
 func (d *Daemon) finishWorker(t *Ticket, res workerResult) {
 	// Always release resources when the worker exits, regardless of outcome.
 	defer d.rm.Release(t.ID)
+
+	// Persist the final output as a stable artifact (best-effort)
+	d.writeResult(t, res)
 
 	ticket, err := d.sm.GetTicket(t.ID)
 	if err != nil {

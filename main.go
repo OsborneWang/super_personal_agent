@@ -48,6 +48,8 @@ func main() {
 		err = cmdClient("answer", map[string]interface{}{"id": arg(2), "text": strings.Join(os.Args[3:], " ")})
 	case "follow":
 		err = cmdFollow(arg(2))
+	case "result":
+		err = cmdResult(arg(2))
 	case "tail":
 		follow := false
 		for _, a := range os.Args[3:] {
@@ -86,6 +88,7 @@ func usage() {
 	fmt.Println("  agent admit               Admit a demo ticket")
 	fmt.Println("  agent answer <id> <text>  Answer a waiting ticket")
 	fmt.Println("  agent follow <id>         Stream ticket state changes live")
+	fmt.Println("  agent result <id>         Show the worker's final result")
 	fmt.Println("  agent tail <id> [-f]      Stream what the worker is doing (tool calls/output)")
 	fmt.Println("  agent cancel <id>         Cancel a ticket")
 	fmt.Println()
@@ -408,6 +411,82 @@ func cmdFollow(id string) error {
 		}
 		time.Sleep(1 * time.Second)
 	}
+}
+
+// cmdResult prints a ticket's final result.
+// Prefers the stable result.md artifact; falls back to scanning the trace.
+func cmdResult(id string) error {
+	if id == "" {
+		return fmt.Errorf("usage: agent result <id>")
+	}
+
+	client, err := NewClient(sockPath())
+	if err != nil {
+		return fmt.Errorf("connect to agentd: %w", err)
+	}
+	resp, err := client.Call("show", map[string]interface{}{"id": id})
+	client.Close()
+	if err != nil {
+		return err
+	}
+	if !resp.Success {
+		return fmt.Errorf("agentd: %s", resp.Error)
+	}
+	data, _ := json.Marshal(resp.Data)
+	var t Ticket
+	json.Unmarshal(data, &t)
+
+	root := t.Project
+	if root == "" {
+		root = homeDir()
+	}
+	dir := filepath.Join(root, ".agent", "tickets", id)
+
+	// Header
+	fmt.Printf("\n%s  [%s]\n", t.ID, t.State)
+	fmt.Printf("%s\n\n", t.Goal)
+
+	// 1. Preferred: stable artifact
+	if b, err := os.ReadFile(filepath.Join(dir, "result.md")); err == nil && len(b) > 0 {
+		fmt.Println(string(b))
+		fmt.Println()
+		return nil
+	}
+
+	// 2. Fallback: last assistant message from trace
+	tracePath := filepath.Join(dir, "trace.jsonl")
+	f, err := os.Open(tracePath)
+	if err != nil {
+		return fmt.Errorf("no result for %s (state=%s; worker may not have finished): %w", id, t.State, err)
+	}
+	defer f.Close()
+
+	scanner := bufio.NewScanner(f)
+	scanner.Buffer(make([]byte, 0, 1024*1024), 16*1024*1024)
+	last := ""
+	for scanner.Scan() {
+		line := scanner.Bytes()
+		var ev struct {
+			Type    string `json:"type"`
+			Message *struct {
+				Role    string          `json:"role"`
+				Content json.RawMessage `json:"content"`
+			} `json:"message"`
+		}
+		if json.Unmarshal(line, &ev) != nil {
+			continue
+		}
+		if ev.Type == "message_end" && ev.Message != nil && ev.Message.Role == "assistant" {
+			if txt := extractText(ev.Message.Content); txt != "" {
+				last = txt
+			}
+		}
+	}
+	if last == "" {
+		return fmt.Errorf("no result for %s (state=%s)", id, t.State)
+	}
+	fmt.Println(last)
+	return nil
 }
 
 // cmdTail streams what a worker is actually doing, by reading its trace.jsonl.

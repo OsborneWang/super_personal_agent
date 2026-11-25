@@ -15,6 +15,7 @@
 #  ▶ 查看任务（Ticket）
 #    sa ls                     看板：所有任务状态，按项目分组
 #    sa show <id>              单张任务的完整细节（目标/状态/深度/pid 等）
+#    sa result <id>            查看任务的最终结果（Worker 的产出）
 #    sa follow <id>            实时盯住单张任务的状态变化（状态机层面）
 #    sa tail <id> [-f]         实时看 Worker 具体在干什么（工具调用/输出/-f 跟流）
 #    sa answer <id> <回答>      回答 Worker 抛给你的问题（任务卡在 waiting_user 时）
@@ -43,7 +44,8 @@
 #    sa follow T-abc           ③ 盯着它跑（running → done/failed/waiting_user）
 #    sa tail T-abc -f          ③' 看 Worker 此刻在调什么工具、输出什么
 #    sa answer T-abc "..."     ④ 若它卡在 waiting_user，回答后继续
-#    sa show T-abc             ⑤ 查看最终结果与细节
+#    sa result T-abc           ⑤ 查看最终结果（Worker 产出）
+#    sa show T-abc             ⑥ 查看任务元数据细节
 #
 # 多项目：在任意项目目录里运行 sa，任务自动归属该项目，
 #         Worker 在该项目目录里干活、用该项目的规则和模型。
@@ -54,11 +56,11 @@ case "$1" in
   start|stop|restart|status|logs|enable|disable|install|uninstall)
     exec agent daemon "$@"
     ;;
-  ls|show|follow|tail|answer|cancel|ping|test|init|reconcile)
+  ls|show|result|follow|tail|answer|cancel|ping|test|init|reconcile)
     exec agent "$@"
     ;;
   -h|--help|help)
-    sed -n '2,49p' "$0"
+    sed -n '2,52p' "$0"
     exit 0
     ;;
 esac

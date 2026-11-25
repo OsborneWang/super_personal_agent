@@ -128,7 +128,8 @@ rules: []           # 全局规则，所有项目的 Worker 都会注入
 | `sa status` / `sa logs [-f]` | 服务状态 / 日志 |
 | `sa enable` / `sa uninstall` | 登录自启 / 卸载 |
 | `sa ls` | **看板**：所有 Ticket 状态，按项目分组 |
-| `sa show <id>` | 单张 Ticket 的细节 |
+| `sa result <id>` | **查看任务最终结果**（Worker 的产出） |
+| `sa show <id>` | 单张 Ticket 的元数据细节 |
 | `sa follow <id>` | 实时盯住一张 Ticket 的状态变化（状态机层面） |
 | `sa tail <id> [-f]` | 实时看 Worker 具体在干什么（工具调用/输出，`-f` 持续跟流） |
 | `sa answer <id> <text>` | 回答 Worker 抛给你的问题 |
