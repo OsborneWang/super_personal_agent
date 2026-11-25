@@ -47,6 +47,22 @@ if ! agent ping >/dev/null 2>&1; then
   esac
 fi
 
-# Mark this session as a super-agent Router session, then launch pi
+# Mark this session as a super-agent Router session, then launch pi.
+#
+# Router tool restriction (design J1: Router 只分诊，绝不干活):
+# The Router must NOT be able to execute the task itself. It only understands
+# the request, drafts a ticket, asks you to confirm, and files it via
+# file_ticket. So we strip every "doing" tool (bash/edit/write) and keep only
+# read-only tools for understanding context + the file_ticket filing tool.
+# Without this, the model tends to just do the work inline instead of routing.
 export SA_MODE=1
-exec pi "$@"
+
+# If the caller already passed --tools, respect it; otherwise restrict.
+case " $* " in
+  *" --tools "*|*" --tools="*")
+    exec pi "$@"
+    ;;
+  *)
+    exec pi --tools read,grep,find,ls,file_ticket "$@"
+    ;;
+esac
