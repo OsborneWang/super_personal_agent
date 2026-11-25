@@ -65,6 +65,7 @@ type Ticket struct {
 	Model       *ModelSpec             `json:"model,omitempty"`
 	Rules       []string               `json:"rules,omitempty"`
 	Resources   []ResourceReq          `json:"resources,omitempty"`
+	Project     string                 `json:"project,omitempty"` // Router cwd at admit time; immutable
 	WaitingSince string                `json:"waiting_since,omitempty"`
 	WaitingChildren bool               `json:"waiting_children,omitempty"`
 	CreatedAt   string                 `json:"created_at"`

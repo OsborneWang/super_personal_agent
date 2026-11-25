@@ -29,13 +29,46 @@ type Daemon struct {
 	pollTick time.Duration
 }
 
-// rulePaths returns the L2 rule files to inject into workers.
-// Ticket-level rules override/extend config-level rules.
-func (d *Daemon) rulePaths() []string {
-	if d.config == nil {
+// rulePaths returns the L2 rule files to inject into a worker for a ticket.
+// Merges global rules + the ticket's project rules (project takes precedence
+// via EffectiveConfig; rules are concatenated so both apply).
+func (d *Daemon) rulePaths(t *Ticket) []string {
+	cfg := d.effectiveConfig(t)
+	if cfg == nil {
 		return nil
 	}
-	return d.config.Rules
+	return cfg.Rules
+}
+
+// effectiveConfig merges global + this ticket's project config
+func (d *Daemon) effectiveConfig(t *Ticket) *Config {
+	proj := LoadProjectConfig(t.Project)
+	return EffectiveConfig(d.config, proj)
+}
+
+// projectRoot returns the directory under which a ticket's physical
+// workspace lives. Defaults to homeDir when the ticket has no project.
+func (d *Daemon) projectRoot(t *Ticket) string {
+	if t.Project != "" {
+		return t.Project
+	}
+	return d.homeDir
+}
+
+// maxAttempts resolves the retry budget for a ticket (project overrides global)
+func (d *Daemon) maxAttempts(t *Ticket) int {
+	if cfg := d.effectiveConfig(t); cfg != nil && cfg.MaxAttempts > 0 {
+		return cfg.MaxAttempts
+	}
+	return 3
+}
+
+// waitingTimeout resolves the waiting_user timeout for a ticket
+func (d *Daemon) waitingTimeout(t *Ticket) time.Duration {
+	if cfg := d.effectiveConfig(t); cfg != nil && cfg.WaitingTimeoutMinutes > 0 {
+		return time.Duration(cfg.WaitingTimeoutMinutes) * time.Minute
+	}
+	return 30 * time.Minute
 }
 
 // NewDaemon creates the daemon
@@ -47,7 +80,7 @@ func NewDaemon(homeDir string) (*Daemon, error) {
 	}
 
 	sm := NewStateMachine(ledger)
-	config := LoadConfig(homeDir)
+	config := LoadGlobalConfig(homeDir)
 
 	d := &Daemon{
 		ledger:   ledger,
@@ -103,6 +136,17 @@ func (d *Daemon) Stop() {
 func (d *Daemon) AdmitTicket(t *Ticket) error {
 	if t.CreatedAt == "" {
 		t.CreatedAt = time.Now().Format(time.RFC3339)
+	}
+	// Normalize resource keys with the project namespace so two projects can
+	// use the same logical resource name without colliding. If the key already
+	// carries the project prefix, leave it alone (idempotent).
+	if t.Project != "" {
+		for i := range t.Resources {
+			prefix := t.Project + ":"
+			if !strings.HasPrefix(t.Resources[i].Key, prefix) {
+				t.Resources[i].Key = prefix + t.Resources[i].Key
+			}
+		}
 	}
 	t.State = StatePending
 
@@ -407,10 +451,7 @@ func (d *Daemon) checkDeadWorkers() {
 				continue
 			}
 			// Retry budget: too many deaths -> fail instead of infinite retry
-			maxAttempts := 3
-			if d.config != nil && d.config.MaxAttempts > 0 {
-				maxAttempts = d.config.MaxAttempts
-			}
+			maxAttempts := d.maxAttempts(t)
 			if t.Attempt >= maxAttempts {
 				d.sm.SetWorkerPID(t.ID, 0)
 				d.sm.TransitionTicket(t.ID, StateFailed, fmt.Sprintf("max_attempts_exceeded(%d)", maxAttempts), Actor{Actor: "agentd"})
@@ -427,10 +468,6 @@ func (d *Daemon) checkDeadWorkers() {
 
 // checkWaitingTimeouts fails tickets that have been waiting_user too long.
 func (d *Daemon) checkWaitingTimeouts() {
-	timeoutMin := 30
-	if d.config != nil && d.config.WaitingTimeoutMinutes > 0 {
-		timeoutMin = d.config.WaitingTimeoutMinutes
-	}
 	now := time.Now()
 	for _, t := range d.sm.ListTickets() {
 		if t.State != StateWaitingUser || t.WaitingSince == "" {
@@ -440,9 +477,10 @@ func (d *Daemon) checkWaitingTimeouts() {
 		if err != nil {
 			continue
 		}
-		if now.Sub(since) > time.Duration(timeoutMin)*time.Minute {
+		timeout := d.waitingTimeout(t)
+		if now.Sub(since) > timeout {
 			d.sm.TransitionTicket(t.ID, StateFailed, "waiting_user_timeout", Actor{Actor: "agentd"})
-			d.notify(t, "interrupt", "failed", fmt.Sprintf("❌ %s 等待回答超时(%d分钟)，已标记失败", t.ID, timeoutMin))
+			d.notify(t, "interrupt", "failed", fmt.Sprintf("❌ %s 等待回答超时(%v)，已标记失败", t.ID, timeout))
 			d.log("ticket %s failed: waiting_user timeout", t.ID)
 		}
 	}
@@ -534,7 +572,7 @@ func (d *Daemon) resumeParentWithChildren(t *Ticket, children []*Ticket) {
 
 // readChildResult extracts a child worker's final assistant text from its trace
 func (d *Daemon) readChildResult(c *Ticket) string {
-	tracePath := filepath.Join(d.homeDir, ".agent", "tickets", c.ID, "trace.jsonl")
+	tracePath := filepath.Join(d.projectRoot(c), ".agent", "tickets", c.ID, "trace.jsonl")
 	data, err := os.ReadFile(tracePath)
 	if err != nil {
 		return "(结果不可用)"

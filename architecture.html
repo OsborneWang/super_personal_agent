@@ -14,62 +14,62 @@
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--txt);font:14px/1.6 "PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;display:flex;min-height:100vh}
   /* ---------- sidebar ---------- */
-  nav{position:sticky;top:0;height:100vh;width:230px;flex:none;background:var(--panel);border-right:1px solid var(--line);padding:22px 16px;overflow-y:auto}
+  nav{position:sticky;top:0;height:100vh;width:230px;flex:none;background:var(--panel);border-right:1px solid var(--line);padding:26px 18px;overflow-y:auto}
   nav h1{font-size:15px;color:#fff;margin-bottom:4px}
-  nav .sub{font-size:11px;color:var(--txt2);margin-bottom:18px}
-  nav a{display:block;color:var(--txt2);text-decoration:none;padding:8px 10px;border-radius:8px;font-size:13px;margin-bottom:2px;border-left:3px solid transparent}
+  nav .sub{font-size:11px;color:var(--txt2);margin-bottom:22px}
+  nav a{display:block;color:var(--txt2);text-decoration:none;padding:10px 12px;border-radius:8px;font-size:13.5px;margin-bottom:3px;border-left:3px solid transparent}
   nav a:hover{background:var(--panel2);color:var(--txt)}
   nav a.active{background:var(--panel2);color:#fff;border-left-color:var(--hl)}
-  nav .hint{margin-top:20px;font-size:11px;color:var(--txt2);border-top:1px solid var(--line);padding-top:14px}
+  nav .hint{margin-top:26px;font-size:11.5px;color:var(--txt2);border-top:1px solid var(--line);padding-top:16px;line-height:2}
   nav .hint b{color:var(--hl)}
   /* ---------- main ---------- */
-  main{flex:1;padding:28px 36px;max-width:1500px}
-  section{margin-bottom:56px;scroll-margin-top:20px}
-  section h2{font-size:19px;color:#fff;margin-bottom:4px}
-  section .desc{font-size:12.5px;color:var(--txt2);margin-bottom:12px}
-  .canvas-wrap{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-  .canvas{overflow:auto;max-height:82vh;padding:8px}
+  main{flex:1;padding:40px 48px;max-width:1680px}
+  section{margin-bottom:96px;scroll-margin-top:20px}
+  section h2{font-size:21px;color:#fff;margin-bottom:8px}
+  section .desc{font-size:13.5px;color:var(--txt2);margin-bottom:18px}
+  .canvas-wrap{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .canvas{overflow:auto;max-height:85vh;padding:14px}
   .canvas svg{display:block;width:100%;height:auto;transform-origin:top left}
-  .zoombar{position:absolute;top:10px;right:10px;display:flex;gap:6px;z-index:5}
-  .zoombar button{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:6px;width:30px;height:30px;cursor:pointer;font-size:15px}
+  .zoombar{position:absolute;top:12px;right:12px;display:flex;gap:6px;z-index:5}
+  .zoombar button{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:6px;width:32px;height:32px;cursor:pointer;font-size:16px}
   .zoombar button:hover{border-color:var(--hl);color:var(--hl)}
   /* ---------- svg common ---------- */
-  .lane{fill:rgba(255,255,255,.025);stroke:var(--line);stroke-width:1.2;stroke-dasharray:3 4;rx:12}
-  .lane-title{font-size:13px;font-weight:700;fill:#aebadb}
+  .lane{fill:rgba(255,255,255,.03);stroke:var(--line);stroke-width:1.4;stroke-dasharray:4 5}
+  .lane-title{font-size:16px;font-weight:700;fill:#b9c6e6}
   .node{cursor:pointer}
-  .box{stroke-width:1.6;rx:8}
-  .node:hover .box{stroke:var(--hl);stroke-width:2.4}
-  .node.sel .box{stroke:var(--hl);stroke-width:3;filter:drop-shadow(0 0 6px rgba(255,209,102,.5))}
-  .you{fill:rgba(247,185,85,.12);stroke:var(--you)}
-  .term{fill:rgba(110,168,254,.12);stroke:var(--term)}
-  .agentd{fill:rgba(61,220,151,.10);stroke:var(--agentd)}
-  .worker{fill:rgba(199,146,234,.12);stroke:var(--worker)}
-  .store{fill:rgba(255,122,147,.12);stroke:var(--store)}
-  .sys{fill:rgba(255,209,102,.10);stroke:var(--hl)}
-  .core{stroke-width:2.6}
-  .t{font-size:13px;fill:var(--txt);text-anchor:middle;font-weight:600}
-  .t2{font-size:10.5px;fill:var(--txt2);text-anchor:middle}
-  .edge{stroke:#7c8db0;stroke-width:1.6;fill:none}
-  .edge.dash{stroke-dasharray:6 5}
-  .edge.cancel{stroke:var(--danger);stroke-dasharray:5 4;stroke-width:1.3}
-  .edge.hl{stroke:var(--hl);stroke-width:2.6}
-  .elabel{font-size:11px;fill:#a9b7d6;text-anchor:middle;paint-order:stroke;stroke:var(--panel);stroke-width:5;stroke-linejoin:round}
+  .box{stroke-width:1.8}
+  .node:hover .box{stroke:var(--hl);stroke-width:2.6}
+  .node.sel .box{stroke:var(--hl);stroke-width:3;filter:drop-shadow(0 0 7px rgba(255,209,102,.55))}
+  .you{fill:rgba(247,185,85,.13);stroke:var(--you)}
+  .term{fill:rgba(110,168,254,.13);stroke:var(--term)}
+  .agentd{fill:rgba(61,220,151,.11);stroke:var(--agentd)}
+  .worker{fill:rgba(199,146,234,.13);stroke:var(--worker)}
+  .store{fill:rgba(255,122,147,.13);stroke:var(--store)}
+  .sys{fill:rgba(255,209,102,.12);stroke:var(--hl)}
+  .core{stroke-width:2.8}
+  .t{font-size:15.5px;fill:var(--txt);text-anchor:middle;font-weight:600}
+  .t2{font-size:12.5px;fill:var(--txt2);text-anchor:middle}
+  .edge{stroke:#7c8db0;stroke-width:1.8;fill:none}
+  .edge.dash{stroke-dasharray:7 6}
+  .edge.cancel{stroke:var(--danger);stroke-dasharray:6 5;stroke-width:1.5}
+  .edge.hl{stroke:var(--hl);stroke-width:2.8}
+  .elabel{font-size:13px;fill:#aeb9d9;text-anchor:middle;paint-order:stroke;stroke:var(--panel);stroke-width:6;stroke-linejoin:round}
+  .elabel.small{font-size:12px}
   .elabel.hl{fill:var(--hl);font-weight:700}
-  .elabel.small{font-size:10px}
-  .dim{opacity:.1;transition:opacity .15s}
+  .dim{opacity:.09;transition:opacity .15s}
   .node,.edge,.elabel{transition:opacity .15s}
-  .num{font-size:10.5px;fill:#7c8db0;font-weight:700}
-  .life{stroke:var(--line);stroke-width:1.2;stroke-dasharray:4 4}
-  .alt{fill:rgba(110,168,254,.05);stroke:#3b4a6e;stroke-width:1;rx:8}
-  .alt-label{font-size:11.5px;font-weight:700;fill:var(--term)}
-  .stat-ok{fill:rgba(61,220,151,.14);stroke:var(--agentd)}
-  .stat-doing{fill:rgba(247,185,85,.14);stroke:var(--you)}
+  .num{font-size:12px;fill:#7c8db0;font-weight:700}
+  .life{stroke:var(--line);stroke-width:1.4;stroke-dasharray:5 5}
+  .alt{fill:rgba(110,168,254,.045);stroke:#3b4a6e;stroke-width:1.2}
+  .alt-label{font-size:13.5px;font-weight:700;fill:var(--term)}
+  .stat-ok{fill:rgba(61,220,151,.15);stroke:var(--agentd)}
+  .stat-doing{fill:rgba(247,185,85,.15);stroke:var(--you)}
   .stat-todo{fill:rgba(147,161,192,.08);stroke:#5a6880}
   /* ---------- tooltip ---------- */
-  #tip{position:fixed;pointer-events:none;background:#232d47;border:1px solid var(--hl);color:var(--txt);font-size:12px;padding:8px 11px;border-radius:8px;max-width:320px;z-index:99;display:none;box-shadow:0 6px 20px rgba(0,0,0,.5)}
-  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--txt2);margin-bottom:12px}
-  .legend span{display:inline-flex;align-items:center;gap:6px}
-  .dot{width:12px;height:12px;border-radius:4px;display:inline-block;border:1.5px solid}
+  #tip{position:fixed;pointer-events:none;background:#232d47;border:1px solid var(--hl);color:var(--txt);font-size:12.5px;padding:9px 12px;border-radius:8px;max-width:340px;z-index:99;display:none;box-shadow:0 6px 20px rgba(0,0,0,.5);line-height:1.7}
+  .legend{display:flex;gap:22px;flex-wrap:wrap;font-size:12.5px;color:var(--txt2);margin-bottom:20px}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .dot{width:13px;height:13px;border-radius:4px;display:inline-block;border:1.8px solid}
 </style>
 </head>
 <body>
@@ -105,150 +105,166 @@
 <!-- ════════════════════════ 1. 总体拓扑 ════════════════════════ -->
 <section id="s1">
   <h2>1 · 总体拓扑</h2>
-  <div class="desc">Router 是对话唯一入口；agentd 是账本唯一写者；Worker 只能申报，状态由 agentd 裁决。</div>
+  <div class="desc">Router 是对话唯一入口；agentd 是账本唯一写者；Worker 只能申报，状态由 agentd 裁决。底部虚线 = 反馈 / 通知通道。</div>
   <div class="canvas-wrap">
     <div class="zoombar"><button data-z="-">−</button><button data-z="r">⤾</button><button data-z="+">+</button></div>
     <div class="canvas">
-    <svg viewBox="0 0 1280 720" data-base="1280">
+    <svg viewBox="0 0 1540 960" data-base="1540">
       <!-- lanes -->
-      <rect class="lane" x="40" y="24" width="320" height="150" rx="12"/>
-      <text class="lane-title" x="56" y="48">👤 你</text>
-      <rect class="lane" x="40" y="210" width="320" height="170" rx="12"/>
-      <text class="lane-title" x="56" y="234">终端层</text>
-      <rect class="lane" x="430" y="24" width="420" height="360" rx="12"/>
-      <text class="lane-title" x="446" y="48">agentd（Go 常驻进程 · 唯一写者）</text>
-      <rect class="lane" x="920" y="24" width="330" height="320" rx="12"/>
-      <text class="lane-title" x="936" y="48">Worker 层（pi headless 进程）</text>
-      <rect class="lane" x="920" y="400" width="330" height="224" rx="12"/>
-      <text class="lane-title" x="936" y="424">存储层</text>
+      <rect class="lane" x="60" y="60" width="330" height="260" rx="16"/>
+      <text class="lane-title" x="84" y="94">👤 你</text>
+      <rect class="lane" x="60" y="370" width="330" height="300" rx="16"/>
+      <text class="lane-title" x="84" y="404">终端层</text>
+      <rect class="lane" x="480" y="60" width="500" height="560" rx="16"/>
+      <text class="lane-title" x="504" y="94">agentd（Go 常驻进程 · 唯一写者）</text>
+      <rect class="lane" x="1070" y="60" width="410" height="410" rx="16"/>
+      <text class="lane-title" x="1094" y="94">Worker 层（pi headless 进程）</text>
+      <rect class="lane" x="1070" y="520" width="410" height="330" rx="16"/>
+      <text class="lane-title" x="1094" y="554">存储层</text>
 
       <!-- YOU -->
       <g class="node" data-id="U1" data-tip="你与系统唯一的对话入口就是 Router（pi 交互 TUI）。多轮对话确认草稿后才允许入档。">
-        <rect class="box you" x="64" y="60" width="272" height="44" rx="8"/>
-        <text class="t" x="200" y="78">与 Router 对话</text><text class="t2" x="200" y="94">唯一入口</text>
+        <rect class="box you" x="85" y="112" width="280" height="76" rx="12"/>
+        <text class="t" x="225" y="143">与 Router 对话</text><text class="t2" x="225" y="170">唯一入口</text>
       </g>
       <g class="node" data-id="U2" data-tip="通过 agent CLI 监视与验收：ls · show · follow · answer · cancel。">
-        <rect class="box you" x="64" y="116" width="272" height="44" rx="8"/>
-        <text class="t" x="200" y="134">监视 / 验收</text><text class="t2" x="200" y="150">agent ls · show · answer · cancel</text>
+        <rect class="box you" x="85" y="212" width="280" height="76" rx="12"/>
+        <text class="t" x="225" y="243">监视 / 验收</text><text class="t2" x="225" y="270">agent ls · show · answer · cancel</text>
       </g>
 
       <!-- TERMINAL -->
       <g class="node" data-id="R" data-tip="pi 交互 TUI。只做一次拆分，不写账本，只调用 file_ticket 工具。入档后 /new 清空上下文。">
-        <rect class="box term" x="64" y="250" width="272" height="52" rx="8"/>
-        <text class="t" x="200" y="271">pi（Router）</text><text class="t2" x="200" y="289">交互 TUI · 模型 = 配置</text>
+        <rect class="box term" x="85" y="430" width="280" height="88" rx="12"/>
+        <text class="t" x="225" y="464">pi（Router）</text><text class="t2" x="225" y="492">交互 TUI · 模型 = 配置</text>
       </g>
       <g class="node" data-id="CLI" data-tip="socket 客户端，不碰账本。命令：admit / ls / show / follow / answer / cancel / drafts。">
-        <rect class="box term" x="64" y="310" width="272" height="52" rx="8"/>
-        <text class="t" x="200" y="331">agent CLI</text><text class="t2" x="200" y="349">socket 客户端，不碰账本</text>
+        <rect class="box term" x="85" y="548" width="280" height="88" rx="12"/>
+        <text class="t" x="225" y="582">agent CLI</text><text class="t2" x="225" y="610">socket 客户端，不碰账本</text>
       </g>
 
       <!-- AGENTD internals -->
       <g class="node" data-id="SOCK" data-tip="~/.agent/sock，接收 admit / ls / show / follow / answer / cancel 命令。">
-        <rect class="box agentd" x="454" y="64" width="170" height="56" rx="8"/>
-        <text class="t" x="539" y="88">socket 服务</text><text class="t2" x="539" y="106">~/.agent/sock</text>
+        <rect class="box agentd" x="505" y="112" width="200" height="82" rx="12"/>
+        <text class="t" x="605" y="147">socket 服务</text><text class="t2" x="605" y="174">~/.agent/sock</text>
       </g>
       <g class="node" data-id="SCHED" data-tip="扫描 ready 队列，做资源互斥检查（同 key 独占），然后 spawn Worker。">
-        <rect class="box agentd" x="454" y="136" width="170" height="56" rx="8"/>
-        <text class="t" x="539" y="160">调度器</text><text class="t2" x="539" y="178">claim ready → spawn</text>
+        <rect class="box agentd" x="505" y="234" width="200" height="82" rx="12"/>
+        <text class="t" x="605" y="269">调度器</text><text class="t2" x="605" y="296">claim ready → spawn</text>
       </g>
       <g class="node" data-id="TIMER" data-tip="租约到期扫描、waiting_user 超时、worker 死亡检测、GC。">
-        <rect class="box agentd" x="454" y="208" width="170" height="56" rx="8"/>
-        <text class="t" x="539" y="232">定时器</text><text class="t2" x="539" y="250">租约 · 超时 · 死亡检测</text>
+        <rect class="box agentd" x="505" y="356" width="200" height="82" rx="12"/>
+        <text class="t" x="605" y="391">定时器</text><text class="t2" x="605" y="418">租约 · 超时 · 死亡检测</text>
       </g>
       <g class="node" data-id="SUP" data-tip="spawn pi、setpgid、heartbeat；回收时两阶段：标记→等待→SIGTERM→SIGKILL。">
-        <rect class="box agentd" x="454" y="280" width="170" height="56" rx="8"/>
-        <text class="t" x="539" y="304">进程监管</text><text class="t2" x="539" y="322">setpgid · heartbeat · SIGTERM</text>
+        <rect class="box agentd" x="505" y="478" width="200" height="82" rx="12"/>
+        <text class="t" x="605" y="513">进程监管</text><text class="t2" x="605" y="540">setpgid · heartbeat · SIGTERM</text>
       </g>
       <g class="node" data-id="SM" data-tip="迁移表驱动的状态机，唯一允许改状态的组件（单写者）。">
-        <rect class="box agentd core" x="656" y="136" width="170" height="64" rx="8"/>
-        <text class="t" x="741" y="162">状态机</text><text class="t2" x="741" y="180">迁移表 · 单写者</text>
+        <rect class="box agentd core" x="755" y="234" width="200" height="92" rx="12"/>
+        <text class="t" x="855" y="270">状态机</text><text class="t2" x="855" y="298">迁移表 · 单写者</text>
       </g>
       <g class="node" data-id="LW" data-tip="单 goroutine，append-only，seq 唯一分配。谁都不能改历史，纠错靠追加新事件。">
-        <rect class="box agentd" x="656" y="216" width="170" height="56" rx="8"/>
-        <text class="t" x="741" y="240">账本写入器</text><text class="t2" x="741" y="258">单 goroutine · seq 唯一</text>
+        <rect class="box agentd" x="755" y="366" width="200" height="82" rx="12"/>
+        <text class="t" x="855" y="401">账本写入器</text><text class="t2" x="855" y="428">单 goroutine · seq 唯一</text>
       </g>
       <g class="node" data-id="NOTIFY" data-tip="三级通道去重：need_input/failed = critical；done/closed = quiet。">
-        <rect class="box agentd" x="656" y="288" width="170" height="56" rx="8"/>
-        <text class="t" x="741" y="312">通知器</text><text class="t2" x="741" y="330">interrupt / quiet / none</text>
+        <rect class="box agentd" x="755" y="488" width="200" height="82" rx="12"/>
+        <text class="t" x="855" y="523">通知器</text><text class="t2" x="855" y="550">interrupt / quiet / none</text>
       </g>
 
       <!-- WORKERS -->
       <g class="node" data-id="W1" data-tip="第一层 Worker：pi --mode json -p --session-id T-xxx。可独立完成，也可拆出子 Ticket。只能申报 done/failed/need_input。">
-        <rect class="box worker" x="944" y="64" width="282" height="60" rx="8"/>
-        <text class="t" x="1085" y="88">pi --mode json -p</text><text class="t2" x="1085" y="106">--session-id T-xxx · Worker L1</text>
+        <rect class="box worker" x="1100" y="112" width="350" height="88" rx="12"/>
+        <text class="t" x="1275" y="147">pi --mode json -p</text><text class="t2" x="1275" y="174">--session-id T-xxx · Worker L1</text>
       </g>
       <g class="node" data-id="W2" data-tip="第二层：继承父模型与 session-id，走同一套「认领→执行→结果」循环。">
-        <rect class="box worker" x="944" y="140" width="282" height="60" rx="8"/>
-        <text class="t" x="1085" y="164">子 Worker L2</text><text class="t2" x="1085" y="182">继承 session-id / 父模型</text>
+        <rect class="box worker" x="1100" y="224" width="350" height="88" rx="12"/>
+        <text class="t" x="1275" y="259">子 Worker L2</text><text class="t2" x="1275" y="286">继承 session-id / 父模型</text>
       </g>
       <g class="node" data-id="W3" data-tip="第三层 = 硬性上限。三层仍未完成 → 转 waiting_user 预警，由你决定。">
-        <rect class="box worker" x="944" y="216" width="282" height="60" rx="8"/>
-        <text class="t" x="1085" y="240">子 Worker L3</text><text class="t2" x="1085" y="258">⚠️ 硬性上限</text>
+        <rect class="box worker" x="1100" y="336" width="350" height="88" rx="12"/>
+        <text class="t" x="1275" y="371">子 Worker L3</text><text class="t2" x="1275" y="398">⚠️ 硬性上限</text>
       </g>
 
       <!-- STORAGE -->
       <g class="node" data-id="LEDGER" data-tip="control/*.jsonl：append-only 账本，系统唯一真相。">
-        <rect class="box store" x="944" y="440" width="282" height="48" rx="8"/>
-        <text class="t" x="1085" y="460">control/*.jsonl</text><text class="t2" x="1085" y="477">账本 · 唯一真相 · append-only</text>
+        <rect class="box store" x="1100" y="572" width="350" height="82" rx="12"/>
+        <text class="t" x="1275" y="607">control/*.jsonl</text><text class="t2" x="1275" y="634">账本 · 唯一真相 · append-only</text>
       </g>
       <g class="node" data-id="TRACE" data-tip="tickets/&lt;id&gt;/trace.jsonl：pi 事件流，作为执行证据。">
-        <rect class="box store" x="944" y="496" width="282" height="48" rx="8"/>
-        <text class="t" x="1085" y="516">tickets/&lt;id&gt;/trace.jsonl</text><text class="t2" x="1085" y="533">pi 事件流 · 证据</text>
+        <rect class="box store" x="1100" y="676" width="350" height="82" rx="12"/>
+        <text class="t" x="1275" y="711">tickets/&lt;id&gt;/trace.jsonl</text><text class="t2" x="1275" y="738">pi 事件流 · 证据</text>
       </g>
       <g class="node" data-id="RULES" data-tip="AGENTS.md 等项目规则文件，Worker 启动时注入其上下文（L2 规则）。">
-        <rect class="box store" x="944" y="552" width="282" height="48" rx="8"/>
-        <text class="t" x="1085" y="572">项目规则文件</text><text class="t2" x="1085" y="589">AGENTS.md 等 · 注入 worker 上下文</text>
+        <rect class="box store" x="1100" y="780" width="350" height="56" rx="12"/>
+        <text class="t" x="1275" y="804">项目规则文件</text><text class="t2" x="1275" y="826">AGENTS.md 等 · 注入 worker 上下文</text>
       </g>
 
-      <!-- ══ edges ══ -->
-      <path class="edge" data-from="U1" data-to="R" marker-start="url(#arrS)" marker-end="url(#arr)" d="M200,104 V250"/>
-      <text class="elabel" data-from="U1" data-to="R" x="212" y="182" text-anchor="start">多轮对话 · 草稿确认</text>
+      <!-- ══ edges: left side ══ -->
+      <path class="edge" data-from="U1" data-to="R" marker-start="url(#arrS)" marker-end="url(#arr)" d="M160,188 V430"/>
+      <text class="elabel" data-from="U1" data-to="R" x="176" y="332" text-anchor="start">多轮对话 · 草稿确认</text>
 
-      <path class="edge" data-from="U2" data-to="CLI" marker-end="url(#arr)" d="M336,138 H404 V336 H336"/>
-      <text class="elabel" data-from="U2" data-to="CLI" x="352" y="206" text-anchor="start">监视命令</text>
+      <path class="edge" data-from="U2" data-to="CLI" marker-end="url(#arr)" d="M365,250 H435 V592 H365"/>
+      <text class="elabel" data-from="U2" data-to="CLI" x="443" y="278" text-anchor="start">监视命令</text>
 
-      <path class="edge" data-from="R" data-to="SOCK" marker-end="url(#arr)" d="M336,276 H420 V92 H454"/>
-      <text class="elabel" data-from="R" data-to="SOCK" x="342" y="268" text-anchor="start">file_ticket(spec) · 唯一入档动作</text>
+      <path class="edge" data-from="R" data-to="SOCK" marker-end="url(#arr)" d="M365,474 H455 V132 H505"/>
+      <text class="elabel" data-from="R" data-to="SOCK" x="378" y="458" text-anchor="start">file_ticket(spec)</text>
+      <text class="elabel small" data-from="R" data-to="SOCK" x="378" y="438" text-anchor="start">唯一入档动作</text>
 
-      <path class="edge" data-from="CLI" data-to="SOCK" marker-start="url(#arrS)" marker-end="url(#arr)" d="M336,350 H388 V106 H454"/>
-      <text class="elabel" data-from="CLI" data-to="SOCK" x="342" y="372" text-anchor="start">admit / ls / show / answer / cancel</text>
+      <path class="edge" data-from="CLI" data-to="SOCK" marker-start="url(#arrS)" marker-end="url(#arr)" d="M365,592 H398 V160 H505"/>
+      <text class="elabel" data-from="CLI" data-to="SOCK" x="378" y="622" text-anchor="start">admit / ls / show</text>
+      <text class="elabel" data-from="CLI" data-to="SOCK" x="378" y="646" text-anchor="start">/ answer / cancel</text>
 
-      <path class="edge" data-from="SOCK" data-to="SM" marker-end="url(#arr)" d="M624,92 H644 V160 H656"/>
-      <path class="edge" data-from="SCHED" data-to="SM" marker-end="url(#arr)" d="M624,164 H656"/>
-      <text class="elabel small" data-from="SCHED" data-to="SM" x="640" y="156">claim</text>
-      <path class="edge" data-from="TIMER" data-to="SUP" marker-end="url(#arr)" d="M539,264 V280"/>
-      <path class="edge" data-from="TIMER" data-to="SM" marker-end="url(#arr)" d="M624,236 H640 V196 H656"/>
-      <text class="elabel small" data-from="TIMER" data-to="SM" x="620" y="230" text-anchor="end">超时</text>
-      <path class="edge dash" data-from="SUP" data-to="SM" marker-end="url(#arr)" d="M624,308 H636 V180 H656"/>
-      <text class="elabel small" data-from="SUP" data-to="SM" x="539" y="356">worker 死亡 → ready 重试（继承 session-id）</text>
-      <path class="edge" data-from="SM" data-to="LW" marker-end="url(#arr)" d="M741,200 V216"/>
-      <path class="edge" data-from="SM" data-to="NOTIFY" marker-end="url(#arr)" d="M800,200 H838 V316 H826"/>
+      <!-- ══ edges: inside agentd ══ -->
+      <path class="edge" data-from="SOCK" data-to="SM" marker-end="url(#arr)" d="M705,153 H730 V256 H755"/>
+      <text class="elabel small" data-from="SOCK" data-to="SM" x="738" y="204" text-anchor="start">命令</text>
 
-      <path class="edge" data-from="LW" data-to="LEDGER" marker-end="url(#arr)" d="M826,244 H890 V464 H944"/>
-      <text class="elabel small" data-from="LW" data-to="LEDGER" x="894" y="456" text-anchor="start">append-only · seq 唯一</text>
+      <path class="edge" data-from="SCHED" data-to="SM" marker-end="url(#arr)" d="M705,275 H755"/>
+      <text class="elabel small" data-from="SCHED" data-to="SM" x="730" y="264">claim</text>
 
-      <path class="edge" data-from="SCHED" data-to="W1" marker-end="url(#arr)" d="M624,178 H866 V100 H944"/>
-      <text class="elabel small" data-from="SCHED" data-to="W1" x="870" y="140" text-anchor="start">spawn</text>
+      <path class="edge" data-from="TIMER" data-to="SUP" marker-end="url(#arr)" d="M605,438 V478"/>
 
-      <path class="edge dash" data-from="W1" data-to="SOCK" marker-end="url(#arr)" d="M944,80 H905 V46 H560 V64"/>
-      <text class="elabel small" data-from="W1" data-to="SOCK" x="720" y="40">申报 done / failed / need_input</text>
+      <path class="edge" data-from="TIMER" data-to="SM" marker-end="url(#arr)" d="M705,397 H740 V304 H755"/>
+      <text class="elabel small" data-from="TIMER" data-to="SM" x="745" y="350" text-anchor="start">超时</text>
 
-      <path class="edge dash" data-from="W1" data-to="TRACE" marker-end="url(#arr)" d="M1226,94 H1258 V520 H1226"/>
-      <text class="elabel small" data-from="W1" data-to="TRACE" transform="rotate(90 1248 300)" x="1248" y="300">事件流</text>
+      <path class="edge dash" data-from="SUP" data-to="SM" marker-end="url(#arr)" d="M705,519 H712 V290 H755"/>
+      <text class="elabel small" data-from="SUP" data-to="SM" x="700" y="590" text-anchor="end">worker 死亡 → ready 重试</text>
+      <text class="elabel small" data-from="SUP" data-to="SM" x="700" y="612" text-anchor="end">（继承 session-id）</text>
 
-      <path class="edge dash" data-from="RULES" data-to="W1" marker-end="url(#arr)" d="M944,576 H912 V110 H944"/>
-      <text class="elabel small" data-from="RULES" data-to="W1" transform="rotate(-90 906 350)" x="906" y="350">启动时注入 L2 规则</text>
+      <path class="edge" data-from="SM" data-to="LW" marker-end="url(#arr)" d="M855,326 V366"/>
+      <path class="edge" data-from="SM" data-to="NOTIFY" marker-end="url(#arr)" d="M905,326 V488"/>
+      <text class="elabel small" data-from="SM" data-to="NOTIFY" x="921" y="460" text-anchor="start">事件</text>
 
-      <path class="edge" data-from="W1" data-to="W2" marker-end="url(#arr)" d="M1085,124 V140"/>
-      <text class="elabel small" data-from="W1" data-to="W2" x="1095" y="136" text-anchor="start">拆子任务</text>
-      <path class="edge" data-from="W2" data-to="W3" marker-end="url(#arr)" d="M1085,200 V216"/>
-      <text class="elabel small" data-from="W2" data-to="W3" x="1095" y="212" text-anchor="start">再拆</text>
+      <!-- ══ edges: agentd → worker / storage ══ -->
+      <path class="edge" data-from="SCHED" data-to="W1" marker-end="url(#arr)" d="M705,299 H1030 V156 H1100"/>
+      <text class="elabel small" data-from="SCHED" data-to="W1" x="800" y="320">spawn</text>
 
-      <path class="edge dash" data-from="W3" data-to="U2" marker-end="url(#arr)" d="M944,252 H884 V700 H36 V130 H64"/>
-      <text class="elabel" data-from="W3" data-to="U2" x="450" y="694">三层仍未完成 → waiting_user 预警</text>
+      <path class="edge" data-from="LW" data-to="LEDGER" marker-end="url(#arr)" d="M955,407 H1062 V613 H1100"/>
+      <text class="elabel small" data-from="LW" data-to="LEDGER" x="1095" y="566" text-anchor="start">append-only · seq 唯一</text>
 
-      <path class="edge dash" data-from="NOTIFY" data-to="U2" marker-end="url(#arr)" d="M741,344 V640 H20 V152 H64"/>
-      <text class="elabel" data-from="NOTIFY" data-to="U2" x="400" y="634">🔔 need_input/failed = critical · done/closed = quiet</text>
+      <!-- worker chain -->
+      <path class="edge" data-from="W1" data-to="W2" marker-end="url(#arr)" d="M1275,200 V224"/>
+      <text class="elabel small" data-from="W1" data-to="W2" x="1291" y="216" text-anchor="start">拆子任务</text>
+      <path class="edge" data-from="W2" data-to="W3" marker-end="url(#arr)" d="M1275,312 V336"/>
+      <text class="elabel small" data-from="W2" data-to="W3" x="1291" y="328" text-anchor="start">再拆</text>
+
+      <!-- storage → worker: rules injection (under worker lane) -->
+      <path class="edge dash" data-from="RULES" data-to="W1" marker-end="url(#arr)" d="M1275,780 V762 H1000 V200 H1100"/>
+      <text class="elabel small" data-from="RULES" data-to="W1" x="1275" y="756" text-anchor="end">启动时注入 L2 规则</text>
+
+      <!-- worker → trace: bottom of worker lane -->
+      <path class="edge dash" data-from="W1" data-to="TRACE" marker-end="url(#arr)" d="M1275,424 H1210 V676"/>
+      <text class="elabel small" data-from="W1" data-to="TRACE" x="1198" y="452" text-anchor="end">事件流</text>
+
+      <!-- ══ edges: feedback channel (bottom) ══ -->
+      <path class="edge dash" data-from="W1" data-to="SOCK" marker-end="url(#arr)" d="M1275,380 V886 H605 V194"/>
+      <text class="elabel" data-from="W1" data-to="SOCK" x="940" y="880">申报 done / failed / need_input</text>
+
+      <path class="edge dash" data-from="NOTIFY" data-to="U2" marker-end="url(#arr)" d="M855,570 V910 H225 V288"/>
+      <text class="elabel" data-from="NOTIFY" data-to="U2" x="470" y="924">🔔 need_input/failed = critical · done/closed = quiet</text>
+
+      <path class="edge dash" data-from="W3" data-to="U2" marker-end="url(#arr)" d="M1100,402 H1010 V938 H140 V288"/>
+      <text class="elabel" data-from="W3" data-to="U2" x="590" y="952">三层仍未完成 → waiting_user 预警</text>
     </svg>
     </div>
   </div>
@@ -257,29 +273,29 @@
 <!-- ════════════════════════ 2. Ticket 生命周期 ════════════════════════ -->
 <section id="s2">
   <h2>2 · 一张 Ticket 的完整生命周期</h2>
-  <div class="desc">从「帮我做 X」到 closed：入档 → 调度 → 执行 →（提问 / 拆层 / 死亡重试）→ 验收 → 回收。</div>
+  <div class="desc">从「帮我做 X」到 closed：入档 → 调度 → 执行 →（提问 / 拆层 / 死亡重试）→ 验收 → 回收。虚线箭头 = 返回消息。</div>
   <div class="canvas-wrap">
     <div class="zoombar"><button data-z="-">−</button><button data-z="r">⤾</button><button data-z="+">+</button></div>
     <div class="canvas">
-    <svg viewBox="0 0 1160 1000" data-base="1160">
+    <svg viewBox="0 0 1240 1230" data-base="1240">
       <!-- alt blocks -->
-      <rect class="alt" x="30" y="418" width="1100" height="165" rx="8"/>
-      <text class="alt-label" x="44" y="438">alt · Worker 需要问你</text>
-      <rect class="alt" x="30" y="586" width="1100" height="136" rx="8"/>
-      <text class="alt-label" x="44" y="606">alt · Worker 拆子任务（≤ 3 层）</text>
-      <rect class="alt" x="30" y="725" width="1100" height="82" rx="8"/>
-      <text class="alt-label" x="44" y="745">alt · Worker 死亡（kill -9 / 崩溃）</text>
+      <rect class="alt" x="40" y="520" width="1160" height="220" rx="10"/>
+      <text class="alt-label" x="56" y="548">alt · Worker 需要问你</text>
+      <rect class="alt" x="40" y="748" width="1160" height="192" rx="10"/>
+      <text class="alt-label" x="56" y="776">alt · Worker 拆子任务（≤ 3 层）</text>
+      <rect class="alt" x="40" y="948" width="1160" height="124" rx="10"/>
+      <text class="alt-label" x="56" y="976">alt · Worker 死亡（kill -9 / 崩溃）</text>
 
       <!-- participants -->
-      <g class="node" data-id="pU" data-tip="你"><rect class="box you" x="25" y="16" width="130" height="38" rx="8"/><text class="t" x="90" y="40">👤 你</text></g>
-      <g class="node" data-id="pR" data-tip="Router（pi 交互 TUI）"><rect class="box term" x="185" y="16" width="130" height="38" rx="8"/><text class="t" x="250" y="40">Router(pi)</text></g>
-      <g class="node" data-id="pD" data-tip="agentd：唯一写者"><rect class="box agentd core" x="395" y="16" width="130" height="38" rx="8"/><text class="t" x="460" y="40">agentd</text></g>
-      <g class="node" data-id="pL" data-tip="账本 control/*.jsonl"><rect class="box store" x="585" y="16" width="130" height="38" rx="8"/><text class="t" x="650" y="40">账本(jsonl)</text></g>
-      <g class="node" data-id="pW" data-tip="Worker（pi headless）"><rect class="box worker" x="775" y="16" width="130" height="38" rx="8"/><text class="t" x="840" y="40">Worker(pi)</text></g>
-      <g class="node" data-id="pS" data-tip="子 Worker（递归点）"><rect class="box worker" x="955" y="16" width="130" height="38" rx="8"/><text class="t" x="1020" y="40">Subagent(pi)</text></g>
-      <line class="life" x1="90" y1="58" x2="90" y2="978"/><line class="life" x1="250" y1="58" x2="250" y2="978"/>
-      <line class="life" x1="460" y1="58" x2="460" y2="978"/><line class="life" x1="650" y1="58" x2="650" y2="978"/>
-      <line class="life" x1="840" y1="58" x2="840" y2="978"/><line class="life" x1="1020" y1="58" x2="1020" y2="978"/>
+      <g class="node" data-id="pU" data-tip="你"><rect class="box you" x="30" y="20" width="150" height="48" rx="10"/><text class="t" x="105" y="51">👤 你</text></g>
+      <g class="node" data-id="pR" data-tip="Router（pi 交互 TUI）"><rect class="box term" x="210" y="20" width="150" height="48" rx="10"/><text class="t" x="285" y="51">Router(pi)</text></g>
+      <g class="node" data-id="pD" data-tip="agentd：唯一写者"><rect class="box agentd core" x="440" y="20" width="150" height="48" rx="10"/><text class="t" x="515" y="51">agentd</text></g>
+      <g class="node" data-id="pL" data-tip="账本 control/*.jsonl"><rect class="box store" x="660" y="20" width="150" height="48" rx="10"/><text class="t" x="735" y="51">账本(jsonl)</text></g>
+      <g class="node" data-id="pW" data-tip="Worker（pi headless）"><rect class="box worker" x="870" y="20" width="150" height="48" rx="10"/><text class="t" x="945" y="51">Worker(pi)</text></g>
+      <g class="node" data-id="pS" data-tip="子 Worker（递归点）"><rect class="box worker" x="1050" y="20" width="150" height="48" rx="10"/><text class="t" x="1125" y="51">Subagent(pi)</text></g>
+      <line class="life" x1="105" y1="74" x2="105" y2="1208"/><line class="life" x1="285" y1="74" x2="285" y2="1208"/>
+      <line class="life" x1="515" y1="74" x2="515" y2="1208"/><line class="life" x1="735" y1="74" x2="735" y2="1208"/>
+      <line class="life" x1="945" y1="74" x2="945" y2="1208"/><line class="life" x1="1125" y1="74" x2="1125" y2="1208"/>
     </svg>
     </div>
   </div>
@@ -288,52 +304,63 @@
 <!-- ════════════════════════ 3. 状态机 ════════════════════════ -->
 <section id="s3">
   <h2>3 · 状态机（M0 已实现）</h2>
-  <div class="desc">迁移表驱动、单写者。红色虚线 = cancel（任意非终态可取消）。closed 是终态，之后只许 resource.released。</div>
+  <div class="desc">迁移表驱动、单写者。红色虚线 = cancel（任意非终态可取消，统一汇入 closed）。closed 是终态，之后只许 resource.released。</div>
   <div class="canvas-wrap">
     <div class="zoombar"><button data-z="-">−</button><button data-z="r">⤾</button><button data-z="+">+</button></div>
     <div class="canvas">
-    <svg viewBox="0 0 1000 640" data-base="1000">
-      <circle cx="140" cy="55" r="9" fill="#dbe4f5"/>
-      <g class="node" data-id="st_pending" data-tip="已入档，等待资源可用。"><rect class="box term" x="65" y="97" width="150" height="46" rx="23"/><text class="t" x="140" y="126">pending</text></g>
-      <g class="node" data-id="st_ready" data-tip="资源已就绪，等待调度器 claim。"><rect class="box term" x="65" y="207" width="150" height="46" rx="23"/><text class="t" x="140" y="236">ready</text></g>
-      <g class="node" data-id="st_running" data-tip="Worker 执行中。"><rect class="box agentd core" x="345" y="307" width="150" height="46" rx="23"/><text class="t" x="420" y="336">running</text></g>
-      <g class="node" data-id="st_waiting" data-tip="Worker 提问，等待你的回答。超时 → failed。"><rect class="box worker" x="645" y="217" width="150" height="46" rx="23"/><text class="t" x="720" y="246">waiting_user</text></g>
-      <g class="node" data-id="st_done" data-tip="验收齐全，等待你确认 close。"><rect class="box store" x="345" y="447" width="150" height="46" rx="23"/><text class="t" x="420" y="476">done</text></g>
-      <g class="node" data-id="st_failed" data-tip="申报失败 / 三层未完成 / 模型不可用未解决 / waiting_user 超时。"><rect class="box" style="fill:rgba(255,107,107,.12);stroke:var(--danger)" x="645" y="397" width="150" height="46" rx="23"/><text class="t" x="720" y="426">failed</text></g>
-      <g class="node" data-id="st_closed" data-tip="终态：资源回收完毕。之后账本只许追加 resource.released。"><rect class="box sys core" x="465" y="552" width="150" height="46" rx="23"/><text class="t" x="540" y="581">closed</text></g>
-      <circle cx="540" cy="620" r="8" fill="none" stroke="#dbe4f5" stroke-width="2"/><circle cx="540" cy="620" r="3.5" fill="#dbe4f5"/>
+    <svg viewBox="0 0 1120 760" data-base="1120">
+      <circle cx="200" cy="66" r="10" fill="#dbe4f5"/>
+      <g class="node" data-id="st_pending" data-tip="已入档，等待资源可用。"><rect class="box term" x="110" y="116" width="180" height="58" rx="29"/><text class="t" x="200" y="152">pending</text></g>
+      <g class="node" data-id="st_ready" data-tip="资源已就绪，等待调度器 claim。"><rect class="box term" x="110" y="256" width="180" height="58" rx="29"/><text class="t" x="200" y="292">ready</text></g>
+      <g class="node" data-id="st_running" data-tip="Worker 执行中。"><rect class="box agentd core" x="390" y="376" width="180" height="58" rx="29"/><text class="t" x="480" y="412">running</text></g>
+      <g class="node" data-id="st_waiting" data-tip="Worker 提问，等待你的回答。超时 → failed。"><rect class="box worker" x="740" y="256" width="180" height="58" rx="29"/><text class="t" x="830" y="292">waiting_user</text></g>
+      <g class="node" data-id="st_done" data-tip="验收齐全，等待你确认 close。"><rect class="box store" x="390" y="536" width="180" height="58" rx="29"/><text class="t" x="480" y="572">done</text></g>
+      <g class="node" data-id="st_failed" data-tip="申报失败 / 三层未完成 / 模型不可用未解决 / waiting_user 超时。"><rect class="box" style="fill:rgba(255,107,107,.13);stroke:var(--danger)" x="740" y="476" width="180" height="58" rx="29"/><text class="t" x="830" y="512">failed</text></g>
+      <g class="node" data-id="st_closed" data-tip="终态：资源回收完毕。之后账本只许追加 resource.released。"><rect class="box sys core" x="520" y="656" width="180" height="58" rx="29"/><text class="t" x="610" y="692">closed</text></g>
+      <circle cx="610" cy="736" r="8" fill="none" stroke="#dbe4f5" stroke-width="2"/><circle cx="610" cy="736" r="3.5" fill="#dbe4f5"/>
 
-      <path class="edge" data-from="st_pending" data-to="st_ready" marker-end="url(#arr)" d="M140,143 V207"/>
-      <text class="elabel" data-from="st_pending" data-to="st_ready" x="152" y="180" text-anchor="start">资源可用</text>
-      <path class="edge" data-from="st_ready" data-to="st_running" marker-end="url(#arr)" d="M215,242 H320 V318 H345"/>
-      <text class="elabel" data-from="st_ready" data-to="st_running" x="225" y="234" text-anchor="start">claim 成功</text>
-      <path class="edge" data-from="st_running" data-to="st_waiting" marker-end="url(#arr)" d="M495,318 H580 V252 H645"/>
-      <text class="elabel" data-from="st_running" data-to="st_waiting" x="505" y="310" text-anchor="start">need_input</text>
-      <path class="edge" data-from="st_waiting" data-to="st_running" marker-end="url(#arr)" d="M645,222 H555 V307"/>
-      <text class="elabel" data-from="st_waiting" data-to="st_running" x="600" y="214">answer</text>
-      <path class="edge" data-from="st_running" data-to="st_ready" marker-end="url(#arr)" d="M380,307 V272 H140 V253"/>
-      <text class="elabel" data-from="st_running" data-to="st_ready" x="255" y="266">worker 死亡 → 自动重试（继承 session-id）</text>
-      <path class="edge" data-from="st_running" data-to="st_done" marker-end="url(#arr)" d="M420,353 V447"/>
-      <text class="elabel" data-from="st_running" data-to="st_done" x="432" y="404" text-anchor="start">验收齐全</text>
-      <path class="edge" data-from="st_running" data-to="st_failed" marker-end="url(#arr)" d="M495,340 H600 V405 H645"/>
-      <text class="elabel" data-from="st_running" data-to="st_failed" x="500" y="332" text-anchor="start">申报失败 / 三层未完成 / 模型不可用未解决</text>
-      <path class="edge" data-from="st_waiting" data-to="st_failed" marker-end="url(#arr)" d="M720,263 V397"/>
-      <text class="elabel" data-from="st_waiting" data-to="st_failed" x="732" y="334" text-anchor="start">超时</text>
-      <path class="edge" data-from="st_done" data-to="st_closed" marker-end="url(#arr)" d="M420,493 V530 H490 V552"/>
-      <text class="elabel" data-from="st_done" data-to="st_closed" x="428" y="514" text-anchor="start">资源回收完</text>
-      <path class="edge" data-from="st_failed" data-to="st_closed" marker-end="url(#arr)" d="M720,443 V530 H590 V552"/>
-      <text class="elabel" data-from="st_failed" data-to="st_closed" x="700" y="520" text-anchor="end">资源回收完</text>
-      <path class="edge" data-from="st_closed" data-to="end" marker-end="url(#arr)" d="M540,598 V610"/>
-      <text class="elabel" x="556" y="624" text-anchor="start">终态（只许 resource.released）</text>
-      <path class="edge" data-from="start" data-to="st_pending" marker-end="url(#arr)" d="M140,64 V97"/>
-      <text class="elabel" x="152" y="86" text-anchor="start">admit（人工确认）</text>
+      <path class="edge" data-from="start" data-to="st_pending" marker-end="url(#arr)" d="M200,76 V116"/>
+      <text class="elabel" x="216" y="102" text-anchor="start">admit（人工确认）</text>
+
+      <path class="edge" data-from="st_pending" data-to="st_ready" marker-end="url(#arr)" d="M200,174 V256"/>
+      <text class="elabel" data-from="st_pending" data-to="st_ready" x="216" y="222" text-anchor="start">资源可用</text>
+
+      <path class="edge" data-from="st_ready" data-to="st_running" marker-end="url(#arr)" d="M290,285 H340 V396 H390"/>
+      <text class="elabel" data-from="st_ready" data-to="st_running" x="348" y="330">claim 成功</text>
+
+      <path class="edge" data-from="st_running" data-to="st_waiting" marker-end="url(#arr)" d="M570,388 H660 V292 H740"/>
+      <text class="elabel" data-from="st_running" data-to="st_waiting" x="580" y="372" text-anchor="start">need_input</text>
+
+      <path class="edge" data-from="st_waiting" data-to="st_running" marker-end="url(#arr)" d="M740,270 H480 V376"/>
+      <text class="elabel" data-from="st_waiting" data-to="st_running" x="610" y="252">answer</text>
+
+      <path class="edge" data-from="st_running" data-to="st_ready" marker-end="url(#arr)" d="M410,376 V344 H200 V314"/>
+      <text class="elabel" data-from="st_running" data-to="st_ready" x="320" y="358" text-anchor="start">worker 死亡 → 自动重试（继承 session-id）</text>
+
+      <path class="edge" data-from="st_running" data-to="st_done" marker-end="url(#arr)" d="M480,434 V536"/>
+      <text class="elabel" data-from="st_running" data-to="st_done" x="496" y="492" text-anchor="start">验收齐全</text>
+
+      <path class="edge" data-from="st_running" data-to="st_failed" marker-end="url(#arr)" d="M570,405 H700 V490 H740"/>
+      <text class="elabel" data-from="st_running" data-to="st_failed" x="580" y="462" text-anchor="start">申报失败 / 三层未完成 / 模型不可用未解决</text>
+
+      <path class="edge" data-from="st_waiting" data-to="st_failed" marker-end="url(#arr)" d="M830,314 V476"/>
+      <text class="elabel" data-from="st_waiting" data-to="st_failed" x="846" y="402" text-anchor="start">超时</text>
+
+      <path class="edge" data-from="st_done" data-to="st_closed" marker-end="url(#arr)" d="M480,594 V626 H580 V656"/>
+      <text class="elabel" data-from="st_done" data-to="st_closed" x="496" y="618" text-anchor="start">资源回收完</text>
+
+      <path class="edge" data-from="st_failed" data-to="st_closed" marker-end="url(#arr)" d="M830,534 V600 H660 V656"/>
+      <text class="elabel" data-from="st_failed" data-to="st_closed" x="822" y="560" text-anchor="end">资源回收完</text>
+
+      <path class="edge" data-from="st_closed" data-to="end" marker-end="url(#arr)" d="M610,714 V726"/>
+      <text class="elabel" x="628" y="740" text-anchor="start">终态（只许 resource.released）</text>
 
       <!-- cancels -->
-      <path class="edge cancel" data-from="st_pending" data-to="st_closed" marker-end="url(#arrR)" d="M65,120 H30 V575 H465"/>
-      <path class="edge cancel" data-from="st_ready" data-to="st_closed" marker-end="url(#arrR)" d="M65,230 H48 V563 H465"/>
-      <path class="edge cancel" data-from="st_running" data-to="st_closed" marker-end="url(#arrR)" d="M370,353 V520 H320 V575 H465"/>
-      <path class="edge cancel" data-from="st_waiting" data-to="st_closed" marker-end="url(#arrR)" d="M795,240 H900 V575 H615"/>
-      <text class="elabel" style="fill:var(--danger)" x="985" y="30" text-anchor="end">红色虚线 = cancel（任意非终态）</text>
+      <path class="edge cancel" data-from="st_pending" data-to="st_closed" marker-end="url(#arrR)" d="M110,145 H60 V685 H520"/>
+      <path class="edge cancel" data-from="st_ready" data-to="st_closed" marker-end="url(#arrR)" d="M110,285 H88 V700 H520"/>
+      <path class="edge cancel" data-from="st_running" data-to="st_closed" marker-end="url(#arrR)" d="M390,420 H350 V716 H520"/>
+      <path class="edge cancel" data-from="st_waiting" data-to="st_closed" marker-end="url(#arrR)" d="M920,285 H1010 V685 H700"/>
+      <text class="elabel" style="fill:var(--danger);stroke:none" x="1090" y="40" text-anchor="end">红色虚线 = cancel（任意非终态 → closed）</text>
     </svg>
     </div>
   </div>
@@ -346,41 +373,53 @@
   <div class="canvas-wrap">
     <div class="zoombar"><button data-z="-">−</button><button data-z="r">⤾</button><button data-z="+">+</button></div>
     <div class="canvas">
-    <svg viewBox="0 0 1150 500" data-base="1150">
-      <rect class="lane" x="40" y="30" width="290" height="310" rx="12"/>
-      <text class="lane-title" x="56" y="54">L1 · 通用内核（系统强制）</text>
-      <rect class="lane" x="400" y="30" width="290" height="310" rx="12"/>
-      <text class="lane-title" x="416" y="54">L2 · 项目规则（注入，不解析）</text>
-      <rect class="lane" x="760" y="30" width="290" height="310" rx="12"/>
-      <text class="lane-title" x="776" y="54">L3 · 单任务约束（注入，不解析）</text>
+    <svg viewBox="0 0 1280 640" data-base="1280">
+      <rect class="lane" x="60" y="40" width="330" height="380" rx="16"/>
+      <text class="lane-title" x="84" y="76">L1 · 通用内核（系统强制）</text>
+      <rect class="lane" x="460" y="40" width="330" height="380" rx="16"/>
+      <text class="lane-title" x="484" y="76">L2 · 项目规则（注入，不解析）</text>
+      <rect class="lane" x="860" y="40" width="330" height="380" rx="16"/>
+      <text class="lane-title" x="884" y="76">L3 · 单任务约束（注入，不解析）</text>
 
-      <g class="node" data-id="l1a" data-tip="file_ticket 入档时校验，goal 为空直接拒绝。"><rect class="box agentd" x="60" y="70" width="250" height="44" rx="8"/><text class="t" x="185" y="97">goal 非空</text></g>
-      <g class="node" data-id="l1b" data-tip="Worker 是第一层，最多拆到第三层。"><rect class="box agentd" x="60" y="124" width="250" height="44" rx="8"/><text class="t" x="185" y="151">最多三层递归</text></g>
-      <g class="node" data-id="l1c" data-tip="调度时同 key 资源独占。"><rect class="box agentd" x="60" y="178" width="250" height="44" rx="8"/><text class="t" x="185" y="205">同 key 资源互斥</text></g>
-      <g class="node" data-id="l1d" data-tip="closed 之后只许 resource.released。"><rect class="box agentd" x="60" y="232" width="250" height="44" rx="8"/><text class="t" x="185" y="259">closed 终态</text></g>
+      <g class="node" data-id="l1a" data-tip="file_ticket 入档时校验，goal 为空直接拒绝。"><rect class="box agentd" x="85" y="96" width="280" height="60" rx="12"/><text class="t" x="225" y="133">goal 非空</text></g>
+      <g class="node" data-id="l1b" data-tip="Worker 是第一层，最多拆到第三层。"><rect class="box agentd" x="85" y="176" width="280" height="60" rx="12"/><text class="t" x="225" y="213">最多三层递归</text></g>
+      <g class="node" data-id="l1c" data-tip="调度时同 key 资源独占。"><rect class="box agentd" x="85" y="256" width="280" height="60" rx="12"/><text class="t" x="225" y="293">同 key 资源互斥</text></g>
+      <g class="node" data-id="l1d" data-tip="closed 之后只许 resource.released。"><rect class="box agentd" x="85" y="336" width="280" height="60" rx="12"/><text class="t" x="225" y="373">closed 终态</text></g>
 
-      <g class="node" data-id="l2a" data-tip="读入 Worker 的 system prompt。"><rect class="box term" x="420" y="70" width="250" height="44" rx="8"/><text class="t" x="545" y="97">AGENTS.md</text></g>
-      <g class="node" data-id="l2b" data-tip="模块约定等项目文档。"><rect class="box term" x="420" y="124" width="250" height="44" rx="8"/><text class="t" x="545" y="151">MODULE-CONVENTIONS.md</text></g>
-      <g class="node" data-id="l2c" data-tip="任何项目特有约束。"><rect class="box term" x="420" y="178" width="250" height="44" rx="8"/><text class="t" x="545" y="205">项目特有约束</text></g>
+      <g class="node" data-id="l2a" data-tip="读入 Worker 的 system prompt。"><rect class="box term" x="485" y="96" width="280" height="60" rx="12"/><text class="t" x="625" y="133">AGENTS.md</text></g>
+      <g class="node" data-id="l2b" data-tip="模块约定等项目文档。"><rect class="box term" x="485" y="176" width="280" height="60" rx="12"/><text class="t" x="625" y="213">MODULE-CONVENTIONS.md</text></g>
+      <g class="node" data-id="l2c" data-tip="任何项目特有约束。"><rect class="box term" x="485" y="256" width="280" height="60" rx="12"/><text class="t" x="625" y="293">项目特有约束</text></g>
 
-      <g class="node" data-id="l3a" data-tip="ticket.constraints 示例。"><rect class="box worker" x="780" y="70" width="250" height="44" rx="8"/><text class="t" x="905" y="97">「不许碰前端」</text></g>
-      <g class="node" data-id="l3b" data-tip="ticket.constraints 示例。"><rect class="box worker" x="780" y="124" width="250" height="44" rx="8"/><text class="t" x="905" y="151">「不许 commit」</text></g>
-      <g class="node" data-id="l3c" data-tip="ticket.constraints 示例。"><rect class="box worker" x="780" y="178" width="250" height="44" rx="8"/><text class="t" x="905" y="205">「必须写报告」</text></g>
+      <g class="node" data-id="l3a" data-tip="ticket.constraints 示例。"><rect class="box worker" x="885" y="96" width="280" height="60" rx="12"/><text class="t" x="1025" y="133">「不许碰前端」</text></g>
+      <g class="node" data-id="l3b" data-tip="ticket.constraints 示例。"><rect class="box worker" x="885" y="176" width="280" height="60" rx="12"/><text class="t" x="1025" y="213">「不许 commit」</text></g>
+      <g class="node" data-id="l3c" data-tip="ticket.constraints 示例。"><rect class="box worker" x="885" y="256" width="280" height="60" rx="12"/><text class="t" x="1025" y="293">「必须写报告」</text></g>
 
-      <g class="node" data-id="sysd" data-tip="L1 由 agentd 代码强制：file_ticket 校验 + 迁移表。"><rect class="box sys" x="90" y="400" width="230" height="60" rx="8"/><text class="t" x="205" y="425">agentd</text><text class="t2" x="205" y="444">代码强制</text></g>
-      <g class="node" data-id="wctx" data-tip="Worker 拿到的完整上下文：L2 规则 + L3 约束 + 元规则「违反 = 失败 + 停 + 报告」。"><rect class="box worker core" x="440" y="400" width="270" height="60" rx="8"/><text class="t" x="575" y="425">Worker 上下文</text><text class="t2" x="575" y="444">system prompt + ticket.constraints</text></g>
-      <g class="node" data-id="audit" data-tip="Worker 的 done 报告必须含每条约束的处理结果，落入账本可审计。"><rect class="box store" x="800" y="400" width="230" height="60" rx="8"/><text class="t" x="915" y="425">账本审计</text><text class="t2" x="915" y="444">每条约束的处理结果</text></g>
+      <g class="node" data-id="sysd" data-tip="L1 由 agentd 代码强制：file_ticket 校验 + 迁移表。">
+        <rect class="box sys" x="110" y="500" width="250" height="80" rx="12"/>
+        <text class="t" x="235" y="533">agentd</text><text class="t2" x="235" y="560">代码强制</text>
+      </g>
+      <g class="node" data-id="wctx" data-tip="Worker 拿到的完整上下文：L2 规则 + L3 约束 + 元规则「违反 = 失败 + 停 + 报告」。">
+        <rect class="box worker core" x="500" y="500" width="280" height="80" rx="12"/>
+        <text class="t" x="640" y="533">Worker 上下文</text><text class="t2" x="640" y="560">system prompt + ticket.constraints</text>
+      </g>
+      <g class="node" data-id="audit" data-tip="Worker 的 done 报告必须含每条约束的处理结果，落入账本可审计。">
+        <rect class="box store" x="900" y="500" width="250" height="80" rx="12"/>
+        <text class="t" x="1025" y="533">账本审计</text><text class="t2" x="1025" y="560">每条约束的处理结果</text>
+      </g>
 
-      <path class="edge" data-from="l1d" data-to="sysd" marker-end="url(#arr)" d="M185,276 V400"/>
-      <text class="elabel" x="197" y="352" text-anchor="start">代码强制</text>
-      <text class="elabel small" x="197" y="368" text-anchor="start">file_ticket 校验 · 迁移表</text>
-      <path class="edge" data-from="l2c" data-to="wctx" marker-end="url(#arr)" d="M545,340 V400"/>
-      <text class="elabel" x="557" y="362" text-anchor="start">读入 system prompt</text>
-      <text class="elabel small" x="557" y="378" text-anchor="start">+ 元规则：违反 = 失败 + 停 + 报告</text>
-      <path class="edge" data-from="l3c" data-to="wctx" marker-end="url(#arr)" d="M905,340 V384 H680 V400"/>
-      <text class="elabel" x="795" y="378" text-anchor="middle">ticket.constraints 随任务下发</text>
-      <path class="edge" data-from="wctx" data-to="audit" marker-end="url(#arr)" d="M710,430 H800"/>
-      <text class="elabel small" x="755" y="420">报告兜底</text>
+      <path class="edge" data-from="l1d" data-to="sysd" marker-end="url(#arr)" d="M225,396 V460 H235 V500"/>
+      <text class="elabel" x="245" y="446" text-anchor="start">代码强制</text>
+      <text class="elabel small" x="245" y="468" text-anchor="start">file_ticket 校验 · 迁移表</text>
+
+      <path class="edge" data-from="l2c" data-to="wctx" marker-end="url(#arr)" d="M625,316 V460 H640 V500"/>
+      <text class="elabel" x="645" y="432" text-anchor="start">读入 system prompt</text>
+      <text class="elabel small" x="645" y="454" text-anchor="start">+ 元规则：违反 = 失败 + 停 + 报告</text>
+
+      <path class="edge" data-from="l3c" data-to="wctx" marker-end="url(#arr)" d="M1025,316 V460 H700 V500"/>
+      <text class="elabel" x="910" y="446">ticket.constraints 随任务下发</text>
+
+      <path class="edge" data-from="wctx" data-to="audit" marker-end="url(#arr)" d="M780,540 H900"/>
+      <text class="elabel small" x="840" y="528">报告兜底</text>
     </svg>
     </div>
   </div>
@@ -393,29 +432,57 @@
   <div class="canvas-wrap">
     <div class="zoombar"><button data-z="-">−</button><button data-z="r">⤾</button><button data-z="+">+</button></div>
     <div class="canvas">
-    <svg viewBox="0 0 1150 500" data-base="1150">
-      <g class="node" data-id="cfg" data-tip="~/.agent/config.yaml：model.router / model.worker / model.subagent。"><rect class="box term" x="40" y="50" width="250" height="64" rx="8"/><text class="t" x="165" y="76">~/.agent/config.yaml</text><text class="t2" x="165" y="94">model.router · worker · subagent</text></g>
-      <g class="node" data-id="adp" data-tip="项目级适配器，可选。"><rect class="box term" x="350" y="50" width="200" height="64" rx="8"/><text class="t" x="450" y="76">项目适配器覆盖</text><text class="t2" x="450" y="94">可选</text></g>
-      <g class="node" data-id="tkt" data-tip="Router 与你对话时为这张 Ticket 指定模型。"><rect class="box term" x="610" y="50" width="200" height="64" rx="8"/><text class="t" x="710" y="76">Ticket 覆盖</text><text class="t2" x="710" y="94">Router 对话时决定</text></g>
-      <g class="node" data-id="run" data-tip="agent run --model，优先级最高。"><rect class="box term" x="870" y="50" width="220" height="64" rx="8"/><text class="t" x="980" y="76">运行时覆盖</text><text class="t2" x="980" y="94">agent run --model</text></g>
-      <path class="edge" marker-end="url(#arr)" d="M290,82 H350"/>
-      <path class="edge" marker-end="url(#arr)" d="M550,82 H610"/>
-      <path class="edge" marker-end="url(#arr)" d="M810,82 H870"/>
+    <svg viewBox="0 0 1280 620" data-base="1280">
+      <g class="node" data-id="cfg" data-tip="~/.agent/config.yaml：model.router / model.worker / model.subagent。">
+        <rect class="box term" x="60" y="60" width="280" height="80" rx="12"/>
+        <text class="t" x="200" y="94">~/.agent/config.yaml</text><text class="t2" x="200" y="121">model.router · worker · subagent</text>
+      </g>
+      <g class="node" data-id="adp" data-tip="项目级适配器，可选。">
+        <rect class="box term" x="390" y="60" width="240" height="80" rx="12"/>
+        <text class="t" x="510" y="94">项目适配器覆盖</text><text class="t2" x="510" y="121">可选</text>
+      </g>
+      <g class="node" data-id="tkt" data-tip="Router 与你对话时为这张 Ticket 指定模型。">
+        <rect class="box term" x="680" y="60" width="240" height="80" rx="12"/>
+        <text class="t" x="800" y="94">Ticket 覆盖</text><text class="t2" x="800" y="121">Router 对话时决定</text>
+      </g>
+      <g class="node" data-id="run" data-tip="agent run --model，优先级最高。">
+        <rect class="box term" x="970" y="60" width="250" height="80" rx="12"/>
+        <text class="t" x="1095" y="94">运行时覆盖</text><text class="t2" x="1095" y="121">agent run --model</text>
+      </g>
+      <path class="edge" marker-end="url(#arr)" d="M340,100 H390"/>
+      <path class="edge" marker-end="url(#arr)" d="M630,100 H680"/>
+      <path class="edge" marker-end="url(#arr)" d="M920,100 H970"/>
 
-      <g class="node" data-id="mr" data-tip="Router 模型 = 配置。"><rect class="box you" x="110" y="220" width="250" height="64" rx="8"/><text class="t" x="235" y="246">Router</text><text class="t2" x="235" y="264">模型 = 配置</text></g>
-      <g class="node" data-id="mw1" data-tip="Worker L1 模型 = ticket 指定。"><rect class="box worker" x="450" y="220" width="250" height="64" rx="8"/><text class="t" x="575" y="246">Worker L1</text><text class="t2" x="575" y="264">模型 = ticket 指定</text></g>
-      <g class="node" data-id="mw2" data-tip="继承父模型，可显式覆盖。"><rect class="box worker" x="790" y="220" width="250" height="64" rx="8"/><text class="t" x="915" y="246">Worker L2</text><text class="t2" x="915" y="264">继承父模型（可显式覆盖）</text></g>
-      <g class="node" data-id="mw3" data-tip="⚠️ 硬性上限：三层仍未完成 → waiting_user。"><rect class="box worker core" x="790" y="350" width="250" height="64" rx="8"/><text class="t" x="915" y="376">Worker L3</text><text class="t2" x="915" y="394">⚠️ 硬上限</text></g>
-      <g class="node" data-id="myou" data-tip="模型不可用或三层未完成时，由你决定降级或等待。"><rect class="box sys" x="450" y="350" width="250" height="64" rx="8"/><text class="t" x="575" y="376">👤 你</text><text class="t2" x="575" y="394">决定降级或等待</text></g>
+      <g class="node" data-id="mr" data-tip="Router 模型 = 配置。">
+        <rect class="box you" x="130" y="280" width="280" height="80" rx="12"/>
+        <text class="t" x="270" y="314">Router</text><text class="t2" x="270" y="341">模型 = 配置</text>
+      </g>
+      <g class="node" data-id="mw1" data-tip="Worker L1 模型 = ticket 指定。">
+        <rect class="box worker" x="500" y="280" width="280" height="80" rx="12"/>
+        <text class="t" x="640" y="314">Worker L1</text><text class="t2" x="640" y="341">模型 = ticket 指定</text>
+      </g>
+      <g class="node" data-id="mw2" data-tip="继承父模型，可显式覆盖。">
+        <rect class="box worker" x="870" y="280" width="280" height="80" rx="12"/>
+        <text class="t" x="1010" y="314">Worker L2</text><text class="t2" x="1010" y="341">继承父模型（可显式覆盖）</text>
+      </g>
+      <g class="node" data-id="mw3" data-tip="⚠️ 硬性上限：三层仍未完成 → waiting_user。">
+        <rect class="box worker core" x="870" y="440" width="280" height="80" rx="12"/>
+        <text class="t" x="1010" y="474">Worker L3</text><text class="t2" x="1010" y="501">⚠️ 硬上限</text>
+      </g>
+      <g class="node" data-id="myou" data-tip="模型不可用或三层未完成时，由你决定降级或等待。">
+        <rect class="box sys" x="500" y="440" width="280" height="80" rx="12"/>
+        <text class="t" x="640" y="474">👤 你</text><text class="t2" x="640" y="501">决定降级或等待</text>
+      </g>
 
-      <path class="edge" data-from="run" data-to="mr" marker-end="url(#arr)" d="M960,114 V160 H235 V220"/>
-      <path class="edge" data-from="run" data-to="mw1" marker-end="url(#arr)" d="M1000,114 V176 H575 V220"/>
-      <path class="edge" data-from="mw1" data-to="mw2" marker-end="url(#arr)" d="M700,252 H790"/>
-      <text class="elabel" data-from="mw1" data-to="mw2" x="745" y="244">拆 + 继承</text>
-      <path class="edge" data-from="mw2" data-to="mw3" marker-end="url(#arr)" d="M915,284 V350"/>
-      <text class="elabel" data-from="mw2" data-to="mw3" x="927" y="322" text-anchor="start">拆 + 继承</text>
-      <path class="edge dash" data-from="mw3" data-to="myou" marker-end="url(#arr)" d="M790,382 H700"/>
-      <text class="elabel" data-from="mw3" data-to="myou" x="745" y="370">模型不可用 / 三层未完成 → waiting_user</text>
+      <path class="edge" data-from="run" data-to="mr" marker-end="url(#arr)" d="M1050,140 V200 H270 V280"/>
+      <path class="edge" data-from="run" data-to="mw1" marker-end="url(#arr)" d="M1140,140 V230 H640 V280"/>
+      <path class="edge" data-from="mw1" data-to="mw2" marker-end="url(#arr)" d="M780,320 H870"/>
+      <text class="elabel" data-from="mw1" data-to="mw2" x="825" y="306">拆 + 继承</text>
+      <path class="edge" data-from="mw2" data-to="mw3" marker-end="url(#arr)" d="M1010,360 V440"/>
+      <text class="elabel" data-from="mw2" data-to="mw3" x="1026" y="406" text-anchor="start">拆 + 继承</text>
+      <path class="edge dash" data-from="mw3" data-to="myou" marker-end="url(#arr)" d="M870,480 H780"/>
+      <text class="elabel small" data-from="mw3" data-to="myou" x="825" y="418">模型不可用 / 三层未完成</text>
+      <text class="elabel small" data-from="mw3" data-to="myou" x="825" y="546">→ waiting_user</text>
     </svg>
     </div>
   </div>
@@ -428,16 +495,16 @@
   <div class="canvas-wrap">
     <div class="zoombar"><button data-z="-">−</button><button data-z="r">⤾</button><button data-z="+">+</button></div>
     <div class="canvas">
-    <svg viewBox="0 0 1180 200" data-base="1180">
-      <g class="node" data-tip="M0 ✅ 已完成"><rect class="box stat-ok" x="30" y="55" width="172" height="96" rx="10"/><text class="t" x="116" y="84">✅ M0</text><text class="t2" x="116" y="104">账本+状态机+reconcile</text><text class="t2" x="116" y="122">kill -9 自愈已验证</text></g>
-      <g class="node" data-tip="M1 🔨 进行中"><rect class="box stat-doing" x="222" y="55" width="172" height="96" rx="10"/><text class="t" x="308" y="84">🔨 M1</text><text class="t2" x="308" y="104">agentd 常驻 + socket</text><text class="t2" x="308" y="122">+ 定时器 + 假 worker</text></g>
-      <g class="node" data-tip="M2 ⬜ 未开始"><rect class="box stat-todo" x="414" y="55" width="172" height="96" rx="10"/><text class="t" x="500" y="84">⬜ M2</text><text class="t2" x="500" y="104">file_ticket 工具</text><text class="t2" x="500" y="122">+ Router 扩展</text></g>
-      <g class="node" data-tip="M3 ⬜ 未开始"><rect class="box stat-todo" x="606" y="55" width="172" height="96" rx="10"/><text class="t" x="692" y="84">⬜ M3</text><text class="t2" x="692" y="104">接 pi worker</text><text class="t2" x="692" y="122">+ 三层限制</text></g>
-      <g class="node" data-tip="M4 ⬜ 未开始"><rect class="box stat-todo" x="798" y="55" width="172" height="96" rx="10"/><text class="t" x="884" y="84">⬜ M4</text><text class="t2" x="884" y="104">ask_user + waiting_user</text><text class="t2" x="884" y="122">+ 三级通知</text></g>
-      <g class="node" data-tip="M5 ⬜ 未开始"><rect class="box stat-todo" x="990" y="55" width="172" height="96" rx="10"/><text class="t" x="1076" y="84">⬜ M5</text><text class="t2" x="1076" y="104">资源互斥</text><text class="t2" x="1076" y="122">+ session-id 继承</text></g>
-      <path class="edge" marker-end="url(#arr)" d="M202,103 H222"/><path class="edge" marker-end="url(#arr)" d="M394,103 H414"/>
-      <path class="edge" marker-end="url(#arr)" d="M586,103 H606"/><path class="edge" marker-end="url(#arr)" d="M778,103 H798"/>
-      <path class="edge" marker-end="url(#arr)" d="M970,103 H990"/>
+    <svg viewBox="0 0 1280 250" data-base="1280">
+      <g class="node" data-tip="M0 ✅ 已完成"><rect class="box stat-ok" x="50" y="60" width="190" height="120" rx="14"/><text class="t" x="145" y="95">✅ M0</text><text class="t2" x="145" y="122">账本+状态机+reconcile</text><text class="t2" x="145" y="145">kill -9 自愈已验证</text></g>
+      <g class="node" data-tip="M1 🔨 进行中"><rect class="box stat-doing" x="260" y="60" width="190" height="120" rx="14"/><text class="t" x="355" y="95">🔨 M1</text><text class="t2" x="355" y="122">agentd 常驻 + socket</text><text class="t2" x="355" y="145">+ 定时器 + 假 worker</text></g>
+      <g class="node" data-tip="M2 ⬜ 未开始"><rect class="box stat-todo" x="470" y="60" width="190" height="120" rx="14"/><text class="t" x="565" y="95">⬜ M2</text><text class="t2" x="565" y="122">file_ticket 工具</text><text class="t2" x="565" y="145">+ Router 扩展</text></g>
+      <g class="node" data-tip="M3 ⬜ 未开始"><rect class="box stat-todo" x="680" y="60" width="190" height="120" rx="14"/><text class="t" x="775" y="95">⬜ M3</text><text class="t2" x="775" y="122">接 pi worker</text><text class="t2" x="775" y="145">+ 三层限制</text></g>
+      <g class="node" data-tip="M4 ⬜ 未开始"><rect class="box stat-todo" x="890" y="60" width="190" height="120" rx="14"/><text class="t" x="985" y="95">⬜ M4</text><text class="t2" x="985" y="122">ask_user + waiting_user</text><text class="t2" x="985" y="145">+ 三级通知</text></g>
+      <g class="node" data-tip="M5 ⬜ 未开始"><rect class="box stat-todo" x="1100" y="60" width="190" height="120" rx="14"/><text class="t" x="1195" y="95">⬜ M5</text><text class="t2" x="1195" y="122">资源互斥</text><text class="t2" x="1195" y="145">+ session-id 继承</text></g>
+      <path class="edge" marker-end="url(#arr)" d="M240,120 H260"/><path class="edge" marker-end="url(#arr)" d="M450,120 H470"/>
+      <path class="edge" marker-end="url(#arr)" d="M660,120 H680"/><path class="edge" marker-end="url(#arr)" d="M870,120 H890"/>
+      <path class="edge" marker-end="url(#arr)" d="M1080,120 H1100"/>
     </svg>
     </div>
   </div>
@@ -467,7 +534,7 @@
 (function(){
   const svg = document.querySelector('#s2 svg');
   const NS = 'http://www.w3.org/2000/svg';
-  const P = {U:90, R:250, D:460, L:650, W:840, S:1020};
+  const P = {U:105, R:285, D:515, L:735, W:945, S:1125};
   const evts = [
     ['U','R','帮我做 X'],
     ['R','U','多轮对话 → 展示草稿 Ticket',1],
@@ -502,36 +569,36 @@
     ['D','D','两阶段回收（标记→等待→SIGTERM→SIGKILL）'],
     ['D','L','resource.released + →closed'],
   ];
-  const y0 = 110, step = 27;
+  const y0 = 128, step = 35;
   evts.forEach((e,i)=>{
     const [f,t,label,ret] = e, y = y0 + i*step, n = i+1;
     const g = document.createElementNS(NS,'g');
-    if(f===t){ // self loop
+    if(f===t){
       const x = P[f];
       const p = document.createElementNS(NS,'path');
-      p.setAttribute('d',`M${x+6},${y} C ${x+58},${y-6} ${x+58},${y+16} ${x+6},${y+18}`);
+      p.setAttribute('d',`M${x+8},${y} C ${x+72},${y-8} ${x+72},${y+20} ${x+8},${y+22}`);
       p.setAttribute('class','edge'+(ret?' dash':''));
       p.setAttribute('marker-end','url(#arr)');
       g.appendChild(p);
       const tx = document.createElementNS(NS,'text');
-      tx.setAttribute('class','elabel'); tx.setAttribute('x',x+66); tx.setAttribute('y',y+10); tx.setAttribute('text-anchor','start');
+      tx.setAttribute('class','elabel'); tx.setAttribute('x',x+82); tx.setAttribute('y',y+13); tx.setAttribute('text-anchor','start');
       tx.textContent = label; g.appendChild(tx);
       const nm = document.createElementNS(NS,'text');
-      nm.setAttribute('class','num'); nm.setAttribute('x',x-14); nm.setAttribute('y',y+4); nm.setAttribute('text-anchor','end');
+      nm.setAttribute('class','num'); nm.setAttribute('x',x-16); nm.setAttribute('y',y+5); nm.setAttribute('text-anchor','end');
       nm.textContent = n; g.appendChild(nm);
     } else {
       const x1 = P[f], x2 = P[t];
       const p = document.createElementNS(NS,'path');
-      p.setAttribute('d',`M${x1},${y} L${x2- (x2>x1?6:-6)},${y}`);
+      p.setAttribute('d',`M${x1},${y} L${x2-(x2>x1?7:-7)},${y}`);
       p.setAttribute('class','edge'+(ret?' dash':''));
       p.setAttribute('marker-end','url(#arr)');
       g.appendChild(p);
       const mid = (x1+x2)/2;
       const nm = document.createElementNS(NS,'text');
-      nm.setAttribute('class','num'); nm.setAttribute('x',mid); nm.setAttribute('y',y-16); nm.setAttribute('text-anchor','middle');
+      nm.setAttribute('class','num'); nm.setAttribute('x',mid); nm.setAttribute('y',y-8); nm.setAttribute('text-anchor','middle');
       nm.textContent = n; g.appendChild(nm);
       const tx = document.createElementNS(NS,'text');
-      tx.setAttribute('class','elabel'); tx.setAttribute('x',mid); tx.setAttribute('y',y-6); tx.setAttribute('text-anchor','middle');
+      tx.setAttribute('class','elabel'); tx.setAttribute('x',mid); tx.setAttribute('y',y+16); tx.setAttribute('text-anchor','middle');
       tx.textContent = label; g.appendChild(tx);
     }
     svg.appendChild(g);

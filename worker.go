@@ -114,10 +114,13 @@ func (d *Daemon) spawnPiWorker(t *Ticket) (*exec.Cmd, error) {
 
 // spawnPiWorkerWithPrompt starts a pi worker with an explicit prompt.
 // Used both for the initial run and for resuming after an answer.
+// The worker's physical workspace lives under the ticket's PROJECT directory,
+// so it can read/write the project's files directly.
 func (d *Daemon) spawnPiWorkerWithPrompt(t *Ticket, prompt string) (*exec.Cmd, error) {
-	// Prepare workspace and trace file
-	workDir := filepath.Join(d.homeDir, ".agent", "tickets", t.ID, "work")
-	traceDir := filepath.Join(d.homeDir, ".agent", "tickets", t.ID)
+	// Workspace + trace live under <project>/.agent/tickets/<id>/
+	root := d.projectRoot(t)
+	workDir := filepath.Join(root, ".agent", "tickets", t.ID, "work")
+	traceDir := filepath.Join(root, ".agent", "tickets", t.ID)
 	if err := os.MkdirAll(workDir, 0755); err != nil {
 		return nil, fmt.Errorf("mkdir work: %w", err)
 	}
@@ -128,8 +131,8 @@ func (d *Daemon) spawnPiWorkerWithPrompt(t *Ticket, prompt string) (*exec.Cmd, e
 		return nil, fmt.Errorf("open trace: %w", err)
 	}
 
-	// System prompt: L2 rules + task identity
-	rules := loadRules(d.rulePaths())
+	// System prompt: L2 rules (global + project) + task identity
+	rules := loadRules(d.rulePaths(t))
 	sysPrompt := buildWorkerSystemPrompt(t, rules)
 	sysFile := filepath.Join(traceDir, ".sysprompt.txt")
 	if err := os.WriteFile(sysFile, []byte(sysPrompt), 0644); err != nil {
@@ -137,8 +140,8 @@ func (d *Daemon) spawnPiWorkerWithPrompt(t *Ticket, prompt string) (*exec.Cmd, e
 		return nil, fmt.Errorf("write sysprompt: %w", err)
 	}
 
-	// Model resolution: ticket override > config default
-	model := resolveWorkerModel(t, d.config)
+	// Model resolution: ticket override > project config > global config
+	model := resolveWorkerModel(t, d.effectiveConfig(t))
 
 	// Use --session-id so the worker's conversation persists across
 	// need_input -> answer resume. The session id is bound to the ticket.
@@ -160,6 +163,7 @@ func (d *Daemon) spawnPiWorkerWithPrompt(t *Ticket, prompt string) (*exec.Cmd, e
 		"SUPER_TICKET_ID="+t.ID,
 		fmt.Sprintf("SUPER_TICKET_DEPTH=%d", t.Depth),
 		"SUPER_SOCK="+filepath.Join(d.homeDir, ".agent", "sock"),
+		"SUPER_PROJECT="+t.Project,
 	)
 
 	stdout, err := cmd.StdoutPipe()

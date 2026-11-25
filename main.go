@@ -33,7 +33,7 @@ func main() {
 	case "ping":
 		err = cmdClient("ping", nil)
 	case "ls":
-		err = cmdClient("ls", nil)
+		err = cmdList()
 	case "show":
 		err = cmdClient("show", map[string]interface{}{"id": arg(2)})
 	case "admit":
@@ -253,6 +253,87 @@ func prettyPrint(v interface{}) {
 		return
 	}
 	fmt.Println(string(data))
+}
+
+// cmdList prints a management view of all tickets, grouped by project
+func cmdList() error {
+	client, err := NewClient(sockPath())
+	if err != nil {
+		return fmt.Errorf("connect to agentd (is it running? try 'agent daemon'): %w", err)
+	}
+	defer client.Close()
+
+	resp, err := client.Call("ls", nil)
+	if err != nil {
+		return err
+	}
+	if !resp.Success {
+		return fmt.Errorf("agentd: %s", resp.Error)
+	}
+
+	data, _ := json.Marshal(resp.Data)
+	var tickets []Ticket
+	json.Unmarshal(data, &tickets)
+
+	if len(tickets) == 0 {
+		fmt.Println("no tickets")
+		return nil
+	}
+
+	// Group by project (empty project = global)
+	groups := map[string][]Ticket{}
+	var order []string
+	for _, t := range tickets {
+		proj := t.Project
+		if proj == "" {
+			proj = "(global)"
+		}
+		if _, seen := groups[proj]; !seen {
+			order = append(order, proj)
+		}
+		groups[proj] = append(groups[proj], t)
+	}
+
+	for _, proj := range order {
+		fmt.Printf("\n%s\n", proj)
+		for _, t := range groups[proj] {
+			marker := stateMarker(t.State)
+			extra := ""
+			if t.Depth > 1 {
+				extra = fmt.Sprintf(" [L%d]", t.Depth)
+			}
+			fmt.Printf("  %s %-18s %-13s%s %s\n", marker, t.ID, t.State, extra, truncate(t.Goal, 55))
+		}
+	}
+	return nil
+}
+
+func stateMarker(s State) string {
+	switch s {
+	case StateRunning:
+		return "⚙️"
+	case StateReady:
+		return "⏳"
+	case StatePending:
+		return "·"
+	case StateWaitingUser:
+		return "⚠️"
+	case StateDone:
+		return "✅"
+	case StateFailed:
+		return "❌"
+	case StateClosed:
+		return "🔒"
+	}
+	return " "
+}
+
+func truncate(s string, n int) string {
+	s = strings.ReplaceAll(s, "\n", " ")
+	if len(s) <= n {
+		return s
+	}
+	return s[:n-1] + "…"
 }
 
 // cmdFollow polls the ticket and prints state changes until terminal
