@@ -1,11 +1,22 @@
-# super_personal_agent
+# super_personal_agent（简称 sa）
 
 一个只在终端里用的个人 AI 任务指挥系统。
-你只和一个 Router 对话；它把任务写成 Ticket；Worker 执行；Worker 可以自己再拆子 Ticket 递归解决（最多三层）；一个常驻进程 `agentd` 负责调度、计时、监管、记账。
+你只和一个 Router 对话；它把任务写成 Ticket；Worker 执行；Worker 可以自己再拆子 Ticket 递归解决（最多三层）；一个常驻后台服务 `sa`（systemd 托管）负责调度、计时、监管、记账。
 
-**支持多项目并行**：一个全局 daemon，可在任意多个项目目录里发起任务，Worker 在对应项目目录里干活、用对应项目的规则和模型，但你能在同一个看板看到所有任务。
+**支持多项目并行**：一个全局服务，可在任意多个项目目录里发起任务，Worker 在对应项目目录里干活、用对应项目的规则和模型，但你能在同一个看板看到所有任务。
 
 > 设计文档：[DESIGN.md](DESIGN.md) · 架构图：[ARCHITECTURE.md](ARCHITECTURE.md)
+
+---
+
+## `sa` 和 `pi` 的区别（核心心智模型）
+
+| 命令 | 是什么 | 什么时候用 |
+|---|---|---|
+| **`sa`** | 打开一个 **Router 会话**，工作进入任务系统：你确认的任务会被 Worker 在后台执行、被跟踪、可被监视和验收 | 你要"指挥 AI 干活"，尤其是**多个并行任务**、**后台执行**、**需要监视进度**、**需要可追溯** |
+| **`pi`** | 单纯的编码助手，没有任何任务系统：没有 file_ticket、不会调度 Worker、不留账本 | 临时问个问题、改个文件、一次性的小活儿，**不需要跟踪也不需要并行** |
+
+一句话：**`sa` 用来指挥，`pi` 用来随手干活。** 判断标准——这件事值不值得被跟踪和管理？值得就 `sa`，不值得就 `pi`。
 
 ---
 
@@ -18,46 +29,45 @@ cd /path/to/super_personal_agent
 go build -o agent .
 ```
 
-### 2. 启动后台进程（systemd，推荐）
+### 2. 启动后台服务（一次性，systemd 托管）
 
 ```bash
-./agent daemon start
+sa start
 ```
 
 第一次运行会自动安装一个 systemd **用户服务**（`super-agent.service`）并启动。之后它就常驻后台、由 systemd 托管，**你不用再开窗口守着它**：
 
 - **崩溃自动拉起**：kill -9 之后 systemd 会 3 秒内重启它（`Restart=on-failure`）
-- **登录自启**：`./agent daemon enable` 后，每次登录自动启动
+- **登录自启**：`sa enable` 后，每次登录自动启动
+- **状态查看**：`sa status`（等价于 `systemctl --user status super-agent.service`）
 
-常用管理命令：
+服务管理：
 
 ```bash
-./agent daemon status    # 查看运行状态
-./agent daemon logs -f   # 跟踪日志
-./agent daemon stop      # 停止
-./agent daemon restart   # 重启
-./agent daemon enable    # 登录自启
-./agent daemon           # 前台运行（调试用，Ctrl+C 停）
-./agent daemon uninstall # 卸载服务
+sa status          # 查看运行状态
+sa logs [-f]       # 跟踪日志
+sa stop / restart  # 停止 / 重启
+sa enable          # 登录自启
+sa uninstall       # 卸载服务
 ```
 
-> **说明**：worker 需要执行 `pi`（一个依赖 node 的脚本），而 systemd 环境的 PATH 默认不含它。`install` 时会自动探测 `pi` 和 `node` 的实际路径注入到服务里，所以你无需手工配 PATH。
+> **说明**：worker 需要执行 `pi`（一个依赖 node 的脚本），而 systemd 环境的 PATH 默认不含它。`install` 时会自动探测 `pi` 和 `node` 的实际路径注入到服务里，无需手工配 PATH。
 >
-> **进阶**：如果你希望 daemon 在**完全登出**（没有任何登录会话）后也继续跑，执行一次 `loginctl enable-linger $USER`。
+> **进阶**：希望 daemon 在**完全登出**（没有任何登录会话）后也继续跑，执行一次 `loginctl enable-linger $USER`。
 
-### 3. 开一个终端，开 pi 对话
+### 3. 开一个 Router 会话开始指挥
 
 ```bash
-pi        # 开 Router 会话（会自动加载 file_ticket 工具）
+sa        # 开 Router 会话（自动带任务系统）
 ```
 
 然后正常聊天：`帮我做 X`。Router 会跟你多轮确认需求、弹出草稿让你确认，确认后任务自动进入系统、Worker 在后台开跑。
 
-**监视进度**（再开一个终端，或复用）：
+**监视进度**（另开一个终端）：
 
 ```bash
-./agent ls          # 看板：所有任务（按项目分组）
-./agent follow <id> # 实时盯住某个任务
+sa ls            # 看板：所有任务（按项目分组）
+sa follow <id>   # 实时盯住某个任务
 ```
 
 ---
@@ -100,17 +110,21 @@ rules: []           # 全局规则，所有项目的 Worker 都会注入
 
 ## 你在终端里用的命令
 
+日常你只用一个入口 **`sa`**；底层 `agent` 命令也存在（`sa` 是它的包装）。
+
 | 命令 | 作用 |
 |---|---|
-| `agent daemon start` | 后台启动（systemd 托管，自动安装服务） |
-| `agent daemon status` / `logs [-f]` / `stop` / `restart` / `enable` | 管理 daemon 服务 |
-| `agent daemon` | 前台运行（调试，Ctrl+C 停止） |
-| `agent ls` | **看板**：所有 Ticket 状态，按项目分组 |
-| `agent show <id>` | 单张 Ticket 的细节 |
-| `agent follow <id>` | 实时盯住一张 Ticket 的状态变化 |
-| `agent answer <id> <text>` | 回答 Worker 抛给你的问题 |
-| `agent cancel <id>` | 强制终止一张 Ticket（回收进程组 + 资源） |
-| `agent ping` | 健康检查（daemon 是否在跑） |
+| `sa` | 开 Router 会话（进入任务系统） |
+| `sa start` / `stop` / `restart` | 后台服务控制（systemd） |
+| `sa status` / `sa logs [-f]` | 服务状态 / 日志 |
+| `sa enable` / `sa uninstall` | 登录自启 / 卸载 |
+| `sa ls` | **看板**：所有 Ticket 状态，按项目分组 |
+| `sa show <id>` | 单张 Ticket 的细节 |
+| `sa follow <id>` | 实时盯住一张 Ticket 的状态变化 |
+| `sa answer <id> <text>` | 回答 Worker 抛给你的问题 |
+| `sa cancel <id>` | 强制终止一张 Ticket（回收进程组 + 资源） |
+| `sa ping` | 健康检查（服务是否在跑） |
+| `sa --help` | sa 自身说明（含 sa/pi 区别） |
 
 ---
 
