@@ -348,6 +348,7 @@ func (d *Daemon) notifyMaxDepth(t *Ticket) {
 		"text":        "任务已到达最大递归深度(3层)仍未完成。可能是 AI 走偏或需求理解有误，需要人工介入判断。",
 		"kind":        "max_depth",
 	})
+	d.sm.SetQuestion(t.ID, "任务已到达最大递归深度(3层)仍未完成。可能是 AI 走偏或需求理解有误，需要人工介入判断。")
 	d.sm.TransitionTicket(t.ID, StateWaitingUser, "max_depth_reached", Actor{Actor: "agentd"})
 	d.notify(t, "interrupt", "max_depth", fmt.Sprintf("⚠️ %s 达到最大递归深度仍未完成，需要人工介入", t.ID))
 	d.log("ticket %s hit max recursion depth, escalated to user", t.ID)

@@ -362,6 +362,7 @@ func (d *Daemon) finishWorker(t *Ticket, res workerResult) {
 			"question_id": fmt.Sprintf("q-%d", time.Now().Unix()),
 			"text":        question,
 		})
+		d.sm.SetQuestion(t.ID, question)
 		d.sm.TransitionTicket(t.ID, StateWaitingUser, "worker_needs_input", Actor{Actor: "worker", PID: ticket.WorkerPID})
 		d.notify(t, "interrupt", "need_input", fmt.Sprintf("⚠️ %s 需要你: %s", t.ID, question))
 		d.log("worker needs input for %s: %s", t.ID, question)

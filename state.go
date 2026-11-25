@@ -66,6 +66,7 @@ type Ticket struct {
 	Rules       []string               `json:"rules,omitempty"`
 	Resources   []ResourceReq          `json:"resources,omitempty"`
 	Project     string                 `json:"project,omitempty"` // Router cwd at admit time; immutable
+	Question    string                 `json:"question,omitempty"` // pending question when waiting_user
 	WaitingSince string                `json:"waiting_since,omitempty"`
 	WaitingChildren bool               `json:"waiting_children,omitempty"`
 	CreatedAt   string                 `json:"created_at"`
@@ -130,6 +131,10 @@ func (sm *StateMachine) applyEvent(event *Event) error {
 		return sm.applyStateChanged(event)
 	case "run.claimed":
 		return sm.applyRunClaimed(event)
+	case "question.asked":
+		return sm.applyQuestionAsked(event)
+	case "answer.given":
+		return sm.applyAnswerGiven(event)
 	default:
 		// Unknown event type - skip for forward compatibility
 		return nil
@@ -201,12 +206,41 @@ func (sm *StateMachine) applyRunClaimed(event *Event) error {
 	return nil
 }
 
+func (sm *StateMachine) applyQuestionAsked(event *Event) error {
+	var data struct {
+		Text string `json:"text"`
+	}
+	if err := jsonUnmarshal(event.Data, &data); err != nil {
+		return err
+	}
+	if t, ok := sm.tickets[event.Ticket]; ok {
+		t.Question = data.Text
+	}
+	return nil
+}
+
+func (sm *StateMachine) applyAnswerGiven(event *Event) error {
+	if t, ok := sm.tickets[event.Ticket]; ok {
+		t.Question = "" // answered; clear the pending question
+	}
+	return nil
+}
+
 // SetWorkerPID updates the worker pid on a ticket (in-memory, after spawn)
 func (sm *StateMachine) SetWorkerPID(ticketID string, pid int) {
 	sm.mu.Lock()
 	defer sm.mu.Unlock()
 	if t, ok := sm.tickets[ticketID]; ok {
 		t.WorkerPID = pid
+	}
+}
+
+// SetQuestion records the pending question on a ticket (in-memory, at runtime)
+func (sm *StateMachine) SetQuestion(ticketID string, question string) {
+	sm.mu.Lock()
+	defer sm.mu.Unlock()
+	if t, ok := sm.tickets[ticketID]; ok {
+		t.Question = question
 	}
 }
 

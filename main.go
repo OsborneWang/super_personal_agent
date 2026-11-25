@@ -360,7 +360,8 @@ func truncate(s string, n int) string {
 	return s[:n-1] + "…"
 }
 
-// cmdFollow polls the ticket and prints state changes until terminal
+// cmdFollow waits on a ticket until it needs you or reaches a terminal state,
+// then hands off with a clear verdict and the next command to run.
 func cmdFollow(id string) error {
 	if id == "" {
 		return fmt.Errorf("usage: agent follow <id>")
@@ -371,46 +372,111 @@ func cmdFollow(id string) error {
 	}
 	defer client.Close()
 
-	fmt.Printf("Following %s (Ctrl+C to stop)\n", id)
-	var lastState string
-	var lastAttempt int
-	for {
+	getTicket := func() (*Ticket, error) {
 		resp, err := client.Call("show", map[string]interface{}{"id": id})
 		if err != nil {
-			return err
+			return nil, err
 		}
 		if !resp.Success {
-			return fmt.Errorf("agentd: %s", resp.Error)
+			return nil, fmt.Errorf("agentd: %s", resp.Error)
 		}
 		data, _ := json.Marshal(resp.Data)
 		var t Ticket
 		json.Unmarshal(data, &t)
+		return &t, nil
+	}
 
-		if string(t.State) != lastState || t.Attempt != lastAttempt {
-			marker := "  "
+	t, err := getTicket()
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("👀 蹲守 %s\n", id)
+	fmt.Printf("   %s\n", truncate(t.Goal, 70))
+	fmt.Printf("   \uff08Ctrl+C \u9000\u51fa\uff0c\u4e0d\u5f71\u54cd\u540e\u53f0\u6267\u884c\uff09\n\n")
+
+	// Already in a state that needs the user
+	if t.State == StateWaitingUser {
+		handoffWaiting(t)
+		return nil
+	}
+	if isTerminal(t.State) {
+		handoffTerminal(t, 0)
+		return nil
+	}
+
+	var runStart time.Time
+	lastState := t.State
+	for {
+		time.Sleep(1 * time.Second)
+		t, err := getTicket()
+		if err != nil {
+			return err
+		}
+
+		if t.State != lastState {
 			switch t.State {
 			case StateRunning:
-				marker = "⚙️ "
+				runStart = time.Now()
+				fmt.Printf("⚙️  [%s] \u5f00\u59cb\u6267\u884c\n", time.Now().Format("15:04:05"))
 			case StateWaitingUser:
-				marker = "⚠️ "
-			case StateDone:
-				marker = "✅ "
-			case StateFailed:
-				marker = "❌ "
-			case StateClosed:
-				marker = "🔒 "
+				handoffWaiting(t)
+				return nil
+			case StateReady:
+				// retry after worker death; keep waiting quietly
+				fmt.Printf("🔁 [%s] \u91cd\u8bd5\u4e2d\uff08attempt %d\uff09\n", time.Now().Format("15:04:05"), t.Attempt)
 			}
-			fmt.Printf("%s[%s] %-13s (attempt %d)\n", marker, time.Now().Format("15:04:05"), t.State, t.Attempt)
-			lastState = string(t.State)
-			lastAttempt = t.Attempt
+			lastState = t.State
 		}
 
-		if t.State == StateDone || t.State == StateFailed || t.State == StateClosed {
-			fmt.Printf("terminal state reached: %s\n", t.State)
+		if isTerminal(t.State) {
+			elapsed := time.Duration(0)
+			if !runStart.IsZero() {
+				elapsed = time.Since(runStart)
+			}
+			handoffTerminal(t, elapsed)
 			return nil
 		}
-		time.Sleep(1 * time.Second)
 	}
+}
+
+// handoffWaiting tells the user exactly what the worker needs and how to answer.
+func handoffWaiting(t *Ticket) {
+	fmt.Println("⚠️  \u9700\u8981\u4f60\u56de\u7b54")
+	if t.Question != "" {
+		fmt.Printf("\n   %s\n\n", indentLines(t.Question, "   "))
+	} else {
+		fmt.Println()
+	}
+	fmt.Printf("👉 \u56de\u7b54\uff1asa answer %s \"\u4f60\u7684\u56de\u7b54\"\n", t.ID)
+}
+
+// handoffTerminal reports the final verdict plus the next command.
+func handoffTerminal(t *Ticket, elapsed time.Duration) {
+	dur := ""
+	if elapsed > 0 {
+		dur = fmt.Sprintf("\uff08\u8017\u65f6 %s\uff09", elapsed.Round(time.Second))
+	}
+	switch t.State {
+	case StateDone:
+		fmt.Printf("✅ \u5b8c\u6210%s\n", dur)
+		fmt.Printf("👉 \u67e5\u770b\u7ed3\u679c\uff1asa result %s\n", t.ID)
+	case StateFailed:
+		fmt.Printf("❌ \u5931\u8d25%s\n", dur)
+		fmt.Printf("👉 \u770b\u8fc7\u7a0b\uff1asa tail %s\n", t.ID)
+	case StateClosed:
+		fmt.Printf("🔒 \u5df2\u5173\u95ed%s\n", dur)
+	default:
+		fmt.Printf("\u72b6\u6001\uff1a%s\n", t.State)
+	}
+}
+
+func isTerminal(s State) bool {
+	return s == StateDone || s == StateFailed || s == StateClosed
+}
+
+func indentLines(s, prefix string) string {
+	return prefix + strings.ReplaceAll(s, "\n", "\n"+prefix)
 }
 
 // cmdResult prints a ticket's final result.
