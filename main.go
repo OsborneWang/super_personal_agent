@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"os/signal"
@@ -46,6 +48,14 @@ func main() {
 		err = cmdClient("answer", map[string]interface{}{"id": arg(2), "text": strings.Join(os.Args[3:], " ")})
 	case "follow":
 		err = cmdFollow(arg(2))
+	case "tail":
+		follow := false
+		for _, a := range os.Args[3:] {
+			if a == "-f" || a == "--follow" {
+				follow = true
+			}
+		}
+		err = cmdTail(arg(2), follow)
 	case "cancel":
 		err = cmdClient("cancel", map[string]interface{}{"id": arg(2)})
 	default:
@@ -75,7 +85,8 @@ func usage() {
 	fmt.Println("  agent show <id>           Show ticket detail")
 	fmt.Println("  agent admit               Admit a demo ticket")
 	fmt.Println("  agent answer <id> <text>  Answer a waiting ticket")
-	fmt.Println("  agent follow <id>         Stream ticket events live")
+	fmt.Println("  agent follow <id>         Stream ticket state changes live")
+	fmt.Println("  agent tail <id> [-f]      Stream what the worker is doing (tool calls/output)")
 	fmt.Println("  agent cancel <id>         Cancel a ticket")
 	fmt.Println()
 	fmt.Println("Dev/validation:")
@@ -396,6 +407,141 @@ func cmdFollow(id string) error {
 			return nil
 		}
 		time.Sleep(1 * time.Second)
+	}
+}
+
+// cmdTail streams what a worker is actually doing, by reading its trace.jsonl.
+// Unlike `follow` (state transitions only), this shows live activity:
+// tool calls, assistant messages, errors.
+func cmdTail(id string, follow bool) error {
+	if id == "" {
+		return fmt.Errorf("usage: agent tail <id> [-f]")
+	}
+
+	// Ask agentd for the ticket so we know where its workspace lives
+	client, err := NewClient(sockPath())
+	if err != nil {
+		return fmt.Errorf("connect to agentd: %w", err)
+	}
+	resp, err := client.Call("show", map[string]interface{}{"id": id})
+	client.Close()
+	if err != nil {
+		return err
+	}
+	if !resp.Success {
+		return fmt.Errorf("agentd: %s", resp.Error)
+	}
+	data, _ := json.Marshal(resp.Data)
+	var t Ticket
+	json.Unmarshal(data, &t)
+
+	root := t.Project
+	if root == "" {
+		root = homeDir()
+	}
+	tracePath := filepath.Join(root, ".agent", "tickets", id, "trace.jsonl")
+
+	// Wait briefly for the trace file to appear (ticket may just have started)
+	var file *os.File
+	for i := 0; i < 30; i++ {
+		file, err = os.Open(tracePath)
+		if err == nil {
+			break
+		}
+		time.Sleep(200 * time.Millisecond)
+	}
+	if err != nil {
+		return fmt.Errorf("trace not found for %s (has the worker started?): %w", id, err)
+	}
+	defer file.Close()
+
+	fmt.Printf("tailing %s\n  trace: %s\n  (Ctrl+C to stop)\n\n", id, tracePath)
+
+	// Read complete lines from the current offset. Returns the new offset.
+	readFrom := func(offset int64) (int64, error) {
+		if _, err := file.Seek(offset, io.SeekStart); err != nil {
+			return offset, err
+		}
+		scanner := bufio.NewScanner(file)
+		scanner.Buffer(make([]byte, 0, 1024*1024), 16*1024*1024)
+		for scanner.Scan() {
+			renderTraceLine(scanner.Bytes())
+			// Track bytes consumed so a partial trailing line is retried later
+			offset += int64(len(scanner.Bytes())) + 1
+		}
+		return offset, scanner.Err()
+	}
+
+	offset, err := readFrom(0)
+	if err != nil {
+		return err
+	}
+	if !follow {
+		return nil
+	}
+
+	// Follow: poll for appended bytes
+	for {
+		time.Sleep(500 * time.Millisecond)
+		info, statErr := file.Stat()
+		if statErr != nil {
+			return statErr
+		}
+		if info.Size() <= offset {
+			continue
+		}
+		offset, err = readFrom(offset)
+		if err != nil {
+			return err
+		}
+	}
+}
+
+// renderTraceLine prints one pi JSONL event in a human-friendly way
+func renderTraceLine(line []byte) {
+	if len(line) == 0 {
+		return
+	}
+	var ev struct {
+		Type    string          `json:"type"`
+		Message *struct {
+			Role    string          `json:"role"`
+			Content json.RawMessage `json:"content"`
+		} `json:"message"`
+		ToolName string          `json:"toolName"`
+		Args     json.RawMessage `json:"args"`
+		Result   json.RawMessage `json:"result"`
+		IsError  bool            `json:"isError"`
+	}
+	if err := json.Unmarshal(line, &ev); err != nil {
+		return
+	}
+	ts := time.Now().Format("15:04:05")
+	switch ev.Type {
+	case "tool_execution_start":
+		args := string(ev.Args)
+		if len(args) > 160 {
+			args = args[:160] + "…"
+		}
+		fmt.Printf("%s ⚙ %-12s %s\n", ts, ev.ToolName, strings.ReplaceAll(args, "\n", " "))
+	case "tool_execution_end":
+		mark := "✓"
+		if ev.IsError {
+			mark = "✗"
+		}
+		fmt.Printf("%s %s %s done\n", ts, mark, ev.ToolName)
+	case "message_end":
+		if ev.Message != nil && ev.Message.Role == "assistant" {
+			text := extractText(ev.Message.Content)
+			if text != "" {
+				if len(text) > 400 {
+					text = text[:400] + "…"
+				}
+				fmt.Printf("%s 💬 %s\n", ts, strings.ReplaceAll(text, "\n", " "))
+			}
+		}
+	case "agent_settled":
+		fmt.Printf("%s ━ worker settled\n", ts)
 	}
 }
 

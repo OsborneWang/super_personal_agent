@@ -15,7 +15,8 @@
 #  ▶ 查看任务（Ticket）
 #    sa ls                     看板：所有任务状态，按项目分组
 #    sa show <id>              单张任务的完整细节（目标/状态/深度/pid 等）
-#    sa follow <id>            实时盯住单张任务的状态变化，直到结束
+#    sa follow <id>            实时盯住单张任务的状态变化（状态机层面）
+#    sa tail <id> [-f]         实时看 Worker 具体在干什么（工具调用/输出/-f 跟流）
 #    sa answer <id> <回答>      回答 Worker 抛给你的问题（任务卡在 waiting_user 时）
 #    sa cancel <id>            强制取消一张任务（回收进程组 + 资源）
 #
@@ -40,6 +41,7 @@
 #    sa                        ① 开会话下发任务，拿到 ticket id（如 T-abc）
 #    sa ls                     ② 看板确认任务已进系统
 #    sa follow T-abc           ③ 盯着它跑（running → done/failed/waiting_user）
+#    sa tail T-abc -f          ③' 看 Worker 此刻在调什么工具、输出什么
 #    sa answer T-abc "..."     ④ 若它卡在 waiting_user，回答后继续
 #    sa show T-abc             ⑤ 查看最终结果与细节
 #
@@ -52,11 +54,11 @@ case "$1" in
   start|stop|restart|status|logs|enable|disable|install|uninstall)
     exec agent daemon "$@"
     ;;
-  ls|show|follow|answer|cancel|ping|test|init|reconcile)
+  ls|show|follow|tail|answer|cancel|ping|test|init|reconcile)
     exec agent "$@"
     ;;
   -h|--help|help)
-    sed -n '2,48p' "$0"
+    sed -n '2,49p' "$0"
     exit 0
     ;;
 esac
