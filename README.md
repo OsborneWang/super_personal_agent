@@ -28,10 +28,16 @@
 cd /path/to/super_personal_agent
 go build -o agent .
 
-# 把 agent 装进 PATH（符号链接，重build自动生效；sa 脚本依赖它）
+# 把 agent 和 sa 装进 PATH（符号链接，重build自动生效）
 ln -sf "$PWD/agent" ~/.local/bin/agent
-# sa Router 启动器（已存在于 ~/.local/bin/sa；没有的话见下文）
+ln -sf "$PWD/packaging/sa" ~/.local/bin/sa
+
+# 安装两个 pi 扩展（Router / Worker）
+ln -sfn "$PWD/packaging/pi-extensions/super-agent-router" ~/.pi/agent/extensions/super-agent-router
+ln -sfn "$PWD/packaging/pi-extensions/super-agent-worker" ~/.pi/agent/extensions/super-agent-worker
 ```
+
+> 完整的安装/接入步骤见 **[packaging/INSTALL.md](packaging/INSTALL.md)**。
 
 > `sa` 和 `agent` 都放在 `~/.local/bin/`（该目录已在 PATH）。`agent` 用符号链接指向 build 产物，所以你每次 `go build` 后无需重新安装。
 >
