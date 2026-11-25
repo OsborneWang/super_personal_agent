@@ -58,11 +58,17 @@ fi
 export SA_MODE=1
 
 # If the caller already passed --tools, respect it; otherwise restrict.
-case " $* " in
-  *" --tools "*|*" --tools="*")
-    exec pi "$@"
-    ;;
-  *)
-    exec pi --tools read,grep,find,ls,file_ticket "$@"
-    ;;
-esac
+has_tools=0
+for a in "$@"; do
+  case "$a" in
+    --tools|--tools=*)
+      has_tools=1
+      ;;
+  esac
+done
+
+if [ "$has_tools" -eq 1 ]; then
+  exec pi "$@"
+else
+  exec pi --tools read,grep,find,ls,file_ticket "$@"
+fi
