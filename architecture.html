@@ -162,38 +162,38 @@
         <text class="t" x="535" y="112">Router（pi + SA_MODE）</text>
         <text class="t2" x="535" y="134">唯一工具：file_ticket</text>
       </g>
-      <path class="edge hl" d="M310,119 L374,119" marker-end="url(#arr)"/>
-      <text class="elabel small" x="342" y="108">对话</text>
+      <path data-from="sa-you" data-to="sa-router" class="edge hl" d="M310,119 L374,119" marker-end="url(#arr)"/>
+      <text data-from="sa-you" data-to="sa-router" class="elabel small" x="342" y="108">对话</text>
 
       <g class="node" data-id="sa-agentd" data-tip="校验 5 条硬约束后入档，进入调度队列。人工确认框在工具内部弹出，模型无法伪造。">
         <rect class="box agentd core" x="380" y="206" width="310" height="72" rx="10"/>
         <text class="t" x="535" y="234">agentd</text>
         <text class="t2" x="535" y="256">校验 → 入档 → 调度</text>
       </g>
-      <path class="edge" d="M535,152 L535,200" marker-end="url(#arr)"/>
-      <text class="elabel small" x="560" y="180">file_ticket(spec)</text>
+      <path data-from="sa-router" data-to="sa-agentd" class="edge" d="M535,152 L535,200" marker-end="url(#arr)"/>
+      <text data-from="sa-router" data-to="sa-agentd" class="elabel small" x="560" y="180">file_ticket(spec)</text>
 
       <g class="node" data-id="sa-worker" data-tip="Worker 在后台的真实进程：拥有 bash / read / write 等完整工具，可联网、可拆子任务。">
         <rect class="box worker core" x="380" y="330" width="310" height="72" rx="10"/>
         <text class="t" x="535" y="358">Worker（后台 pi 进程）</text>
         <text class="t2" x="535" y="380">bash · read · write · create_subtask</text>
       </g>
-      <path class="edge" d="M535,278 L535,324" marker-end="url(#arr)"/>
-      <text class="elabel small" x="565" y="305">spawn</text>
+      <path data-from="sa-agentd" data-to="sa-worker" class="edge" d="M535,278 L535,324" marker-end="url(#arr)"/>
+      <text data-from="sa-agentd" data-to="sa-worker" class="elabel small" x="565" y="305">spawn</text>
 
       <g class="node" data-id="sa-store" data-tip="全局账本记录状态（唯一真相）；项目目录里留 trace 与 result 作为证据。">
         <rect class="box store" x="80" y="330" width="230" height="72" rx="10"/>
         <text class="t" x="195" y="358">账本 + 产物</text>
         <text class="t2" x="195" y="380">可审计 · 可回放</text>
       </g>
-      <path class="edge dash" d="M374,254 L314,340" marker-end="url(#arr)"/>
+      <path data-from="sa-agentd" data-to="sa-store" class="edge dash" d="M374,254 L314,340" marker-end="url(#arr)"/>
 
       <g class="node" data-id="sa-back" data-tip="你随时用 sa ls / follow / tail / result 观测，用 sa answer 回答，用 sa close 验收。">
         <rect class="box sys" x="80" y="432" width="610" height="62" rx="10"/>
         <text class="t" x="385" y="458">👀 观测 / 回答 / 验收</text>
         <text class="t2" x="385" y="479">sa ls · sa follow · sa tail · sa result · sa answer · sa close</text>
       </g>
-      <path class="edge dash" d="M195,402 L195,426" marker-end="url(#arr)"/>
+      <path data-from="sa-store" data-to="sa-back" class="edge dash" d="M195,402 L195,426" marker-end="url(#arr)"/>
 
       <!-- RIGHT: pi -->
       <rect class="lane" x="770" y="30" width="690" height="500" rx="16"/>
@@ -209,22 +209,22 @@
         <text class="t" x="1265" y="112">pi（普通会话）</text>
         <text class="t2" x="1265" y="134">无 SA_MODE → 扩展不加载</text>
       </g>
-      <path class="edge hl" d="M1040,119 L1104,119" marker-end="url(#arr)"/>
-      <text class="elabel small" x="1072" y="108">直接</text>
+      <path data-from="pi-you" data-to="pi-pi" class="edge hl" d="M1040,119 L1104,119" marker-end="url(#arr)"/>
+      <text data-from="pi-you" data-to="pi-pi" class="elabel small" x="1072" y="108">直接</text>
 
       <g class="node" data-id="pi-work" data-tip="模型直接用 read / write / bash 在当场完成，不产生 ticket，不留账。">
         <rect class="box worker" x="1110" y="206" width="310" height="72" rx="10"/>
         <text class="t" x="1265" y="234">当场完成</text>
         <text class="t2" x="1265" y="256">read · write · bash</text>
       </g>
-      <path class="edge" d="M1265,152 L1265,200" marker-end="url(#arr)"/>
+      <path data-from="pi-pi" data-to="pi-work" class="edge" d="M1265,152 L1265,200" marker-end="url(#arr)"/>
 
       <g class="node" data-id="pi-none" data-tip="这是关键区分：pi 的产出不进入任务系统，所以不可监视、不可并行调度、不可事后审计。">
         <rect class="box muted" x="810" y="330" width="610" height="72" rx="10"/>
         <text class="t" x="1115" y="358">✕ 不入档 · 不调度 · 不留账</text>
         <text class="t2" x="1115" y="380">适用于不值得被跟踪的一次性小活</text>
       </g>
-      <path class="edge dash cancel" d="M1265,278 L1265,324" marker-end="url(#arr)"/>
+      <path data-from="pi-work" data-to="pi-none" class="edge dash cancel" d="M1265,278 L1265,324" marker-end="url(#arr)"/>
 
       <g class="node" data-id="pi-when" data-tip="判断标准：这件事值不值得被跟踪和管理？值得 → sa；不值得 → pi。">
         <rect class="box sys" x="810" y="432" width="610" height="62" rx="10"/>
@@ -288,7 +288,7 @@
         <text class="t" x="205" y="568">agent CLI</text>
         <text class="t2" x="205" y="589">socket 客户端</text>
       </g>
-      <path class="edge hl" d="M205,242 L205,350" marker-end="url(#arr)"/>
+      <path data-from="you" data-to="sa" class="edge hl" d="M205,242 L205,350" marker-end="url(#arr)"/>
 
       <!-- agentd internals -->
       <g class="node" data-id="sock" data-tip="全局唯一 socket：~/.agent/sock。所有 CLI 与 Router 都连它。">
@@ -338,14 +338,14 @@
         <text class="t2" x="645" y="855">同 key 独占 · 项目命名空间</text>
       </g>
 
-      <path class="edge" d="M340,396 L434,150" marker-end="url(#arr)"/>
-      <path class="edge" d="M340,573 L434,132" marker-end="url(#arr)"/>
-      <text class="elabel small" x="372" y="300">unix socket</text>
+      <path data-from="sa" data-to="sock" class="edge" d="M340,396 L434,150" marker-end="url(#arr)"/>
+      <path data-from="cli" data-to="sock" class="edge" d="M340,573 L434,132" marker-end="url(#arr)"/>
+      <text data-from="cli" data-to="sock" class="elabel small" x="372" y="300">unix socket</text>
 
-      <path class="edge dash" d="M645,164 L645,180" marker-end="url(#arr)"/>
-      <path class="edge dash" d="M645,250 L645,266" marker-end="url(#arr)"/>
-      <path class="edge dash" d="M645,336 L645,352" marker-end="url(#arr)"/>
-      <path class="edge dash" d="M645,692 L645,706" marker-end="url(#arr)"/>
+      <path data-from="sock" data-to="validate" class="edge dash" d="M645,164 L645,180" marker-end="url(#arr)"/>
+      <path data-from="validate" data-to="sm" class="edge dash" d="M645,250 L645,266" marker-end="url(#arr)"/>
+      <path data-from="sm" data-to="sched" class="edge dash" d="M645,336 L645,352" marker-end="url(#arr)"/>
+      <path data-from="rec" data-to="ledgerw" class="edge dash" d="M645,692 L645,706" marker-end="url(#arr)"/>
 
       <!-- workers -->
       <g class="node" data-id="w1" data-tip="Worker L1：由调度器 spawn，session-id 与 ticket 绑定，失败重试可继承上下文。">
@@ -368,14 +368,14 @@
         <text class="t" x="1077" y="228">父 Worker 恢复</text>
         <text class="t2" x="1077" y="250">子结果回填</text>
       </g>
-      <path class="edge" d="M645,420 L946,138" marker-end="url(#arr)"/>
-      <text class="elabel small" x="800" y="290">spawn · setpgid</text>
-      <path class="edge dash" d="M1202,138 L1224,138" marker-end="url(#arr)"/>
-      <text class="elabel small" x="1213" y="128">拆</text>
-      <path class="edge dash" d="M1355,176 L1355,194" marker-end="url(#arr)"/>
-      <path class="edge dash" d="M1202,238 L1224,238" marker-end="url(#arr)"/>
-      <text class="elabel small" x="1213" y="228">恢复</text>
-      <path class="edge dash" d="M1077,176 L1077,194" marker-end="url(#arr)"/>
+      <path data-from="sched" data-to="w1" class="edge" d="M645,420 L946,138" marker-end="url(#arr)"/>
+      <text data-from="sched" data-to="w1" class="elabel small" x="800" y="290">spawn · setpgid</text>
+      <path data-from="w1" data-to="w2" class="edge dash" d="M1202,138 L1224,138" marker-end="url(#arr)"/>
+      <text data-from="w1" data-to="w2" class="elabel small" x="1213" y="128">拆</text>
+      <path data-from="w2" data-to="w3" class="edge dash" d="M1355,176 L1355,194" marker-end="url(#arr)"/>
+      <path data-from="w4" data-to="w2" class="edge dash" d="M1202,238 L1224,238" marker-end="url(#arr)"/>
+      <text data-from="w4" data-to="w2" class="elabel small" x="1213" y="228">恢复</text>
+      <path data-from="w1" data-to="w4" class="edge dash" d="M1077,176 L1077,194" marker-end="url(#arr)"/>
 
       <!-- storage -->
       <g class="node" data-id="gstore" data-tip="全局存储：账本（唯一真相）、socket、全局配置、status.json。所有项目的事件都在这里，便于统一看板与审计。">
@@ -407,11 +407,11 @@
         <text class="t2" x="1216" y="852">父 Worker 拿到子任务输出后完成最终产出</text>
       </g>
 
-      <path class="edge dash" d="M645,744 L946,580" marker-end="url(#arr)"/>
-      <text class="elabel small" x="800" y="700">append</text>
-      <path class="edge dash" d="M1087,270 L1087,484" marker-end="url(#arr)"/>
-      <text class="elabel small" x="1087" y="400">trace / result</text>
-      <path class="edge dash" d="M1210,528 L1236,528" marker-end="url(#arr)"/>
+      <path data-from="ledgerw" data-to="gstore" class="edge dash" d="M645,744 L946,580" marker-end="url(#arr)"/>
+      <text data-from="ledgerw" data-to="gstore" class="elabel small" x="800" y="700">append</text>
+      <path data-from="w1" data-to="gstore" class="edge dash" d="M1087,270 L1087,484" marker-end="url(#arr)"/>
+      <text data-from="w1" data-to="gstore" class="elabel small" x="1087" y="400">trace / result</text>
+      <path data-from="gstore" data-to="pstore" class="edge dash" d="M1210,528 L1236,528" marker-end="url(#arr)"/>
     </svg>
     </div>
   </div>
@@ -482,29 +482,29 @@
         <text class="t2" x="1335" y="272">终态</text>
       </g>
 
-      <path class="edge" d="M260,145 L344,145" marker-end="url(#arr)"/>
-      <text class="elabel small" x="302" y="132">就绪</text>
-      <path class="edge" d="M530,145 L614,145" marker-end="url(#arr)"/>
-      <text class="elabel small" x="572" y="132">claim + 资源</text>
-      <path class="edge" d="M710,180 L710,324" marker-end="url(#arr)"/>
-      <text class="elabel small left" x="720" y="200">need_input</text>
-      <path class="edge dash" d="M660,330 L660,184" marker-end="url(#arr)"/>
-      <text class="elabel small" x="612" y="262">answer</text>
-      <path class="edge" d="M800,145 L954,145" marker-end="url(#arr)"/>
-      <text class="elabel small" x="877" y="132">done</text>
-      <path class="edge" d="M800,166 L954,340" marker-end="url(#arr)"/>
-      <text class="elabel small" x="880" y="270">failed</text>
-      <path class="edge dash" d="M620,150 L536,150" marker-end="url(#arr)"/>
-      <text class="elabel small" x="572" y="200">Worker 死亡 → 重试</text>
-      <path class="edge dash cancel" d="M710,400 L710,470 L1335,470 L1335,296" marker-end="url(#arr)"/>
-      <text class="elabel small" x="1000" y="490">waiting_user 超时 → failed</text>
+      <path data-from="pending" data-to="ready" class="edge" d="M260,145 L344,145" marker-end="url(#arr)"/>
+      <text data-from="pending" data-to="ready" class="elabel small" x="302" y="132">就绪</text>
+      <path data-from="ready" data-to="running" class="edge" d="M530,145 L614,145" marker-end="url(#arr)"/>
+      <text data-from="ready" data-to="running" class="elabel small" x="572" y="132">claim + 资源</text>
+      <path data-from="running" data-to="waiting" class="edge" d="M710,180 L710,324" marker-end="url(#arr)"/>
+      <text data-from="running" data-to="waiting" class="elabel small left" x="720" y="200">need_input</text>
+      <path data-from="waiting" data-to="running" class="edge dash" d="M660,330 L660,184" marker-end="url(#arr)"/>
+      <text data-from="waiting" data-to="running" class="elabel small" x="612" y="262">answer</text>
+      <path data-from="running" data-to="done" class="edge" d="M800,145 L954,145" marker-end="url(#arr)"/>
+      <text data-from="running" data-to="done" class="elabel small" x="877" y="132">done</text>
+      <path data-from="running" data-to="failed" class="edge" d="M800,166 L954,340" marker-end="url(#arr)"/>
+      <text data-from="running" data-to="failed" class="elabel small" x="880" y="270">failed</text>
+      <path data-from="running" data-to="ready" class="edge dash" d="M620,150 L536,150" marker-end="url(#arr)"/>
+      <text data-from="running" data-to="ready" class="elabel small" x="572" y="200">Worker 死亡 → 重试</text>
+      <path data-from="waiting" data-to="failed" class="edge dash cancel" d="M710,400 L710,470 L1335,470 L1335,296" marker-end="url(#arr)"/>
+      <text data-from="waiting" data-to="failed" class="elabel small" x="1000" y="490">waiting_user 超时 → failed</text>
 
-      <path class="edge" d="M1140,145 L1320,215" marker-end="url(#arr)"/>
-      <text class="elabel small" x="1240" y="160">close</text>
-      <path class="edge" d="M1140,365 L1320,290" marker-end="url(#arr)"/>
-      <text class="elabel small" x="1240" y="350">close</text>
-      <path class="edge dash cancel" d="M170,180 L170,560 L1335,560 L1335,296" marker-end="url(#arr)"/>
-      <text class="elabel small" x="700" y="580">cancel（任意非终态 → closed）</text>
+      <path data-from="done" data-to="closed" class="edge" d="M1140,145 L1320,215" marker-end="url(#arr)"/>
+      <text data-from="done" data-to="closed" class="elabel small" x="1240" y="160">close</text>
+      <path data-from="failed" data-to="closed" class="edge" d="M1140,365 L1320,290" marker-end="url(#arr)"/>
+      <text data-from="failed" data-to="closed" class="elabel small" x="1240" y="350">close</text>
+      <path data-from="pending" data-to="closed" class="edge dash cancel" d="M170,180 L170,560 L1335,560 L1335,296" marker-end="url(#arr)"/>
+      <text data-from="pending" data-to="closed" class="elabel small" x="700" y="580">cancel（任意非终态 → closed）</text>
     </svg>
     </div>
   </div>
@@ -638,8 +638,8 @@
         <text class="t2" x="555" y="190">前缀 = 项目目录路径</text>
         <text class="t3" x="555" y="211">内核本身不懂"项目"，只认 key</text>
       </g>
-      <path class="edge" d="M350,129 L404,165" marker-end="url(#arr)"/>
-      <path class="edge" d="M350,233 L404,200" marker-end="url(#arr)"/>
+      <path data-from="pa" data-to="ns" class="edge" d="M350,129 L404,165" marker-end="url(#arr)"/>
+      <path data-from="pb" data-to="ns" class="edge" d="M350,233 L404,200" marker-end="url(#arr)"/>
 
       <g class="node" data-id="ka" data-tip="实际 key：&lt;项目A&gt;:worktree:build">
         <rect class="box store" x="80" y="330" width="290" height="70" rx="10"/>
@@ -651,8 +651,8 @@
         <text class="t2" x="555" y="358">&lt;项目B&gt;:worktree:build</text>
         <text class="t3" x="555" y="381">独占持有 ✓</text>
       </g>
-      <path class="edge" d="M520,226 L225,324" marker-end="url(#arr)"/>
-      <path class="edge" d="M590,226 L555,324" marker-end="url(#arr)"/>
+      <path data-from="ns" data-to="ka" class="edge" d="M520,226 L225,324" marker-end="url(#arr)"/>
+      <path data-from="ns" data-to="kb" class="edge" d="M590,226 L555,324" marker-end="url(#arr)"/>
 
       <g class="node" data-id="both" data-tip="结果：两个 Worker 同时跑，互不干扰。">
         <rect class="box sys" x="80" y="450" width="620" height="86" rx="10"/>
@@ -680,16 +680,16 @@
         <text class="t2" x="1280" y="190">同 key 同刻仅一个独占者</text>
         <text class="t3" x="1280" y="211">冲突 → 保持 ready 排队</text>
       </g>
-      <path class="edge" d="M1100,129 L1134,168" marker-end="url(#arr)"/>
-      <path class="edge dash" d="M1140,200 L1104,233" marker-end="url(#arr)"/>
-      <text class="elabel small" x="1128" y="292">拒绝 · 保持 ready</text>
+      <path data-from="t1" data-to="rmg" class="edge" d="M1100,129 L1134,168" marker-end="url(#arr)"/>
+      <path data-from="rmg" data-to="t2" class="edge dash" d="M1140,200 L1104,233" marker-end="url(#arr)"/>
+      <text data-from="rmg" data-to="t2" class="elabel small" x="1128" y="292">拒绝 · 保持 ready</text>
 
       <g class="node" data-id="q" data-tip="任务 1 结束并释放租约后，任务 2 自动拿到资源开始运行——不需要你做任何事。">
         <rect class="box sys" x="820" y="330" width="600" height="86" rx="10"/>
         <text class="t" x="1120" y="360">⏳ 任务 2 安静排队（ready）</text>
         <text class="t2" x="1120" y="384">任务 1 释放租约后，任务 2 自动接续运行</text>
       </g>
-      <path class="edge dash" d="M960,266 L960,324" marker-end="url(#arr)"/>
+      <path data-from="t2" data-to="q" class="edge dash" d="M960,266 L960,324" marker-end="url(#arr)"/>
 
       <g class="node" data-id="depth" data-tip="递归上限：L1 → L2 → L3。到 L3 仍未完成，系统不再允许拆分，直接转 waiting_user 让人判断。">
         <rect class="box sys" x="820" y="450" width="600" height="86" rx="10"/>
@@ -903,7 +903,8 @@ document.addEventListener('click', ev=>{
   scope.querySelectorAll('.edge,.elabel,.life').forEach(e=>{
     if(e.dataset.from===id || e.dataset.to===id){
       e.classList.add('hl');
-      linked.add(e.dataset.from); linked.add(e.dataset.to);
+      if(e.dataset.from) linked.add(e.dataset.from);
+      if(e.dataset.to) linked.add(e.dataset.to);
     } else if(e.dataset.from || e.dataset.to){ e.classList.add('dim'); }
   });
   scope.querySelectorAll('.node[data-id]').forEach(n=>{
