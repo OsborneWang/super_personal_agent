@@ -5,7 +5,7 @@
 
 **支持多项目并行**：一个全局服务，可在任意多个项目目录里发起任务，Worker 在对应项目目录里干活、用对应项目的规则和模型，但你能在同一个看板看到所有任务。
 
-> 设计文档：[DESIGN.md](DESIGN.md) · 架构图：[ARCHITECTURE.md](ARCHITECTURE.md)
+> 设计文档：[DESIGN.md](DESIGN.md) · 架构图：[ARCHITECTURE.md](ARCHITECTURE.md) · **交互版架构图：[architecture.html](architecture.html)**（浏览器直接打开，可点击高亮、悬停看说明、缩放）
 
 ---
 
