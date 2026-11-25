@@ -1,21 +1,51 @@
 #!/bin/sh
-# sa — super-agent Router session
+# sa — super-agent：个人 AI 任务指挥系统
 #
-# `sa` launches pi as the ROUTER of the super_personal_agent system:
-# the file_ticket tool is available, tickets you confirm enter the daemon,
-# and Workers execute them in the background.
+# 核心区分：
+#   sa   = 打开 Router 会话，工作进入任务系统（被 Worker 后台执行、跟踪、可验收）
+#   pi   = 单纯的编码助手，没有任何任务系统（不调度、不跟踪、不留账）
 #
-# Plain `pi` stays a normal coding assistant with no task system.
+# ══════════════════════════════════════════════════════════════
+# 用法总览（sa --help 显示的就是这段）
+# ══════════════════════════════════════════════════════════════
 #
-# Usage:
-#   sa [pi-args...]        interactive Router session (needs sa daemon running)
-#   sa status              -> sa daemon status (systemd)
-#   sa logs                -> sa daemon logs
-#   sa ls / follow / ...   -> sa daemon CLI (see `agent --help`)
+#  ▶ 开始一个任务
+#    sa                        打开 Router 会话，用自然语言下发任务
 #
-# Distinguish:
-#   sa   = talk to the Router, work enters the super-agent system
-#   pi   = plain coding assistant, nothing is scheduled or tracked
+#  ▶ 查看任务（Ticket）
+#    sa ls                     看板：所有任务状态，按项目分组
+#    sa show <id>              单张任务的完整细节（目标/状态/深度/pid 等）
+#    sa follow <id>            实时盯住单张任务的状态变化，直到结束
+#    sa answer <id> <回答>      回答 Worker 抛给你的问题（任务卡在 waiting_user 时）
+#    sa cancel <id>            强制取消一张任务（回收进程组 + 资源）
+#
+#  ▶ 后台服务管理（systemd）
+#    sa status                 服务状态（= systemctl --user status super-agent）
+#    sa logs [-f]              看日志（-f 持续跟踪）
+#    sa start                  启动后台服务（首次自动安装）
+#    sa stop                   停止服务
+#    sa restart                重启服务
+#    sa enable                 登录时自动启动
+#    sa disable                取消登录自启
+#    sa install                （重新）安装 systemd 服务
+#    sa uninstall              卸载服务
+#
+#  ▶ 其他
+#    sa ping                   健康检查：daemon 是否在运行
+#    sa --help                 显示本帮助
+#
+# ══════════════════════════════════════════════════════════════
+# 典型使用流
+# ══════════════════════════════════════════════════════════════
+#    sa                        ① 开会话下发任务，拿到 ticket id（如 T-abc）
+#    sa ls                     ② 看板确认任务已进系统
+#    sa follow T-abc           ③ 盯着它跑（running → done/failed/waiting_user）
+#    sa answer T-abc "..."     ④ 若它卡在 waiting_user，回答后继续
+#    sa show T-abc             ⑤ 查看最终结果与细节
+#
+# 多项目：在任意项目目录里运行 sa，任务自动归属该项目，
+#         Worker 在该项目目录里干活、用该项目的规则和模型。
+# ══════════════════════════════════════════════════════════════
 
 # Pass through daemon management / CLI convenience subcommands
 case "$1" in
@@ -26,7 +56,7 @@ case "$1" in
     exec agent "$@"
     ;;
   -h|--help|help)
-    sed -n '2,30p' "$0"
+    sed -n '2,48p' "$0"
     exit 0
     ;;
 esac
@@ -47,16 +77,6 @@ if ! agent ping >/dev/null 2>&1; then
   esac
 fi
 
-# Mark this session as a super-agent Router session, then launch pi.
-#
-# Router tool restriction (design J1: Router 只分诊，绝不干活):
-# The Router must NOT be able to execute the task itself. It only understands
-# the request, drafts a ticket, asks you to confirm, and files it via
-# file_ticket. So we strip every "doing" tool (bash/edit/write) and keep only
-# read-only tools for understanding context + the file_ticket filing tool.
-# Without this, the model tends to just do the work inline instead of routing.
-export SA_MODE=1
-
 # Router tool restriction (design J1: Router 是纯传话筒，绝不调查、绝不干活)。
 # The Router's ONLY action is file_ticket. It does NOT read files, run commands,
 # or investigate — all investigation belongs to background Workers. If a request
@@ -70,6 +90,8 @@ for a in "$@"; do
       ;;
   esac
 done
+
+export SA_MODE=1
 
 # Inject the Router role system-prompt so the model behaves as a dispatcher,
 # not an assistant that answers/investigates inline.
