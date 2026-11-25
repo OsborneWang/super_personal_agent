@@ -13,29 +13,27 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--txt);font:14px/1.6 "PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;display:flex;min-height:100vh}
-  /* ---------- sidebar ---------- */
-  nav{position:sticky;top:0;height:100vh;width:230px;flex:none;background:var(--panel);border-right:1px solid var(--line);padding:26px 18px;overflow-y:auto}
+  nav{position:sticky;top:0;height:100vh;width:238px;flex:none;background:var(--panel);border-right:1px solid var(--line);padding:26px 18px;overflow-y:auto}
   nav h1{font-size:15px;color:#fff;margin-bottom:4px}
   nav .sub{font-size:11px;color:var(--txt2);margin-bottom:22px}
-  nav a{display:block;color:var(--txt2);text-decoration:none;padding:10px 12px;border-radius:8px;font-size:13.5px;margin-bottom:3px;border-left:3px solid transparent}
+  nav a{display:block;color:var(--txt2);text-decoration:none;padding:9px 12px;border-radius:8px;font-size:13px;margin-bottom:3px;border-left:3px solid transparent}
   nav a:hover{background:var(--panel2);color:var(--txt)}
   nav a.active{background:var(--panel2);color:#fff;border-left-color:var(--hl)}
-  nav .hint{margin-top:26px;font-size:11.5px;color:var(--txt2);border-top:1px solid var(--line);padding-top:16px;line-height:2}
+  nav .hint{margin-top:22px;font-size:11.5px;color:var(--txt2);border-top:1px solid var(--line);padding-top:14px;line-height:1.9}
   nav .hint b{color:var(--hl)}
-  /* ---------- main ---------- */
-  main{flex:1;padding:40px 48px;max-width:1680px}
-  section{margin-bottom:96px;scroll-margin-top:20px}
+  main{flex:1;padding:38px 46px;max-width:1720px}
+  section{margin-bottom:88px;scroll-margin-top:20px}
   section h2{font-size:21px;color:#fff;margin-bottom:8px}
-  section .desc{font-size:13.5px;color:var(--txt2);margin-bottom:18px}
+  section .desc{font-size:13.5px;color:var(--txt2);margin-bottom:18px;max-width:1100px}
   .canvas-wrap{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
   .canvas{overflow:auto;max-height:85vh;padding:14px}
   .canvas svg{display:block;width:100%;height:auto;transform-origin:top left}
   .zoombar{position:absolute;top:12px;right:12px;display:flex;gap:6px;z-index:5}
   .zoombar button{background:var(--panel2);color:var(--txt);border:1px solid var(--line);border-radius:6px;width:32px;height:32px;cursor:pointer;font-size:16px}
   .zoombar button:hover{border-color:var(--hl);color:var(--hl)}
-  /* ---------- svg common ---------- */
+  /* svg common */
   .lane{fill:rgba(255,255,255,.03);stroke:var(--line);stroke-width:1.4;stroke-dasharray:4 5}
-  .lane-title{font-size:16px;font-weight:700;fill:#b9c6e6}
+  .lane-title{font-size:15px;font-weight:700;fill:#b9c6e6}
   .node{cursor:pointer}
   .box{stroke-width:1.8}
   .node:hover .box{stroke:var(--hl);stroke-width:2.6}
@@ -46,46 +44,83 @@
   .worker{fill:rgba(199,146,234,.13);stroke:var(--worker)}
   .store{fill:rgba(255,122,147,.13);stroke:var(--store)}
   .sys{fill:rgba(255,209,102,.12);stroke:var(--hl)}
+  .muted{fill:rgba(147,161,192,.07);stroke:#5a6880}
   .core{stroke-width:2.8}
-  .t{font-size:15.5px;fill:var(--txt);text-anchor:middle;font-weight:600}
+  .t{font-size:15px;fill:var(--txt);text-anchor:middle;font-weight:600}
   .t2{font-size:12.5px;fill:var(--txt2);text-anchor:middle}
+  .t3{font-size:11.5px;fill:#7f8db0;text-anchor:middle}
+  .tl{font-size:14px;fill:var(--txt);font-weight:600}
+  .tl2{font-size:12px;fill:var(--txt2)}
   .edge{stroke:#7c8db0;stroke-width:1.8;fill:none}
   .edge.dash{stroke-dasharray:7 6}
   .edge.cancel{stroke:var(--danger);stroke-dasharray:6 5;stroke-width:1.5}
   .edge.hl{stroke:var(--hl);stroke-width:2.8}
-  .elabel{font-size:13px;fill:#aeb9d9;text-anchor:middle;paint-order:stroke;stroke:var(--panel);stroke-width:6;stroke-linejoin:round}
-  .elabel.small{font-size:12px}
+  .elabel{font-size:12.5px;fill:#aeb9d9;text-anchor:middle;paint-order:stroke;stroke:var(--panel);stroke-width:6;stroke-linejoin:round}
+  .elabel.small{font-size:11.5px}
   .elabel.hl{fill:var(--hl);font-weight:700}
+  .elabel.left{text-anchor:start}
   .dim{opacity:.09;transition:opacity .15s}
   .node,.edge,.elabel{transition:opacity .15s}
-  .num{font-size:12px;fill:#7c8db0;font-weight:700}
+  .num{font-size:11.5px;fill:#7c8db0;font-weight:700}
   .life{stroke:var(--line);stroke-width:1.4;stroke-dasharray:5 5}
-  .alt{fill:rgba(110,168,254,.045);stroke:#3b4a6e;stroke-width:1.2}
-  .alt-label{font-size:13.5px;font-weight:700;fill:var(--term)}
-  .stat-ok{fill:rgba(61,220,151,.15);stroke:var(--agentd)}
-  .stat-doing{fill:rgba(247,185,85,.15);stroke:var(--you)}
-  .stat-todo{fill:rgba(147,161,192,.08);stroke:#5a6880}
-  /* ---------- tooltip ---------- */
   #tip{position:fixed;pointer-events:none;background:#232d47;border:1px solid var(--hl);color:var(--txt);font-size:12.5px;padding:9px 12px;border-radius:8px;max-width:340px;z-index:99;display:none;box-shadow:0 6px 20px rgba(0,0,0,.5);line-height:1.7}
-  .legend{display:flex;gap:22px;flex-wrap:wrap;font-size:12.5px;color:var(--txt2);margin-bottom:20px}
+  .legend{display:flex;gap:20px;flex-wrap:wrap;font-size:12.5px;color:var(--txt2);margin-bottom:20px}
   .legend span{display:inline-flex;align-items:center;gap:7px}
   .dot{width:13px;height:13px;border-radius:4px;display:inline-block;border:1.8px solid}
+  /* html cards */
+  .cards{display:grid;gap:16px}
+  .cards.c2{grid-template-columns:1fr 1fr}
+  .cards.c3{grid-template-columns:repeat(3,1fr)}
+  .cards.c4{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .card h3{font-size:14.5px;color:#fff;margin-bottom:6px}
+  .card .k{font-size:12px;color:var(--txt2);letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px}
+  .card p{font-size:13px;color:var(--txt2);line-height:1.75}
+  .card ul{margin:8px 0 0 18px;font-size:13px;color:var(--txt2);line-height:1.8}
+  .card code{background:#0b1120;border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:12px;color:#cfe0ff}
+  .card.acc-you{border-left:4px solid var(--you)}
+  .card.acc-term{border-left:4px solid var(--term)}
+  .card.acc-agentd{border-left:4px solid var(--agentd)}
+  .card.acc-worker{border-left:4px solid var(--worker)}
+  .card.acc-store{border-left:4px solid var(--store)}
+  .card.acc-hl{border-left:4px solid var(--hl)}
+  .table{width:100%;border-collapse:collapse;font-size:13px;background:var(--panel);border-radius:12px;overflow:hidden}
+  .table th,.table td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  .table th{background:var(--panel2);color:var(--txt);font-weight:600;font-size:12.5px}
+  .table td{color:var(--txt2)}
+  .table td:first-child{color:var(--txt);white-space:nowrap}
+  .table tr:last-child td{border-bottom:none}
+  .table code{background:#0b1120;border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:12px;color:#cfe0ff}
+  .ok{color:var(--agentd)}
+  .term-tag{display:inline-block;background:#0b1120;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:12px;color:#cfe0ff;margin-right:4px}
 </style>
 </head>
 <body>
 
+<!-- 共享的箭头 marker：所有 SVG 共用（同一文档内的 id 可跨 svg 引用） -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#7c8db0"/>
+    </marker>
+  </defs>
+</svg>
+
 <nav>
   <h1>super_personal_agent</h1>
-  <div class="sub">架构图 · 对应 DESIGN.md v0.3</div>
-  <a href="#s1">1 · 总体拓扑</a>
-  <a href="#s2">2 · Ticket 生命周期</a>
-  <a href="#s3">3 · 状态机（M0）</a>
-  <a href="#s4">4 · 三层约束注入</a>
-  <a href="#s5">5 · 模型与递归</a>
-  <a href="#s6">6 · 里程碑进度</a>
+  <div class="sub">架构图 · 对应当前实现</div>
+  <a href="#s1">1 · sa 与 pi 的区别</a>
+  <a href="#s2">2 · 总体拓扑</a>
+  <a href="#s3">3 · 任务完整生命周期</a>
+  <a href="#s4">4 · 状态机</a>
+  <a href="#s5">5 · 核心实体与账本</a>
+  <a href="#s6">6 · 三层约束与配置分层</a>
+  <a href="#s7">7 · 资源互斥与递归</a>
+  <a href="#s8">8 · CLI 命令面</a>
+  <a href="#s9">9 · 已实现能力</a>
   <div class="hint">
     <b>交互</b><br>
-    · 点击节点：高亮它的所有连线<br>
+    · 点击节点：高亮相关连线<br>
     · 再点一次 / 点空白：取消<br>
     · 悬停节点：查看说明<br>
     · 右上角按钮：缩放
@@ -96,512 +131,755 @@
 <div class="legend">
   <span><i class="dot" style="border-color:var(--you);background:rgba(247,185,85,.15)"></i>你</span>
   <span><i class="dot" style="border-color:var(--term);background:rgba(110,168,254,.15)"></i>终端层</span>
-  <span><i class="dot" style="border-color:var(--agentd);background:rgba(61,220,151,.15)"></i>agentd</span>
+  <span><i class="dot" style="border-color:var(--agentd);background:rgba(61,220,151,.15)"></i>agentd 内核</span>
   <span><i class="dot" style="border-color:var(--worker);background:rgba(199,146,234,.15)"></i>Worker</span>
-  <span><i class="dot" style="border-color:var(--store);background:rgba(255,122,147,.15)"></i>存储层</span>
-  <span><i class="dot" style="border-color:var(--hl);background:rgba(255,209,102,.12)"></i>你（决策点）</span>
+  <span><i class="dot" style="border-color:var(--store);background:rgba(255,122,147,.15)"></i>存储</span>
+  <span><i class="dot" style="border-color:var(--hl);background:rgba(255,209,102,.12)"></i>决策点 / 门禁</span>
 </div>
 
-<!-- ════════════════════════ 1. 总体拓扑 ════════════════════════ -->
+<!-- ═══════════════ 1. sa 与 pi ═══════════════ -->
 <section id="s1">
-  <h2>1 · 总体拓扑</h2>
-  <div class="desc">Router 是对话唯一入口；agentd 是账本唯一写者；Worker 只能申报，状态由 agentd 裁决。底部虚线 = 反馈 / 通知通道。</div>
+  <h2>1 · sa 与 pi 的区别</h2>
+  <div class="desc">
+    同一个 <code>pi</code> 二进制，两种身份。<code>sa</code> 是通过包装器以 <code>SA_MODE=1</code> 启动的 Router 会话，工具被收窄为只有
+    <code>file_ticket</code>；<code>pi</code> 是纯净的编码助手，扩展根本不加载。
+  </div>
   <div class="canvas-wrap">
     <div class="zoombar"><button data-z="-">−</button><button data-z="r">⤾</button><button data-z="+">+</button></div>
     <div class="canvas">
-    <svg viewBox="0 0 1540 960" data-base="1540">
-      <!-- lanes -->
-      <rect class="lane" x="60" y="60" width="330" height="260" rx="16"/>
-      <text class="lane-title" x="84" y="94">👤 你</text>
-      <rect class="lane" x="60" y="370" width="330" height="300" rx="16"/>
-      <text class="lane-title" x="84" y="404">终端层</text>
-      <rect class="lane" x="480" y="60" width="500" height="560" rx="16"/>
-      <text class="lane-title" x="504" y="94">agentd（Go 常驻进程 · 唯一写者）</text>
-      <rect class="lane" x="1070" y="60" width="410" height="410" rx="16"/>
-      <text class="lane-title" x="1094" y="94">Worker 层（pi headless 进程）</text>
-      <rect class="lane" x="1070" y="520" width="410" height="330" rx="16"/>
-      <text class="lane-title" x="1094" y="554">存储层</text>
+    <svg viewBox="0 0 1500 560" data-base="1500">
+      <!-- LEFT: sa -->
+      <rect class="lane" x="40" y="30" width="690" height="500" rx="16"/>
+      <text class="lane-title" x="64" y="62">sa —— 指挥模式（工作进入任务系统）</text>
 
-      <!-- YOU -->
-      <g class="node" data-id="U1" data-tip="你与系统唯一的对话入口就是 Router（pi 交互 TUI）。多轮对话确认草稿后才允许入档。">
-        <rect class="box you" x="85" y="112" width="280" height="76" rx="12"/>
-        <text class="t" x="225" y="143">与 Router 对话</text><text class="t2" x="225" y="170">唯一入口</text>
+      <g class="node" data-id="sa-you" data-tip="你只需和 Router 对话，不用开多个窗口盯任务">
+        <rect class="box you" x="80" y="86" width="230" height="66" rx="10"/>
+        <text class="t" x="195" y="115">👤 你</text>
+        <text class="t2" x="195" y="136">自然语言下达意图</text>
       </g>
-      <g class="node" data-id="U2" data-tip="通过 agent CLI 监视与验收：ls · show · follow · answer · cancel。">
-        <rect class="box you" x="85" y="212" width="280" height="76" rx="12"/>
-        <text class="t" x="225" y="243">监视 / 验收</text><text class="t2" x="225" y="270">agent ls · show · answer · cancel</text>
+      <g class="node" data-id="sa-router" data-tip="Router 是纯分诊台：只有 file_ticket 一个工具，不读文件、不执行、不调查。信息不足就问你。">
+        <rect class="box term core" x="380" y="86" width="310" height="66" rx="10"/>
+        <text class="t" x="535" y="112">Router（pi + SA_MODE）</text>
+        <text class="t2" x="535" y="134">唯一工具：file_ticket</text>
       </g>
+      <path class="edge hl" d="M310,119 L374,119" marker-end="url(#arr)"/>
+      <text class="elabel small" x="342" y="108">对话</text>
 
-      <!-- TERMINAL -->
-      <g class="node" data-id="R" data-tip="pi 交互 TUI。只做一次拆分，不写账本，只调用 file_ticket 工具。入档后 /new 清空上下文。">
-        <rect class="box term" x="85" y="430" width="280" height="88" rx="12"/>
-        <text class="t" x="225" y="464">pi（Router）</text><text class="t2" x="225" y="492">交互 TUI · 模型 = 配置</text>
+      <g class="node" data-id="sa-agentd" data-tip="校验 5 条硬约束后入档，进入调度队列。人工确认框在工具内部弹出，模型无法伪造。">
+        <rect class="box agentd core" x="380" y="206" width="310" height="72" rx="10"/>
+        <text class="t" x="535" y="234">agentd</text>
+        <text class="t2" x="535" y="256">校验 → 入档 → 调度</text>
       </g>
-      <g class="node" data-id="CLI" data-tip="socket 客户端，不碰账本。命令：admit / ls / show / follow / answer / cancel / drafts。">
-        <rect class="box term" x="85" y="548" width="280" height="88" rx="12"/>
-        <text class="t" x="225" y="582">agent CLI</text><text class="t2" x="225" y="610">socket 客户端，不碰账本</text>
+      <path class="edge" d="M535,152 L535,200" marker-end="url(#arr)"/>
+      <text class="elabel small" x="560" y="180">file_ticket(spec)</text>
+
+      <g class="node" data-id="sa-worker" data-tip="Worker 在后台的真实进程：拥有 bash / read / write 等完整工具，可联网、可拆子任务。">
+        <rect class="box worker core" x="380" y="330" width="310" height="72" rx="10"/>
+        <text class="t" x="535" y="358">Worker（后台 pi 进程）</text>
+        <text class="t2" x="535" y="380">bash · read · write · create_subtask</text>
       </g>
+      <path class="edge" d="M535,278 L535,324" marker-end="url(#arr)"/>
+      <text class="elabel small" x="565" y="305">spawn</text>
 
-      <!-- AGENTD internals -->
-      <g class="node" data-id="SOCK" data-tip="~/.agent/sock，接收 admit / ls / show / follow / answer / cancel 命令。">
-        <rect class="box agentd" x="505" y="112" width="200" height="82" rx="12"/>
-        <text class="t" x="605" y="147">socket 服务</text><text class="t2" x="605" y="174">~/.agent/sock</text>
+      <g class="node" data-id="sa-store" data-tip="全局账本记录状态（唯一真相）；项目目录里留 trace 与 result 作为证据。">
+        <rect class="box store" x="80" y="330" width="230" height="72" rx="10"/>
+        <text class="t" x="195" y="358">账本 + 产物</text>
+        <text class="t2" x="195" y="380">可审计 · 可回放</text>
       </g>
-      <g class="node" data-id="SCHED" data-tip="扫描 ready 队列，做资源互斥检查（同 key 独占），然后 spawn Worker。">
-        <rect class="box agentd" x="505" y="234" width="200" height="82" rx="12"/>
-        <text class="t" x="605" y="269">调度器</text><text class="t2" x="605" y="296">claim ready → spawn</text>
+      <path class="edge dash" d="M374,254 L314,340" marker-end="url(#arr)"/>
+
+      <g class="node" data-id="sa-back" data-tip="你随时用 sa ls / follow / tail / result 观测，用 sa answer 回答，用 sa close 验收。">
+        <rect class="box sys" x="80" y="432" width="610" height="62" rx="10"/>
+        <text class="t" x="385" y="458">👀 观测 / 回答 / 验收</text>
+        <text class="t2" x="385" y="479">sa ls · sa follow · sa tail · sa result · sa answer · sa close</text>
       </g>
-      <g class="node" data-id="TIMER" data-tip="租约到期扫描、waiting_user 超时、worker 死亡检测、GC。">
-        <rect class="box agentd" x="505" y="356" width="200" height="82" rx="12"/>
-        <text class="t" x="605" y="391">定时器</text><text class="t2" x="605" y="418">租约 · 超时 · 死亡检测</text>
+      <path class="edge dash" d="M195,402 L195,426" marker-end="url(#arr)"/>
+
+      <!-- RIGHT: pi -->
+      <rect class="lane" x="770" y="30" width="690" height="500" rx="16"/>
+      <text class="lane-title" x="794" y="62">pi —— 随手模式（没有任何任务系统）</text>
+
+      <g class="node" data-id="pi-you" data-tip="临时问问题、改个文件、一次性小活">
+        <rect class="box you" x="810" y="86" width="230" height="66" rx="10"/>
+        <text class="t" x="925" y="115">👤 你</text>
+        <text class="t2" x="925" y="136">临时请求</text>
       </g>
-      <g class="node" data-id="SUP" data-tip="spawn pi、setpgid、heartbeat；回收时两阶段：标记→等待→SIGTERM→SIGKILL。">
-        <rect class="box agentd" x="505" y="478" width="200" height="82" rx="12"/>
-        <text class="t" x="605" y="513">进程监管</text><text class="t2" x="605" y="540">setpgid · heartbeat · SIGTERM</text>
+      <g class="node" data-id="pi-pi" data-tip="普通 pi 会话：没有 file_ticket、没有 create_subtask、不写账本、不调度。">
+        <rect class="box term core" x="1110" y="86" width="310" height="66" rx="10"/>
+        <text class="t" x="1265" y="112">pi（普通会话）</text>
+        <text class="t2" x="1265" y="134">无 SA_MODE → 扩展不加载</text>
       </g>
-      <g class="node" data-id="SM" data-tip="迁移表驱动的状态机，唯一允许改状态的组件（单写者）。">
-        <rect class="box agentd core" x="755" y="234" width="200" height="92" rx="12"/>
-        <text class="t" x="855" y="270">状态机</text><text class="t2" x="855" y="298">迁移表 · 单写者</text>
+      <path class="edge hl" d="M1040,119 L1104,119" marker-end="url(#arr)"/>
+      <text class="elabel small" x="1072" y="108">直接</text>
+
+      <g class="node" data-id="pi-work" data-tip="模型直接用 read / write / bash 在当场完成，不产生 ticket，不留账。">
+        <rect class="box worker" x="1110" y="206" width="310" height="72" rx="10"/>
+        <text class="t" x="1265" y="234">当场完成</text>
+        <text class="t2" x="1265" y="256">read · write · bash</text>
       </g>
-      <g class="node" data-id="LW" data-tip="单 goroutine，append-only，seq 唯一分配。谁都不能改历史，纠错靠追加新事件。">
-        <rect class="box agentd" x="755" y="366" width="200" height="82" rx="12"/>
-        <text class="t" x="855" y="401">账本写入器</text><text class="t2" x="855" y="428">单 goroutine · seq 唯一</text>
+      <path class="edge" d="M1265,152 L1265,200" marker-end="url(#arr)"/>
+
+      <g class="node" data-id="pi-none" data-tip="这是关键区分：pi 的产出不进入任务系统，所以不可监视、不可并行调度、不可事后审计。">
+        <rect class="box muted" x="810" y="330" width="610" height="72" rx="10"/>
+        <text class="t" x="1115" y="358">✕ 不入档 · 不调度 · 不留账</text>
+        <text class="t2" x="1115" y="380">适用于不值得被跟踪的一次性小活</text>
       </g>
-      <g class="node" data-id="NOTIFY" data-tip="三级通道去重：need_input/failed = critical；done/closed = quiet。">
-        <rect class="box agentd" x="755" y="488" width="200" height="82" rx="12"/>
-        <text class="t" x="855" y="523">通知器</text><text class="t2" x="855" y="550">interrupt / quiet / none</text>
+      <path class="edge dash cancel" d="M1265,278 L1265,324" marker-end="url(#arr)"/>
+
+      <g class="node" data-id="pi-when" data-tip="判断标准：这件事值不值得被跟踪和管理？值得 → sa；不值得 → pi。">
+        <rect class="box sys" x="810" y="432" width="610" height="62" rx="10"/>
+        <text class="t" x="1115" y="458">判断标准</text>
+        <text class="t2" x="1115" y="479">值不值得被跟踪？值得 → sa；不值得 → pi</text>
       </g>
-
-      <!-- WORKERS -->
-      <g class="node" data-id="W1" data-tip="第一层 Worker：pi --mode json -p --session-id T-xxx。可独立完成，也可拆出子 Ticket。只能申报 done/failed/need_input。">
-        <rect class="box worker" x="1100" y="112" width="350" height="88" rx="12"/>
-        <text class="t" x="1275" y="147">pi --mode json -p</text><text class="t2" x="1275" y="174">--session-id T-xxx · Worker L1</text>
-      </g>
-      <g class="node" data-id="W2" data-tip="第二层：继承父模型与 session-id，走同一套「认领→执行→结果」循环。">
-        <rect class="box worker" x="1100" y="224" width="350" height="88" rx="12"/>
-        <text class="t" x="1275" y="259">子 Worker L2</text><text class="t2" x="1275" y="286">继承 session-id / 父模型</text>
-      </g>
-      <g class="node" data-id="W3" data-tip="第三层 = 硬性上限。三层仍未完成 → 转 waiting_user 预警，由你决定。">
-        <rect class="box worker" x="1100" y="336" width="350" height="88" rx="12"/>
-        <text class="t" x="1275" y="371">子 Worker L3</text><text class="t2" x="1275" y="398">⚠️ 硬性上限</text>
-      </g>
-
-      <!-- STORAGE -->
-      <g class="node" data-id="LEDGER" data-tip="control/*.jsonl：append-only 账本，系统唯一真相。">
-        <rect class="box store" x="1100" y="572" width="350" height="82" rx="12"/>
-        <text class="t" x="1275" y="607">control/*.jsonl</text><text class="t2" x="1275" y="634">账本 · 唯一真相 · append-only</text>
-      </g>
-      <g class="node" data-id="TRACE" data-tip="tickets/&lt;id&gt;/trace.jsonl：pi 事件流，作为执行证据。">
-        <rect class="box store" x="1100" y="676" width="350" height="82" rx="12"/>
-        <text class="t" x="1275" y="711">tickets/&lt;id&gt;/trace.jsonl</text><text class="t2" x="1275" y="738">pi 事件流 · 证据</text>
-      </g>
-      <g class="node" data-id="RULES" data-tip="AGENTS.md 等项目规则文件，Worker 启动时注入其上下文（L2 规则）。">
-        <rect class="box store" x="1100" y="780" width="350" height="56" rx="12"/>
-        <text class="t" x="1275" y="804">项目规则文件</text><text class="t2" x="1275" y="826">AGENTS.md 等 · 注入 worker 上下文</text>
-      </g>
-
-      <!-- ══ edges: left side ══ -->
-      <path class="edge" data-from="U1" data-to="R" marker-start="url(#arrS)" marker-end="url(#arr)" d="M160,188 V430"/>
-      <text class="elabel" data-from="U1" data-to="R" x="176" y="332" text-anchor="start">多轮对话 · 草稿确认</text>
-
-      <path class="edge" data-from="U2" data-to="CLI" marker-end="url(#arr)" d="M365,250 H435 V592 H365"/>
-      <text class="elabel" data-from="U2" data-to="CLI" x="443" y="278" text-anchor="start">监视命令</text>
-
-      <path class="edge" data-from="R" data-to="SOCK" marker-end="url(#arr)" d="M365,474 H455 V132 H505"/>
-      <text class="elabel" data-from="R" data-to="SOCK" x="378" y="458" text-anchor="start">file_ticket(spec)</text>
-      <text class="elabel small" data-from="R" data-to="SOCK" x="378" y="438" text-anchor="start">唯一入档动作</text>
-
-      <path class="edge" data-from="CLI" data-to="SOCK" marker-start="url(#arrS)" marker-end="url(#arr)" d="M365,592 H398 V160 H505"/>
-      <text class="elabel" data-from="CLI" data-to="SOCK" x="378" y="622" text-anchor="start">admit / ls / show</text>
-      <text class="elabel" data-from="CLI" data-to="SOCK" x="378" y="646" text-anchor="start">/ answer / cancel</text>
-
-      <!-- ══ edges: inside agentd ══ -->
-      <path class="edge" data-from="SOCK" data-to="SM" marker-end="url(#arr)" d="M705,153 H730 V256 H755"/>
-      <text class="elabel small" data-from="SOCK" data-to="SM" x="738" y="204" text-anchor="start">命令</text>
-
-      <path class="edge" data-from="SCHED" data-to="SM" marker-end="url(#arr)" d="M705,275 H755"/>
-      <text class="elabel small" data-from="SCHED" data-to="SM" x="730" y="264">claim</text>
-
-      <path class="edge" data-from="TIMER" data-to="SUP" marker-end="url(#arr)" d="M605,438 V478"/>
-
-      <path class="edge" data-from="TIMER" data-to="SM" marker-end="url(#arr)" d="M705,397 H740 V304 H755"/>
-      <text class="elabel small" data-from="TIMER" data-to="SM" x="745" y="350" text-anchor="start">超时</text>
-
-      <path class="edge dash" data-from="SUP" data-to="SM" marker-end="url(#arr)" d="M705,519 H712 V290 H755"/>
-      <text class="elabel small" data-from="SUP" data-to="SM" x="700" y="590" text-anchor="end">worker 死亡 → ready 重试</text>
-      <text class="elabel small" data-from="SUP" data-to="SM" x="700" y="612" text-anchor="end">（继承 session-id）</text>
-
-      <path class="edge" data-from="SM" data-to="LW" marker-end="url(#arr)" d="M855,326 V366"/>
-      <path class="edge" data-from="SM" data-to="NOTIFY" marker-end="url(#arr)" d="M905,326 V488"/>
-      <text class="elabel small" data-from="SM" data-to="NOTIFY" x="921" y="460" text-anchor="start">事件</text>
-
-      <!-- ══ edges: agentd → worker / storage ══ -->
-      <path class="edge" data-from="SCHED" data-to="W1" marker-end="url(#arr)" d="M705,299 H1030 V156 H1100"/>
-      <text class="elabel small" data-from="SCHED" data-to="W1" x="800" y="320">spawn</text>
-
-      <path class="edge" data-from="LW" data-to="LEDGER" marker-end="url(#arr)" d="M955,407 H1062 V613 H1100"/>
-      <text class="elabel small" data-from="LW" data-to="LEDGER" x="1095" y="566" text-anchor="start">append-only · seq 唯一</text>
-
-      <!-- worker chain -->
-      <path class="edge" data-from="W1" data-to="W2" marker-end="url(#arr)" d="M1275,200 V224"/>
-      <text class="elabel small" data-from="W1" data-to="W2" x="1291" y="216" text-anchor="start">拆子任务</text>
-      <path class="edge" data-from="W2" data-to="W3" marker-end="url(#arr)" d="M1275,312 V336"/>
-      <text class="elabel small" data-from="W2" data-to="W3" x="1291" y="328" text-anchor="start">再拆</text>
-
-      <!-- storage → worker: rules injection (under worker lane) -->
-      <path class="edge dash" data-from="RULES" data-to="W1" marker-end="url(#arr)" d="M1275,780 V762 H1000 V200 H1100"/>
-      <text class="elabel small" data-from="RULES" data-to="W1" x="1275" y="756" text-anchor="end">启动时注入 L2 规则</text>
-
-      <!-- worker → trace: bottom of worker lane -->
-      <path class="edge dash" data-from="W1" data-to="TRACE" marker-end="url(#arr)" d="M1275,424 H1210 V676"/>
-      <text class="elabel small" data-from="W1" data-to="TRACE" x="1198" y="452" text-anchor="end">事件流</text>
-
-      <!-- ══ edges: feedback channel (bottom) ══ -->
-      <path class="edge dash" data-from="W1" data-to="SOCK" marker-end="url(#arr)" d="M1275,380 V886 H605 V194"/>
-      <text class="elabel" data-from="W1" data-to="SOCK" x="940" y="880">申报 done / failed / need_input</text>
-
-      <path class="edge dash" data-from="NOTIFY" data-to="U2" marker-end="url(#arr)" d="M855,570 V910 H225 V288"/>
-      <text class="elabel" data-from="NOTIFY" data-to="U2" x="470" y="924">🔔 need_input/failed = critical · done/closed = quiet</text>
-
-      <path class="edge dash" data-from="W3" data-to="U2" marker-end="url(#arr)" d="M1100,402 H1010 V938 H140 V288"/>
-      <text class="elabel" data-from="W3" data-to="U2" x="590" y="952">三层仍未完成 → waiting_user 预警</text>
     </svg>
     </div>
   </div>
 </section>
 
-<!-- ════════════════════════ 2. Ticket 生命周期 ════════════════════════ -->
+<!-- ═══════════════ 2. 总体拓扑 ═══════════════ -->
 <section id="s2">
-  <h2>2 · 一张 Ticket 的完整生命周期</h2>
-  <div class="desc">从「帮我做 X」到 closed：入档 → 调度 → 执行 →（提问 / 拆层 / 死亡重试）→ 验收 → 回收。虚线箭头 = 返回消息。</div>
+  <h2>2 · 总体拓扑</h2>
+  <div class="desc">
+    一个全局 agentd 常驻服务；任意多个项目目录都可以作为 Router 的发起地。任务归属 = 发起时的目录（不可变），
+    Worker 就在该项目的物理目录里干活。全局只存运行记录（账本 / socket / 全局配置）。
+  </div>
   <div class="canvas-wrap">
     <div class="zoombar"><button data-z="-">−</button><button data-z="r">⤾</button><button data-z="+">+</button></div>
     <div class="canvas">
-    <svg viewBox="0 0 1240 1230" data-base="1240">
-      <!-- alt blocks -->
-      <rect class="alt" x="40" y="520" width="1160" height="220" rx="10"/>
-      <text class="alt-label" x="56" y="548">alt · Worker 需要问你</text>
-      <rect class="alt" x="40" y="748" width="1160" height="192" rx="10"/>
-      <text class="alt-label" x="56" y="776">alt · Worker 拆子任务（≤ 3 层）</text>
-      <rect class="alt" x="40" y="948" width="1160" height="124" rx="10"/>
-      <text class="alt-label" x="56" y="976">alt · Worker 死亡（kill -9 / 崩溃）</text>
+    <svg viewBox="0 0 1560 980" data-base="1560">
+      <!-- lanes -->
+      <rect class="lane" x="40" y="40" width="330" height="230" rx="16"/>
+      <text class="lane-title" x="64" y="72">👤 你</text>
 
-      <!-- participants -->
-      <g class="node" data-id="pU" data-tip="你"><rect class="box you" x="30" y="20" width="150" height="48" rx="10"/><text class="t" x="105" y="51">👤 你</text></g>
-      <g class="node" data-id="pR" data-tip="Router（pi 交互 TUI）"><rect class="box term" x="210" y="20" width="150" height="48" rx="10"/><text class="t" x="285" y="51">Router(pi)</text></g>
-      <g class="node" data-id="pD" data-tip="agentd：唯一写者"><rect class="box agentd core" x="440" y="20" width="150" height="48" rx="10"/><text class="t" x="515" y="51">agentd</text></g>
-      <g class="node" data-id="pL" data-tip="账本 control/*.jsonl"><rect class="box store" x="660" y="20" width="150" height="48" rx="10"/><text class="t" x="735" y="51">账本(jsonl)</text></g>
-      <g class="node" data-id="pW" data-tip="Worker（pi headless）"><rect class="box worker" x="870" y="20" width="150" height="48" rx="10"/><text class="t" x="945" y="51">Worker(pi)</text></g>
-      <g class="node" data-id="pS" data-tip="子 Worker（递归点）"><rect class="box worker" x="1050" y="20" width="150" height="48" rx="10"/><text class="t" x="1125" y="51">Subagent(pi)</text></g>
-      <line class="life" x1="105" y1="74" x2="105" y2="1208"/><line class="life" x1="285" y1="74" x2="285" y2="1208"/>
-      <line class="life" x1="515" y1="74" x2="515" y2="1208"/><line class="life" x1="735" y1="74" x2="735" y2="1208"/>
-      <line class="life" x1="945" y1="74" x2="945" y2="1208"/><line class="life" x1="1125" y1="74" x2="1125" y2="1208"/>
+      <rect class="lane" x="40" y="300" width="330" height="330" rx="16"/>
+      <text class="lane-title" x="64" y="332">终端层</text>
+
+      <rect class="lane" x="410" y="40" width="470" height="890" rx="16"/>
+      <text class="lane-title" x="434" y="72">agentd（Go 常驻 · systemd 托管 · 唯一写者）</text>
+
+      <rect class="lane" x="920" y="40" width="600" height="360" rx="16"/>
+      <text class="lane-title" x="944" y="72">Worker 层（后台 pi 进程 · 按项目目录运行）</text>
+
+      <rect class="lane" x="920" y="430" width="600" height="500" rx="16"/>
+      <text class="lane-title" x="944" y="462">存储层（全局 = 记录；项目 = 内容）</text>
+
+      <!-- 你 -->
+      <g class="node" data-id="you" data-tip="你只对接 Router；观测与验收也只通过 CLI，不给任何 agent 开旁路。">
+        <rect class="box you core" x="70" y="96" width="270" height="146" rx="12"/>
+        <text class="t" x="205" y="130">👤 你</text>
+        <text class="t2" x="205" y="156">下达意图</text>
+        <text class="t2" x="205" y="178">观测进度</text>
+        <text class="t2" x="205" y="200">回答 / 验收</text>
+      </g>
+
+      <!-- 终端层 -->
+      <g class="node" data-id="sa" data-tip="sa = Router 会话：SA_MODE=1，工具只有 file_ticket。传话筒，不干活。">
+        <rect class="box term core" x="70" y="356" width="270" height="80" rx="12"/>
+        <text class="t" x="205" y="386">sa（Router）</text>
+        <text class="t2" x="205" y="410">只有 file_ticket</text>
+      </g>
+      <g class="node" data-id="pi" data-tip="pi = 纯净编码助手，扩展不加载，与任务系统完全无关。">
+        <rect class="box term" x="70" y="456" width="270" height="66" rx="12"/>
+        <text class="t" x="205" y="484">pi（普通助手）</text>
+        <text class="t2" x="205" y="505">不接入系统</text>
+      </g>
+      <g class="node" data-id="cli" data-tip="CLI 只是 socket 客户端：ls / show / result / follow / tail / answer / close。从不直接改账本。">
+        <rect class="box term" x="70" y="540" width="270" height="66" rx="12"/>
+        <text class="t" x="205" y="568">agent CLI</text>
+        <text class="t2" x="205" y="589">socket 客户端</text>
+      </g>
+      <path class="edge hl" d="M205,242 L205,350" marker-end="url(#arr)"/>
+
+      <!-- agentd internals -->
+      <g class="node" data-id="sock" data-tip="全局唯一 socket：~/.agent/sock。所有 CLI 与 Router 都连它。">
+        <rect class="box agentd core" x="440" y="100" width="410" height="64" rx="10"/>
+        <text class="t" x="645" y="126">socket 服务</text>
+        <text class="t2" x="645" y="147">~/.agent/sock（全局唯一）</text>
+      </g>
+      <g class="node" data-id="validate" data-tip="入档前硬校验：goal 非空、acceptance≥1、context 自包含、depth≤3、模型名合法。
+非法请求直接拒收，Router 必须回去继续问人。">
+        <rect class="box agentd" x="440" y="186" width="410" height="64" rx="10"/>
+        <text class="t" x="645" y="212">入档校验</text>
+        <text class="t2" x="645" y="233">goal · acceptance · context · depth</text>
+      </g>
+      <g class="node" data-id="sm" data-tip="状态机是闭集：迁移必须查表，非法迁移一律拒绝。closed 是终态。">
+        <rect class="box agentd" x="440" y="272" width="410" height="64" rx="10"/>
+        <text class="t" x="645" y="298">状态机（迁移表）</text>
+        <text class="t2" x="645" y="319">只有 agentd 能写状态</text>
+      </g>
+      <g class="node" data-id="sched" data-tip="调度循环：ready 的票先抢资源租约（同 key 独占），成功才 claim 并 spawn Worker。">
+        <rect class="box agentd" x="440" y="358" width="410" height="64" rx="10"/>
+        <text class="t" x="645" y="384">调度器</text>
+        <text class="t2" x="645" y="405">资源租约 → claim → spawn</text>
+      </g>
+      <g class="node" data-id="timer" data-tip="定时器负责确定性的事：租约到期、waiting_user 超时、最大重试次数、进程死亡检测（/proc 判活）。">
+        <rect class="box agentd" x="440" y="444" width="410" height="64" rx="10"/>
+        <text class="t" x="645" y="470">定时器 / 看门狗</text>
+        <text class="t2" x="645" y="491">租约 · 超时 · 死亡检测</text>
+      </g>
+      <g class="node" data-id="notify" data-tip="三级通知：interrupt（需要你 / 失败）会打断；quiet（完成）静音；其余只落账。">
+        <rect class="box agentd" x="440" y="530" width="410" height="64" rx="10"/>
+        <text class="t" x="645" y="556">通知器</text>
+        <text class="t2" x="645" y="577">interrupt / quiet / none</text>
+      </g>
+      <g class="node" data-id="rec" data-tip="启动自愈：重放账本 → 找回孤儿 Worker → 释放幽灵资源 → 记录 reconcile.applied。kill -9 后能自己恢复。">
+        <rect class="box agentd core" x="440" y="616" width="410" height="72" rx="10"/>
+        <text class="t" x="645" y="644">reconcile（启动自愈）</text>
+        <text class="t2" x="645" y="666">重放账本 · 孤儿回收 · 幂等</text>
+      </g>
+      <g class="node" data-id="ledgerw" data-tip="账本写入器是单 goroutine：seq 全局单调，append-only。这是整个系统唯一的事实来源。">
+        <rect class="box agentd core" x="440" y="712" width="410" height="72" rx="10"/>
+        <text class="t" x="645" y="740">账本写入器（单写者）</text>
+        <text class="t2" x="645" y="762">append-only · seq 单调</text>
+      </g>
+      <g class="node" data-id="rm" data-tip="资源管理器：同一 key 同一时刻只能有一个独占持有者，不关心 key 到底是什么。">
+        <rect class="box agentd" x="440" y="808" width="410" height="64" rx="10"/>
+        <text class="t" x="645" y="834">资源租约管理器</text>
+        <text class="t2" x="645" y="855">同 key 独占 · 项目命名空间</text>
+      </g>
+
+      <path class="edge" d="M340,396 L434,150" marker-end="url(#arr)"/>
+      <path class="edge" d="M340,573 L434,132" marker-end="url(#arr)"/>
+      <text class="elabel small" x="372" y="300">unix socket</text>
+
+      <path class="edge dash" d="M645,164 L645,180" marker-end="url(#arr)"/>
+      <path class="edge dash" d="M645,250 L645,266" marker-end="url(#arr)"/>
+      <path class="edge dash" d="M645,336 L645,352" marker-end="url(#arr)"/>
+      <path class="edge dash" d="M645,692 L645,706" marker-end="url(#arr)"/>
+
+      <!-- workers -->
+      <g class="node" data-id="w1" data-tip="Worker L1：由调度器 spawn，session-id 与 ticket 绑定，失败重试可继承上下文。">
+        <rect class="box worker core" x="952" y="100" width="250" height="76" rx="10"/>
+        <text class="t" x="1077" y="128">Worker L1</text>
+        <text class="t2" x="1077" y="150">bash · 可联网</text>
+      </g>
+      <g class="node" data-id="w2" data-tip="子任务 L2：父 Worker 通过 create_subtask 派生，独立 session-id，继承父模型。">
+        <rect class="box worker" x="1230" y="100" width="250" height="76" rx="10"/>
+        <text class="t" x="1355" y="128">子 Worker L2</text>
+        <text class="t2" x="1355" y="150">继承父模型</text>
+      </g>
+      <g class="node" data-id="w3" data-tip="第三层是硬上限。到这里还不完成，系统会要求停下并转 waiting_user 让人判断，防止 AI 无限拆解走偏。">
+        <rect class="box worker" x="1230" y="200" width="250" height="76" rx="10"/>
+        <text class="t" x="1355" y="228">子 Worker L3</text>
+        <text class="t2" x="1355" y="250">⚠️ 硬上限</text>
+      </g>
+      <g class="node" data-id="w4" data-tip="主任务等所有子任务完成后，用同一个 session-id 恢复，把子任务结果喂回给父 Worker 整合。">
+        <rect class="box worker" x="952" y="200" width="250" height="76" rx="10"/>
+        <text class="t" x="1077" y="228">父 Worker 恢复</text>
+        <text class="t2" x="1077" y="250">子结果回填</text>
+      </g>
+      <path class="edge" d="M645,420 L946,138" marker-end="url(#arr)"/>
+      <text class="elabel small" x="800" y="290">spawn · setpgid</text>
+      <path class="edge dash" d="M1202,138 L1224,138" marker-end="url(#arr)"/>
+      <text class="elabel small" x="1213" y="128">拆</text>
+      <path class="edge dash" d="M1355,176 L1355,194" marker-end="url(#arr)"/>
+      <path class="edge dash" d="M1202,238 L1224,238" marker-end="url(#arr)"/>
+      <text class="elabel small" x="1213" y="228">恢复</text>
+      <path class="edge dash" d="M1077,176 L1077,194" marker-end="url(#arr)"/>
+
+      <!-- storage -->
+      <g class="node" data-id="gstore" data-tip="全局存储：账本（唯一真相）、socket、全局配置、status.json。所有项目的事件都在这里，便于统一看板与审计。">
+        <rect class="box store core" x="952" y="490" width="270" height="180" rx="12"/>
+        <text class="t" x="1087" y="518">~/.agent（全局）</text>
+        <text class="t2" x="1087" y="544">control/*.jsonl 账本</text>
+        <text class="t2" x="1087" y="566">sock</text>
+        <text class="t2" x="1087" y="588">config.yaml（兜底）</text>
+        <text class="t2" x="1087" y="610">status.json</text>
+        <text class="t3" x="1087" y="640">唯一真相 · 跨项目统一</text>
+      </g>
+      <g class="node" data-id="pstore" data-tip="项目存储：Worker 在这里的实际工作目录，能直接读写项目文件；trace/result 是证据，删了不影响正确性。">
+        <rect class="box store" x="1240" y="490" width="240" height="180" rx="12"/>
+        <text class="t" x="1360" y="518">&lt;项目&gt;/.agent</text>
+        <text class="t2" x="1360" y="544">tickets/&lt;id&gt;/work/</text>
+        <text class="t2" x="1360" y="566">trace.jsonl 证据</text>
+        <text class="t2" x="1360" y="588">result.md 结果</text>
+        <text class="t2" x="1360" y="610">config.yaml（覆盖）</text>
+        <text class="t3" x="1360" y="640">物理隔离 · 随项目走</text>
+      </g>
+      <g class="node" data-id="rules" data-tip="项目规则（L2）：由项目配置的 rules 引用，注入该项目 Worker 的 system prompt。不同项目互不污染。">
+        <rect class="box sys" x="952" y="700" width="528" height="80" rx="10"/>
+        <text class="t" x="1216" y="728">项目规则注入（L2）</text>
+        <text class="t2" x="1216" y="752">规则跟着项目走：A 项目的规则只进 A 的 Worker</text>
+      </g>
+      <g class="node" data-id="restore" data-tip="父 Worker 结束后，子任务结果被读回并作为新一轮 prompt 喂给父 Worker（同 session-id），完成整合。">
+        <rect class="box sys" x="952" y="800" width="528" height="80" rx="10"/>
+        <text class="t" x="1216" y="828">子结果回填 = 同 session-id 恢复</text>
+        <text class="t2" x="1216" y="852">父 Worker 拿到子任务输出后完成最终产出</text>
+      </g>
+
+      <path class="edge dash" d="M645,744 L946,580" marker-end="url(#arr)"/>
+      <text class="elabel small" x="800" y="700">append</text>
+      <path class="edge dash" d="M1087,270 L1087,484" marker-end="url(#arr)"/>
+      <text class="elabel small" x="1087" y="400">trace / result</text>
+      <path class="edge dash" d="M1210,528 L1236,528" marker-end="url(#arr)"/>
     </svg>
     </div>
   </div>
 </section>
 
-<!-- ════════════════════════ 3. 状态机 ════════════════════════ -->
+<!-- ═══════════════ 3. 生命周期时序 ═══════════════ -->
 <section id="s3">
-  <h2>3 · 状态机（M0 已实现）</h2>
-  <div class="desc">迁移表驱动、单写者。红色虚线 = cancel（任意非终态可取消，统一汇入 closed）。closed 是终态，之后只许 resource.released。</div>
+  <h2>3 · 一个任务的完整生命周期</h2>
+  <div class="desc">
+    实线 = 请求 / 写入；虚线 = 返回 / 通知。图上同时画出三条真实会走到的支线：<b>需要人回答</b>、<b>拆子任务</b>、<b>Worker 死亡重试</b>。
+  </div>
   <div class="canvas-wrap">
     <div class="zoombar"><button data-z="-">−</button><button data-z="r">⤾</button><button data-z="+">+</button></div>
     <div class="canvas">
-    <svg viewBox="0 0 1120 760" data-base="1120">
-      <circle cx="200" cy="66" r="10" fill="#dbe4f5"/>
-      <g class="node" data-id="st_pending" data-tip="已入档，等待资源可用。"><rect class="box term" x="110" y="116" width="180" height="58" rx="29"/><text class="t" x="200" y="152">pending</text></g>
-      <g class="node" data-id="st_ready" data-tip="资源已就绪，等待调度器 claim。"><rect class="box term" x="110" y="256" width="180" height="58" rx="29"/><text class="t" x="200" y="292">ready</text></g>
-      <g class="node" data-id="st_running" data-tip="Worker 执行中。"><rect class="box agentd core" x="390" y="376" width="180" height="58" rx="29"/><text class="t" x="480" y="412">running</text></g>
-      <g class="node" data-id="st_waiting" data-tip="Worker 提问，等待你的回答。超时 → failed。"><rect class="box worker" x="740" y="256" width="180" height="58" rx="29"/><text class="t" x="830" y="292">waiting_user</text></g>
-      <g class="node" data-id="st_done" data-tip="验收齐全，等待你确认 close。"><rect class="box store" x="390" y="536" width="180" height="58" rx="29"/><text class="t" x="480" y="572">done</text></g>
-      <g class="node" data-id="st_failed" data-tip="申报失败 / 三层未完成 / 模型不可用未解决 / waiting_user 超时。"><rect class="box" style="fill:rgba(255,107,107,.13);stroke:var(--danger)" x="740" y="476" width="180" height="58" rx="29"/><text class="t" x="830" y="512">failed</text></g>
-      <g class="node" data-id="st_closed" data-tip="终态：资源回收完毕。之后账本只许追加 resource.released。"><rect class="box sys core" x="520" y="656" width="180" height="58" rx="29"/><text class="t" x="610" y="692">closed</text></g>
-      <circle cx="610" cy="736" r="8" fill="none" stroke="#dbe4f5" stroke-width="2"/><circle cx="610" cy="736" r="3.5" fill="#dbe4f5"/>
-
-      <path class="edge" data-from="start" data-to="st_pending" marker-end="url(#arr)" d="M200,76 V116"/>
-      <text class="elabel" x="216" y="102" text-anchor="start">admit（人工确认）</text>
-
-      <path class="edge" data-from="st_pending" data-to="st_ready" marker-end="url(#arr)" d="M200,174 V256"/>
-      <text class="elabel" data-from="st_pending" data-to="st_ready" x="216" y="222" text-anchor="start">资源可用</text>
-
-      <path class="edge" data-from="st_ready" data-to="st_running" marker-end="url(#arr)" d="M290,285 H340 V396 H390"/>
-      <text class="elabel" data-from="st_ready" data-to="st_running" x="348" y="330">claim 成功</text>
-
-      <path class="edge" data-from="st_running" data-to="st_waiting" marker-end="url(#arr)" d="M570,388 H660 V292 H740"/>
-      <text class="elabel" data-from="st_running" data-to="st_waiting" x="580" y="372" text-anchor="start">need_input</text>
-
-      <path class="edge" data-from="st_waiting" data-to="st_running" marker-end="url(#arr)" d="M740,270 H480 V376"/>
-      <text class="elabel" data-from="st_waiting" data-to="st_running" x="610" y="252">answer</text>
-
-      <path class="edge" data-from="st_running" data-to="st_ready" marker-end="url(#arr)" d="M410,376 V344 H200 V314"/>
-      <text class="elabel" data-from="st_running" data-to="st_ready" x="320" y="358" text-anchor="start">worker 死亡 → 自动重试（继承 session-id）</text>
-
-      <path class="edge" data-from="st_running" data-to="st_done" marker-end="url(#arr)" d="M480,434 V536"/>
-      <text class="elabel" data-from="st_running" data-to="st_done" x="496" y="492" text-anchor="start">验收齐全</text>
-
-      <path class="edge" data-from="st_running" data-to="st_failed" marker-end="url(#arr)" d="M570,405 H700 V490 H740"/>
-      <text class="elabel" data-from="st_running" data-to="st_failed" x="580" y="462" text-anchor="start">申报失败 / 三层未完成 / 模型不可用未解决</text>
-
-      <path class="edge" data-from="st_waiting" data-to="st_failed" marker-end="url(#arr)" d="M830,314 V476"/>
-      <text class="elabel" data-from="st_waiting" data-to="st_failed" x="846" y="402" text-anchor="start">超时</text>
-
-      <path class="edge" data-from="st_done" data-to="st_closed" marker-end="url(#arr)" d="M480,594 V626 H580 V656"/>
-      <text class="elabel" data-from="st_done" data-to="st_closed" x="496" y="618" text-anchor="start">资源回收完</text>
-
-      <path class="edge" data-from="st_failed" data-to="st_closed" marker-end="url(#arr)" d="M830,534 V600 H660 V656"/>
-      <text class="elabel" data-from="st_failed" data-to="st_closed" x="822" y="560" text-anchor="end">资源回收完</text>
-
-      <path class="edge" data-from="st_closed" data-to="end" marker-end="url(#arr)" d="M610,714 V726"/>
-      <text class="elabel" x="628" y="740" text-anchor="start">终态（只许 resource.released）</text>
-
-      <!-- cancels -->
-      <path class="edge cancel" data-from="st_pending" data-to="st_closed" marker-end="url(#arrR)" d="M110,145 H60 V685 H520"/>
-      <path class="edge cancel" data-from="st_ready" data-to="st_closed" marker-end="url(#arrR)" d="M110,285 H88 V700 H520"/>
-      <path class="edge cancel" data-from="st_running" data-to="st_closed" marker-end="url(#arrR)" d="M390,420 H350 V716 H520"/>
-      <path class="edge cancel" data-from="st_waiting" data-to="st_closed" marker-end="url(#arrR)" d="M920,285 H1010 V685 H700"/>
-      <text class="elabel" style="fill:var(--danger);stroke:none" x="1090" y="40" text-anchor="end">红色虚线 = cancel（任意非终态 → closed）</text>
+    <svg viewBox="0 0 1280 1370" data-base="1280">
+      <g id="heads"></g>
+      <g id="lifelines"></g>
+      <g id="events"></g>
     </svg>
     </div>
   </div>
 </section>
 
-<!-- ════════════════════════ 4. 三层约束注入 ════════════════════════ -->
+<!-- ═══════════════ 4. 状态机 ═══════════════ -->
 <section id="s4">
-  <h2>4 · 三层约束注入</h2>
-  <div class="desc">L1 由代码强制；L2 / L3 只注入不解析，靠「Worker 报告每条约束的处理结果 + 账本审计」兜底。</div>
+  <h2>4 · 状态机（闭集，迁移必须查表）</h2>
+  <div class="desc">
+    区分 <b>pending</b>（等依赖/尚未就绪）、<b>ready</b>（等资源）与 <b>running</b>（在跑）——这是回答"为什么它没在跑"的前提。
+    <b>closed 是终态</b>：到达后除资源释放事件外，任何事件都会被拒绝。
+  </div>
   <div class="canvas-wrap">
     <div class="zoombar"><button data-z="-">−</button><button data-z="r">⤾</button><button data-z="+">+</button></div>
     <div class="canvas">
-    <svg viewBox="0 0 1280 640" data-base="1280">
-      <rect class="lane" x="60" y="40" width="330" height="380" rx="16"/>
-      <text class="lane-title" x="84" y="76">L1 · 通用内核（系统强制）</text>
-      <rect class="lane" x="460" y="40" width="330" height="380" rx="16"/>
-      <text class="lane-title" x="484" y="76">L2 · 项目规则（注入，不解析）</text>
-      <rect class="lane" x="860" y="40" width="330" height="380" rx="16"/>
-      <text class="lane-title" x="884" y="76">L3 · 单任务约束（注入，不解析）</text>
-
-      <g class="node" data-id="l1a" data-tip="file_ticket 入档时校验，goal 为空直接拒绝。"><rect class="box agentd" x="85" y="96" width="280" height="60" rx="12"/><text class="t" x="225" y="133">goal 非空</text></g>
-      <g class="node" data-id="l1b" data-tip="Worker 是第一层，最多拆到第三层。"><rect class="box agentd" x="85" y="176" width="280" height="60" rx="12"/><text class="t" x="225" y="213">最多三层递归</text></g>
-      <g class="node" data-id="l1c" data-tip="调度时同 key 资源独占。"><rect class="box agentd" x="85" y="256" width="280" height="60" rx="12"/><text class="t" x="225" y="293">同 key 资源互斥</text></g>
-      <g class="node" data-id="l1d" data-tip="closed 之后只许 resource.released。"><rect class="box agentd" x="85" y="336" width="280" height="60" rx="12"/><text class="t" x="225" y="373">closed 终态</text></g>
-
-      <g class="node" data-id="l2a" data-tip="读入 Worker 的 system prompt。"><rect class="box term" x="485" y="96" width="280" height="60" rx="12"/><text class="t" x="625" y="133">AGENTS.md</text></g>
-      <g class="node" data-id="l2b" data-tip="模块约定等项目文档。"><rect class="box term" x="485" y="176" width="280" height="60" rx="12"/><text class="t" x="625" y="213">MODULE-CONVENTIONS.md</text></g>
-      <g class="node" data-id="l2c" data-tip="任何项目特有约束。"><rect class="box term" x="485" y="256" width="280" height="60" rx="12"/><text class="t" x="625" y="293">项目特有约束</text></g>
-
-      <g class="node" data-id="l3a" data-tip="ticket.constraints 示例。"><rect class="box worker" x="885" y="96" width="280" height="60" rx="12"/><text class="t" x="1025" y="133">「不许碰前端」</text></g>
-      <g class="node" data-id="l3b" data-tip="ticket.constraints 示例。"><rect class="box worker" x="885" y="176" width="280" height="60" rx="12"/><text class="t" x="1025" y="213">「不许 commit」</text></g>
-      <g class="node" data-id="l3c" data-tip="ticket.constraints 示例。"><rect class="box worker" x="885" y="256" width="280" height="60" rx="12"/><text class="t" x="1025" y="293">「必须写报告」</text></g>
-
-      <g class="node" data-id="sysd" data-tip="L1 由 agentd 代码强制：file_ticket 校验 + 迁移表。">
-        <rect class="box sys" x="110" y="500" width="250" height="80" rx="12"/>
-        <text class="t" x="235" y="533">agentd</text><text class="t2" x="235" y="560">代码强制</text>
+    <svg viewBox="0 0 1480 620" data-base="1480">
+      <g class="node" data-id="pending" data-tip="已入档但尚未就绪。只有 agentd 能推进它。">
+        <rect class="box muted" x="80" y="110" width="180" height="70" rx="12"/>
+        <text class="t" x="170" y="140">pending</text>
+        <text class="t2" x="170" y="162">已入档</text>
       </g>
-      <g class="node" data-id="wctx" data-tip="Worker 拿到的完整上下文：L2 规则 + L3 约束 + 元规则「违反 = 失败 + 停 + 报告」。">
-        <rect class="box worker core" x="500" y="500" width="280" height="80" rx="12"/>
-        <text class="t" x="640" y="533">Worker 上下文</text><text class="t2" x="640" y="560">system prompt + ticket.constraints</text>
+      <g class="node" data-id="ready" data-tip="就绪：等资源。资源被别的任务占着时，它会安静地停在这里（可在日志看到 held by 谁）。">
+        <rect class="box term" x="350" y="110" width="180" height="70" rx="12"/>
+        <text class="t" x="440" y="140">ready</text>
+        <text class="t2" x="440" y="162">等资源</text>
       </g>
-      <g class="node" data-id="audit" data-tip="Worker 的 done 报告必须含每条约束的处理结果，落入账本可审计。">
-        <rect class="box store" x="900" y="500" width="250" height="80" rx="12"/>
-        <text class="t" x="1025" y="533">账本审计</text><text class="t2" x="1025" y="560">每条约束的处理结果</text>
+      <g class="node" data-id="running" data-tip="已 claim 到资源并 spawn 了 Worker 进程。">
+        <rect class="box agentd" x="620" y="110" width="180" height="70" rx="12"/>
+        <text class="t" x="710" y="140">running</text>
+        <text class="t2" x="710" y="162">Worker 在跑</text>
+      </g>
+      <g class="node" data-id="waiting" data-tip="Worker 遇到阻塞性问题，停下来等人。此时没有 Worker 进程在跑；你 answer 后会用同 session-id 恢复。">
+        <rect class="box sys" x="620" y="330" width="180" height="70" rx="12"/>
+        <text class="t" x="710" y="360">waiting_user</text>
+        <text class="t2" x="710" y="382">等你回答</text>
+      </g>
+      <g class="node" data-id="done" data-tip="Worker 申报完成。若还有未完成子任务，会先等子任务；子任务全部完成后才真正置为 done。">
+        <rect class="box store" x="960" y="110" width="180" height="70" rx="12"/>
+        <text class="t" x="1050" y="140">done</text>
+        <text class="t2" x="1050" y="162">完成待验收</text>
+      </g>
+      <g class="node" data-id="failed" data-tip="失败：Worker 申报失败、超过最大重试次数、或 waiting 超时。">
+        <rect class="box store" x="960" y="330" width="180" height="70" rx="12"/>
+        <text class="t" x="1050" y="360">failed</text>
+        <text class="t2" x="1050" y="382">失败</text>
+      </g>
+      <g class="node" data-id="closed" data-tip="终态。到达后回收进程组与资源租约；之后除 resource.released 外任何事件都被拒绝。">
+        <rect class="box muted core" x="1250" y="220" width="170" height="70" rx="12"/>
+        <text class="t" x="1335" y="250">closed</text>
+        <text class="t2" x="1335" y="272">终态</text>
       </g>
 
-      <path class="edge" data-from="l1d" data-to="sysd" marker-end="url(#arr)" d="M225,396 V460 H235 V500"/>
-      <text class="elabel" x="245" y="446" text-anchor="start">代码强制</text>
-      <text class="elabel small" x="245" y="468" text-anchor="start">file_ticket 校验 · 迁移表</text>
+      <path class="edge" d="M260,145 L344,145" marker-end="url(#arr)"/>
+      <text class="elabel small" x="302" y="132">就绪</text>
+      <path class="edge" d="M530,145 L614,145" marker-end="url(#arr)"/>
+      <text class="elabel small" x="572" y="132">claim + 资源</text>
+      <path class="edge" d="M710,180 L710,324" marker-end="url(#arr)"/>
+      <text class="elabel small left" x="720" y="200">need_input</text>
+      <path class="edge dash" d="M660,330 L660,184" marker-end="url(#arr)"/>
+      <text class="elabel small" x="612" y="262">answer</text>
+      <path class="edge" d="M800,145 L954,145" marker-end="url(#arr)"/>
+      <text class="elabel small" x="877" y="132">done</text>
+      <path class="edge" d="M800,166 L954,340" marker-end="url(#arr)"/>
+      <text class="elabel small" x="880" y="270">failed</text>
+      <path class="edge dash" d="M620,150 L536,150" marker-end="url(#arr)"/>
+      <text class="elabel small" x="578" y="176">Worker 死亡 → 重试</text>
+      <path class="edge dash cancel" d="M710,400 L710,470 L1335,470 L1335,296" marker-end="url(#arr)"/>
+      <text class="elabel small" x="1000" y="490">waiting_user 超时 → failed</text>
 
-      <path class="edge" data-from="l2c" data-to="wctx" marker-end="url(#arr)" d="M625,316 V460 H640 V500"/>
-      <text class="elabel" x="645" y="432" text-anchor="start">读入 system prompt</text>
-      <text class="elabel small" x="645" y="454" text-anchor="start">+ 元规则：违反 = 失败 + 停 + 报告</text>
-
-      <path class="edge" data-from="l3c" data-to="wctx" marker-end="url(#arr)" d="M1025,316 V460 H700 V500"/>
-      <text class="elabel" x="910" y="446">ticket.constraints 随任务下发</text>
-
-      <path class="edge" data-from="wctx" data-to="audit" marker-end="url(#arr)" d="M780,540 H900"/>
-      <text class="elabel small" x="840" y="528">报告兜底</text>
+      <path class="edge" d="M1140,145 L1320,215" marker-end="url(#arr)"/>
+      <text class="elabel small" x="1240" y="160">close</text>
+      <path class="edge" d="M1140,365 L1320,290" marker-end="url(#arr)"/>
+      <text class="elabel small" x="1240" y="350">close</text>
+      <path class="edge dash cancel" d="M170,180 L170,560 L1335,560 L1335,296" marker-end="url(#arr)"/>
+      <text class="elabel small" x="700" y="580">cancel（任意非终态 → closed）</text>
     </svg>
     </div>
   </div>
 </section>
 
-<!-- ════════════════════════ 5. 模型与递归 ════════════════════════ -->
+<!-- ═══════════════ 5. 核心实体与账本 ═══════════════ -->
 <section id="s5">
-  <h2>5 · 模型与递归（部署决策，不进内核）</h2>
-  <div class="desc">模型优先级：运行时覆盖 &gt; Ticket 覆盖 &gt; 项目适配器 &gt; 全局配置。子 Worker 继承父模型，三层是硬上限。</div>
+  <h2>5 · 核心实体与账本</h2>
+  <div class="desc">
+    六个实体就是内核的最小完备集——再少就不通用了。所有变化都表达为账本事件，状态是账本的投影。
+  </div>
+  <div class="cards c3">
+    <div class="card acc-hl">
+      <div class="k">Task</div>
+      <h3>任务（可递归的树）</h3>
+      <p>任意深度，叶子才是执行单元。<code>depth</code> / <code>max_depth</code> 限制最多三层。</p>
+      <ul><li>parent_id 形成任务树</li><li>含 goal / acceptance / context</li></ul>
+    </div>
+    <div class="card acc-agentd">
+      <div class="k">Attempt</div>
+      <h3>一次有界执行</h3>
+      <p>绑定 <code>session_id</code> 与 <code>worker_pid</code>。失败重试用同一 session-id，继承上下文。</p>
+      <ul><li>attempt 计数受 max_attempts 限制</li><li>进程组隔离（setpgid）</li></ul>
+    </div>
+    <div class="card acc-term">
+      <div class="k">Resource</div>
+      <h3>资源租约</h3>
+      <p><code>(kind, key, mode)</code>，内核只保证"同 key 同刻一个独占持有者"，不关心 key 是什么。</p>
+      <ul><li>key 自动加项目命名空间</li><li>冲突则排队等待</li></ul>
+    </div>
+    <div class="card acc-store">
+      <div class="k">Artifact</div>
+      <h3>产物 / 证据</h3>
+      <p><code>trace.jsonl</code>（Worker 完整事件流）与 <code>result.md</code>（最终输出）。删掉不影响正确性。</p>
+      <ul><li>放在项目目录里</li><li>供审计与复盘</li></ul>
+    </div>
+    <div class="card acc-hl">
+      <div class="k">Gate</div>
+      <h3>人工门禁</h3>
+      <p>需要人或授权方裁决的点：入档确认、need_input、max_depth 预警、waiting 超时。</p>
+      <ul><li>入档确认在工具内部弹出</li><li>模型无法伪造</li></ul>
+    </div>
+    <div class="card acc-agentd">
+      <div class="k">Ledger</div>
+      <h3>账本（唯一真相）</h3>
+      <p>append-only JSONL，<code>seq</code> 全局单调。<b>状态只由 agentd 写</b>，Worker 只能申报意图。</p>
+      <ul><li>单 goroutine 写入</li><li>可 grep、可回放、可自愈</li></ul>
+    </div>
+  </div>
+  <div style="margin-top:18px">
+    <table class="table">
+      <tr><th>账本事件（闭集）</th><th>含义</th></tr>
+      <tr><td><code>ticket.admitted</code></td><td>人工确认后入档（草稿 → 正式任务）</td></tr>
+      <tr><td><code>state.changed</code></td><td>状态迁移，只由 agentd 写，带 reason 与触发者</td></tr>
+      <tr><td><code>run.claimed</code> / <code>run.ended</code></td><td>一次执行的开始与结束（带模型、结局、用量）</td></tr>
+      <tr><td><code>question.asked</code> / <code>answer.given</code></td><td>Worker 提问与人回答（waiting_user 的载体）</td></tr>
+      <tr><td><code>resource.allocated</code> / <code>resource.released</code></td><td>资源租约获取与释放</td></tr>
+      <tr><td><code>notification.sent</code></td><td>通知记录（可统计"一天被打扰几次"）</td></tr>
+      <tr><td><code>reconcile.applied</code></td><td>启动自愈做了哪些修复</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════ 6. 约束与配置分层 ═══════════════ -->
+<section id="s6">
+  <h2>6 · 三层约束与配置分层</h2>
+  <div class="desc">
+    系统管"规则必须在场 + 结果必须交代"，不管"规则是什么"。所以换项目不必改内核——改配置文件即可。
+    <b>优先级：项目配置 &gt; 全局配置</b>；规则是<b>拼接</b>而非覆盖。
+  </div>
+  <div class="cards c3">
+    <div class="card acc-hl">
+      <div class="k">L1 · 通用内核</div>
+      <h3>系统强制</h3>
+      <p>所有项目共有，写在代码里，无法绕过。</p>
+      <ul><li>goal 非空 / acceptance ≥ 1 / context 自包含</li><li>最多三层递归</li><li>同 key 资源互斥</li><li>closed 是终态</li></ul>
+    </div>
+    <div class="card acc-term">
+      <div class="k">L2 · 项目规则</div>
+      <h3>注入，不解析</h3>
+      <p>项目自己的约束（禁主库、必须用某脚本、禁止改某目录…），以文件形式注入 Worker 的 system prompt。</p>
+      <ul><li>来自 <code>&lt;项目&gt;/.agent/config.yaml</code> 的 <code>rules</code></li><li>不同项目互不污染</li></ul>
+    </div>
+    <div class="card acc-worker">
+      <div class="k">L3 · 单任务约束</div>
+      <h3>随票下发</h3>
+      <p>只对这张票生效的约束：不许碰前端、不许 commit、必须写报告…</p>
+      <ul><li>写在 ticket 的 constraints 里</li><li>Worker 需在报告中逐条交代</li></ul>
+    </div>
+  </div>
+  <div style="margin-top:18px">
+    <table class="table">
+      <tr><th>配置项</th><th>全局 <code>~/.agent/config.yaml</code></th><th>项目 <code>&lt;项目&gt;/.agent/config.yaml</code></th><th>合并方式</th></tr>
+      <tr><td><code>model.worker</code></td><td>兜底默认</td><td>覆盖</td><td>项目优先</td></tr>
+      <tr><td><code>model.router</code></td><td>兜底默认</td><td>覆盖</td><td>项目优先</td></tr>
+      <tr><td><code>rules</code></td><td>全局规则</td><td>项目规则</td><td><b>拼接</b>（两者都生效）</td></tr>
+      <tr><td><code>waiting_timeout_minutes</code></td><td>兜底 30</td><td>覆盖</td><td>项目优先</td></tr>
+      <tr><td><code>max_attempts</code></td><td>兜底 3</td><td>覆盖</td><td>项目优先</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════════ 7. 资源互斥与递归 ═══════════════ -->
+<section id="s7">
+  <h2>7 · 资源互斥与递归</h2>
+  <div class="desc">
+    左：两个项目使用同名资源，因为 key 自动加项目命名空间，<b>互不冲突、可并行</b>。
+    右：同一项目内同名资源则真正互斥，后来的排队等待。
+  </div>
   <div class="canvas-wrap">
     <div class="zoombar"><button data-z="-">−</button><button data-z="r">⤾</button><button data-z="+">+</button></div>
     <div class="canvas">
-    <svg viewBox="0 0 1280 620" data-base="1280">
-      <g class="node" data-id="cfg" data-tip="~/.agent/config.yaml：model.router / model.worker / model.subagent。">
-        <rect class="box term" x="60" y="60" width="280" height="80" rx="12"/>
-        <text class="t" x="200" y="94">~/.agent/config.yaml</text><text class="t2" x="200" y="121">model.router · worker · subagent</text>
-      </g>
-      <g class="node" data-id="adp" data-tip="项目级适配器，可选。">
-        <rect class="box term" x="390" y="60" width="240" height="80" rx="12"/>
-        <text class="t" x="510" y="94">项目适配器覆盖</text><text class="t2" x="510" y="121">可选</text>
-      </g>
-      <g class="node" data-id="tkt" data-tip="Router 与你对话时为这张 Ticket 指定模型。">
-        <rect class="box term" x="680" y="60" width="240" height="80" rx="12"/>
-        <text class="t" x="800" y="94">Ticket 覆盖</text><text class="t2" x="800" y="121">Router 对话时决定</text>
-      </g>
-      <g class="node" data-id="run" data-tip="agent run --model，优先级最高。">
-        <rect class="box term" x="970" y="60" width="250" height="80" rx="12"/>
-        <text class="t" x="1095" y="94">运行时覆盖</text><text class="t2" x="1095" y="121">agent run --model</text>
-      </g>
-      <path class="edge" marker-end="url(#arr)" d="M340,100 H390"/>
-      <path class="edge" marker-end="url(#arr)" d="M630,100 H680"/>
-      <path class="edge" marker-end="url(#arr)" d="M920,100 H970"/>
+    <svg viewBox="0 0 1500 620" data-base="1500">
+      <!-- left: cross-project -->
+      <rect class="lane" x="40" y="30" width="700" height="550" rx="16"/>
+      <text class="lane-title" x="64" y="62">跨项目：同名资源不冲突</text>
 
-      <g class="node" data-id="mr" data-tip="Router 模型 = 配置。">
-        <rect class="box you" x="130" y="280" width="280" height="80" rx="12"/>
-        <text class="t" x="270" y="314">Router</text><text class="t2" x="270" y="341">模型 = 配置</text>
+      <g class="node" data-id="pa" data-tip="项目 A 申请 key = worktree:build">
+        <rect class="box term" x="80" y="96" width="270" height="66" rx="10"/>
+        <text class="t" x="215" y="124">项目 A 的任务</text>
+        <text class="t2" x="215" y="145">key: worktree:build</text>
       </g>
-      <g class="node" data-id="mw1" data-tip="Worker L1 模型 = ticket 指定。">
-        <rect class="box worker" x="500" y="280" width="280" height="80" rx="12"/>
-        <text class="t" x="640" y="314">Worker L1</text><text class="t2" x="640" y="341">模型 = ticket 指定</text>
+      <g class="node" data-id="pb" data-tip="项目 B 申请的是同一个逻辑名">
+        <rect class="box term" x="80" y="200" width="270" height="66" rx="10"/>
+        <text class="t" x="215" y="228">项目 B 的任务</text>
+        <text class="t2" x="215" y="249">key: worktree:build</text>
       </g>
-      <g class="node" data-id="mw2" data-tip="继承父模型，可显式覆盖。">
-        <rect class="box worker" x="870" y="280" width="280" height="80" rx="12"/>
-        <text class="t" x="1010" y="314">Worker L2</text><text class="t2" x="1010" y="341">继承父模型（可显式覆盖）</text>
+      <g class="node" data-id="ns" data-tip="入档时 agentd 自动加项目前缀，把逻辑名变成全局唯一 key。你不需要手工管命名。">
+        <rect class="box agentd core" x="410" y="140" width="290" height="86" rx="10"/>
+        <text class="t" x="555" y="168">自动加命名空间</text>
+        <text class="t2" x="555" y="190">前缀 = 项目目录路径</text>
+        <text class="t3" x="555" y="211">内核本身不懂"项目"，只认 key</text>
       </g>
-      <g class="node" data-id="mw3" data-tip="⚠️ 硬性上限：三层仍未完成 → waiting_user。">
-        <rect class="box worker core" x="870" y="440" width="280" height="80" rx="12"/>
-        <text class="t" x="1010" y="474">Worker L3</text><text class="t2" x="1010" y="501">⚠️ 硬上限</text>
+      <path class="edge" d="M350,129 L404,165" marker-end="url(#arr)"/>
+      <path class="edge" d="M350,233 L404,200" marker-end="url(#arr)"/>
+
+      <g class="node" data-id="ka" data-tip="实际 key：&lt;项目A&gt;:worktree:build">
+        <rect class="box store" x="80" y="330" width="290" height="70" rx="10"/>
+        <text class="t2" x="225" y="358">&lt;项目A&gt;:worktree:build</text>
+        <text class="t3" x="225" y="381">独占持有 ✓</text>
       </g>
-      <g class="node" data-id="myou" data-tip="模型不可用或三层未完成时，由你决定降级或等待。">
-        <rect class="box sys" x="500" y="440" width="280" height="80" rx="12"/>
-        <text class="t" x="640" y="474">👤 你</text><text class="t2" x="640" y="501">决定降级或等待</text>
+      <g class="node" data-id="kb" data-tip="实际 key：&lt;项目B&gt;:worktree:build，与 A 完全不同，因此可并行。">
+        <rect class="box store" x="410" y="330" width="290" height="70" rx="10"/>
+        <text class="t2" x="555" y="358">&lt;项目B&gt;:worktree:build</text>
+        <text class="t3" x="555" y="381">独占持有 ✓</text>
+      </g>
+      <path class="edge" d="M520,226 L225,324" marker-end="url(#arr)"/>
+      <path class="edge" d="M590,226 L555,324" marker-end="url(#arr)"/>
+
+      <g class="node" data-id="both" data-tip="结果：两个 Worker 同时跑，互不干扰。">
+        <rect class="box sys" x="80" y="450" width="620" height="86" rx="10"/>
+        <text class="t" x="390" y="480">✓ 两个 Worker 同时运行，互不干扰</text>
+        <text class="t2" x="390" y="504">不同项目即使给资源起一样的名字，也不会互相挡路</text>
       </g>
 
-      <path class="edge" data-from="run" data-to="mr" marker-end="url(#arr)" d="M1050,140 V200 H270 V280"/>
-      <path class="edge" data-from="run" data-to="mw1" marker-end="url(#arr)" d="M1140,140 V230 H640 V280"/>
-      <path class="edge" data-from="mw1" data-to="mw2" marker-end="url(#arr)" d="M780,320 H870"/>
-      <text class="elabel" data-from="mw1" data-to="mw2" x="825" y="306">拆 + 继承</text>
-      <path class="edge" data-from="mw2" data-to="mw3" marker-end="url(#arr)" d="M1010,360 V440"/>
-      <text class="elabel" data-from="mw2" data-to="mw3" x="1026" y="406" text-anchor="start">拆 + 继承</text>
-      <path class="edge dash" data-from="mw3" data-to="myou" marker-end="url(#arr)" d="M870,480 H780"/>
-      <text class="elabel small" data-from="mw3" data-to="myou" x="825" y="418">模型不可用 / 三层未完成</text>
-      <text class="elabel small" data-from="mw3" data-to="myou" x="825" y="546">→ waiting_user</text>
+      <!-- right: same project -->
+      <rect class="lane" x="780" y="30" width="680" height="550" rx="16"/>
+      <text class="lane-title" x="804" y="62">同项目：同 key 真互斥（排队）</text>
+
+      <g class="node" data-id="t1" data-tip="先到者抢到租约，开始运行。">
+        <rect class="box worker" x="820" y="96" width="280" height="66" rx="10"/>
+        <text class="t" x="960" y="124">任务 1（先到）</text>
+        <text class="t2" x="960" y="145">同一项目 · 同一 key</text>
+      </g>
+      <g class="node" data-id="t2" data-tip="后到者拿不到租约，安静地停在 ready，不消耗任何执行资源。">
+        <rect class="box muted" x="820" y="200" width="280" height="66" rx="10"/>
+        <text class="t" x="960" y="228">任务 2（后到）</text>
+        <text class="t2" x="960" y="249">同一项目 · 同一 key</text>
+      </g>
+      <g class="node" data-id="rmg" data-tip="内核只做一件事：同一 key 同一时刻只允许一个独占持有者。冲突时日志会写明被谁持有。">
+        <rect class="box agentd core" x="1140" y="140" width="280" height="86" rx="10"/>
+        <text class="t" x="1280" y="168">资源租约管理器</text>
+        <text class="t2" x="1280" y="190">同 key 同刻仅一个独占者</text>
+        <text class="t3" x="1280" y="211">冲突 → 保持 ready 排队</text>
+      </g>
+      <path class="edge" d="M1100,129 L1134,168" marker-end="url(#arr)"/>
+      <path class="edge dash" d="M1140,200 L1104,233" marker-end="url(#arr)"/>
+      <text class="elabel small" x="1122" y="228">拒绝</text>
+
+      <g class="node" data-id="q" data-tip="任务 1 结束并释放租约后，任务 2 自动拿到资源开始运行——不需要你做任何事。">
+        <rect class="box sys" x="820" y="330" width="600" height="86" rx="10"/>
+        <text class="t" x="1120" y="360">⏳ 任务 2 安静排队（ready）</text>
+        <text class="t2" x="1120" y="384">任务 1 释放租约后，任务 2 自动接续运行</text>
+      </g>
+      <path class="edge dash" d="M960,266 L960,324" marker-end="url(#arr)"/>
+
+      <g class="node" data-id="depth" data-tip="递归上限：L1 → L2 → L3。到 L3 仍未完成，系统不再允许拆分，直接转 waiting_user 让人判断。">
+        <rect class="box sys" x="820" y="450" width="600" height="86" rx="10"/>
+        <text class="t" x="1120" y="480">递归硬上限：L1 → L2 → L3</text>
+        <text class="t2" x="1120" y="504">到 L3 仍未完成 → 停下并转 waiting_user，让人判断</text>
+      </g>
     </svg>
     </div>
   </div>
 </section>
 
-<!-- ════════════════════════ 6. 里程碑 ════════════════════════ -->
-<section id="s6">
-  <h2>6 · 里程碑进度</h2>
-  <div class="desc">当前：M1 进行中。</div>
-  <div class="canvas-wrap">
-    <div class="zoombar"><button data-z="-">−</button><button data-z="r">⤾</button><button data-z="+">+</button></div>
-    <div class="canvas">
-    <svg viewBox="0 0 1280 250" data-base="1280">
-      <g class="node" data-tip="M0 ✅ 已完成"><rect class="box stat-ok" x="50" y="60" width="190" height="120" rx="14"/><text class="t" x="145" y="95">✅ M0</text><text class="t2" x="145" y="122">账本+状态机+reconcile</text><text class="t2" x="145" y="145">kill -9 自愈已验证</text></g>
-      <g class="node" data-tip="M1 🔨 进行中"><rect class="box stat-doing" x="260" y="60" width="190" height="120" rx="14"/><text class="t" x="355" y="95">🔨 M1</text><text class="t2" x="355" y="122">agentd 常驻 + socket</text><text class="t2" x="355" y="145">+ 定时器 + 假 worker</text></g>
-      <g class="node" data-tip="M2 ⬜ 未开始"><rect class="box stat-todo" x="470" y="60" width="190" height="120" rx="14"/><text class="t" x="565" y="95">⬜ M2</text><text class="t2" x="565" y="122">file_ticket 工具</text><text class="t2" x="565" y="145">+ Router 扩展</text></g>
-      <g class="node" data-tip="M3 ⬜ 未开始"><rect class="box stat-todo" x="680" y="60" width="190" height="120" rx="14"/><text class="t" x="775" y="95">⬜ M3</text><text class="t2" x="775" y="122">接 pi worker</text><text class="t2" x="775" y="145">+ 三层限制</text></g>
-      <g class="node" data-tip="M4 ⬜ 未开始"><rect class="box stat-todo" x="890" y="60" width="190" height="120" rx="14"/><text class="t" x="985" y="95">⬜ M4</text><text class="t2" x="985" y="122">ask_user + waiting_user</text><text class="t2" x="985" y="145">+ 三级通知</text></g>
-      <g class="node" data-tip="M5 ⬜ 未开始"><rect class="box stat-todo" x="1100" y="60" width="190" height="120" rx="14"/><text class="t" x="1195" y="95">⬜ M5</text><text class="t2" x="1195" y="122">资源互斥</text><text class="t2" x="1195" y="145">+ session-id 继承</text></g>
-      <path class="edge" marker-end="url(#arr)" d="M240,120 H260"/><path class="edge" marker-end="url(#arr)" d="M450,120 H470"/>
-      <path class="edge" marker-end="url(#arr)" d="M660,120 H680"/><path class="edge" marker-end="url(#arr)" d="M870,120 H890"/>
-      <path class="edge" marker-end="url(#arr)" d="M1080,120 H1100"/>
-    </svg>
+<!-- ═══════════════ 8. CLI 命令面 ═══════════════ -->
+<section id="s8">
+  <h2>8 · CLI 命令面</h2>
+  <div class="desc">日常只需一个入口 <code>sa</code>。底层二进制是 <code>agent</code>，<code>sa</code> 是它的包装 + Router 启动器。</div>
+  <table class="table">
+    <tr><th>阶段</th><th>命令</th><th>作用</th></tr>
+    <tr><td>下发</td><td><code>sa</code></td><td>打开 Router 会话，用自然语言下达意图；确认草稿后任务入档</td></tr>
+    <tr><td rowspan="4">观测</td><td><code>sa ls</code></td><td>看板：活跃任务，按项目分组（<code>--all</code> 含已关闭，<code>--closed</code> 只看已关闭）</td></tr>
+    <tr><td><code>sa show &lt;id&gt;</code></td><td>元数据：目标、验收标准、状态、深度、pid</td></tr>
+    <tr><td><code>sa follow &lt;id&gt;</code></td><td>蹲守：等到它需要你/结束时，直接把问题摆出来并给出下一步命令</td></tr>
+    <tr><td><code>sa tail &lt;id&gt; [-f]</code></td><td>实时看 Worker 具体在干什么（工具调用 / 输出）</td></tr>
+    <tr><td rowspan="3">介入</td><td><code>sa result &lt;id&gt;</code></td><td>查看最终结果（result.md 产物，回退到 trace）</td></tr>
+    <tr><td><code>sa answer &lt;id&gt; "…"</code></td><td>回答 Worker 的提问，用同 session-id 恢复执行</td></tr>
+    <tr><td><code>sa close &lt;id…&gt;</code></td><td>验收完成 / 不再关注：关闭并从看板移除（可批量，幂等）</td></tr>
+    <tr><td rowspan="4">服务</td><td><code>sa start</code> / <code>stop</code> / <code>restart</code></td><td>systemd 用户服务控制（首次 <code>sa start</code> 自动安装）</td></tr>
+    <tr><td><code>sa status</code> / <code>sa logs -f</code></td><td>服务状态 / 日志</td></tr>
+    <tr><td><code>sa enable</code> / <code>disable</code></td><td>登录自启开关</td></tr>
+    <tr><td><code>sa ping</code></td><td>健康检查</td></tr>
+  </table>
+</section>
+
+<!-- ═══════════════ 9. 已实现能力 ═══════════════ -->
+<section id="s9">
+  <h2>9 · 已实现并验证的能力</h2>
+  <div class="desc">每一条都对应一次真实运行验证，不是纸面承诺。</div>
+  <div class="cards c2">
+    <div class="card acc-agentd">
+      <h3><span class="ok">✓</span> 崩溃自愈</h3>
+      <p>kill -9 agentd 后：systemd 自动拉起 → 重放账本 → 发现孤儿 Worker → 用同 session-id 重试，不丢上下文，且不会出现死亡检测死循环。</p>
+    </div>
+    <div class="card acc-agentd">
+      <h3><span class="ok">✓</span> 状态机强制</h3>
+      <p>状态迁移查表校验，非法迁移被拒绝；closed 之后除资源释放外任何事件都不接受。</p>
+    </div>
+    <div class="card acc-worker">
+      <h3><span class="ok">✓</span> 真实 Worker 干活</h3>
+      <p>实测：联网 curl 多个 API 交叉验证后汇总成表、写文件、跑命令、逐条自检验收标准并输出控制标记。</p>
+    </div>
+    <div class="card acc-hl">
+      <h3><span class="ok">✓</span> need_input 闭环</h3>
+      <p>Worker 停下提问 → 通知你 → <code>sa answer</code> → 同 session-id 恢复继续。Worker 会拒绝编造，遇到无法满足的前提如实报告。</p>
+    </div>
+    <div class="card acc-worker">
+      <h3><span class="ok">✓</span> 递归子任务</h3>
+      <p>父 Worker 用 <code>create_subtask</code> 拆子任务 → 父等子 → 子结果回填后父用同 session-id 恢复整合。</p>
+    </div>
+    <div class="card acc-term">
+      <h3><span class="ok">✓</span> 资源互斥</h3>
+      <p>同项目同 key 排队、释放后自动接续；跨项目自动命名空间，可并行。</p>
+    </div>
+    <div class="card acc-term">
+      <h3><span class="ok">✓</span> 多项目隔离</h3>
+      <p>一个 daemon，多个项目目录；Worker 在各自项目目录运行，能直接读写项目文件，规则与配置互不污染。</p>
+    </div>
+    <div class="card acc-store">
+      <h3><span class="ok">✓</span> 可审计</h3>
+      <p>账本 append-only、零截断行；任意状态都能从事件流复盘。trace 与 result 作为证据留在项目目录。</p>
     </div>
   </div>
 </section>
 
 </main>
 
-<!-- global defs: arrow markers -->
-<svg width="0" height="0" style="position:absolute">
-  <defs>
-    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#7c8db0"/>
-    </marker>
-    <marker id="arrS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#7c8db0"/>
-    </marker>
-    <marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#ff6b6b"/>
-    </marker>
-  </defs>
-</svg>
-
 <div id="tip"></div>
 
 <script>
-/* ---------- sequence diagram: generate events ---------- */
+/* ---------- sequence diagram: generate heads / lifelines / events ---------- */
 (function(){
-  const svg = document.querySelector('#s2 svg');
+  const svg = document.querySelector('#s3 svg');
+  if(!svg) return;
   const NS = 'http://www.w3.org/2000/svg';
-  const P = {U:105, R:285, D:515, L:735, W:945, S:1125};
-  const evts = [
-    ['U','R','帮我做 X'],
-    ['R','U','多轮对话 → 展示草稿 Ticket',1],
-    ['U','R','「可以」'],
-    ['R','D','file_ticket(spec)  [unix socket]'],
-    ['D','D','校验 5 条硬约束（goal / acceptance / context / depth / model）'],
-    ['D','L','ticket.admitted'],
-    ['D','R','{ticket_id: T-xxx}',1],
-    ['R','U','「已入档 T-xxx」 → /new 清空上下文',1],
-    ['D','D','调度循环 · 资源互斥检查（同 key 独占）'],
-    ['D','L','state.changed: pending→ready'],
-    ['D','W','spawn: pi --mode json -p --session-id T-xxx'],
-    ['D','L','run.claimed + ready→running'],
-    ['W','D','need_input("问题 A？")'],
-    ['D','L','question.asked + →waiting_user'],
-    ['D','U','🔔 critical 通知'],
-    ['U','D','agent answer T-xxx "答案"'],
-    ['D','L','answer.given + →running'],
-    ['D','W','同 session-id 重新拉起，喂入答案'],
-    ['W','D','创建子 Ticket（depth+1）'],
-    ['D','L','ticket.admitted（子）'],
-    ['D','S','spawn 子 Worker（新 session · 继承父模型）'],
-    ['S','D','子任务 done',1],
-    ['D','L','state.changed（子）'],
-    ['D','D','租约扫描发现 pid 不存在'],
-    ['D','L','state→ready（worker_died_auto_retry）'],
-    ['D','W','新 spawn，同一 session-id 继承上下文'],
-    ['W','D','done（验收自检 + 约束处理说明）'],
-    ['D','L','run.ended + →done'],
-    ['D','U','🔔 quiet 通知'],
-    ['U','D','验收 → agent close T-xxx'],
-    ['D','D','两阶段回收（标记→等待→SIGTERM→SIGKILL）'],
-    ['D','L','resource.released + →closed'],
+  const actors = [
+    ['U','👤 你',        105],
+    ['R','Router',       300],
+    ['D','agentd',       520],
+    ['L','账本',         745],
+    ['W','Worker',       960],
+    ['S','子 Worker',    1150],
   ];
-  const y0 = 128, step = 35;
+  const P = {};
+  actors.forEach(([k,,x])=>{ P[k]=x; });
+
+  const heads = document.getElementById('heads');
+  const lifelines = document.getElementById('lifelines');
+  const evLayer = document.getElementById('events');
+
+  actors.forEach(([k,label,x])=>{
+    const g = document.createElementNS(NS,'g');
+    g.setAttribute('class','node');
+    g.dataset.id = 'seq-'+k;
+    const cls = k==='U' ? 'you' : (k==='R' ? 'term' : (k==='D' ? 'agentd' : (k==='L' ? 'store' : 'worker')));
+    const r = document.createElementNS(NS,'rect');
+    r.setAttribute('x', x-72); r.setAttribute('y', 30);
+    r.setAttribute('width', 144); r.setAttribute('height', 52);
+    r.setAttribute('rx', 10); r.setAttribute('class','box '+cls);
+    g.appendChild(r);
+    const t = document.createElementNS(NS,'text');
+    t.setAttribute('class','t'); t.setAttribute('x',x); t.setAttribute('y',62);
+    t.textContent = label; g.appendChild(t);
+    heads.appendChild(g);
+
+    const ln = document.createElementNS(NS,'line');
+    ln.setAttribute('class','life');
+    ln.setAttribute('x1',x); ln.setAttribute('y1',86);
+    ln.setAttribute('x2',x); ln.setAttribute('y2',1330);
+    lifelines.appendChild(ln);
+  });
+
+  const evts = [
+    ['U','R','「帮我做 X」'],
+    ['R','U','多轮对话澄清：缺什么就问什么',1],
+    ['R','D','file_ticket(spec)　（工具内弹人工确认）'],
+    ['D','D','硬校验：goal / acceptance / context / depth / 模型'],
+    ['D','L','ticket.admitted'],
+    ['R','U','「已入档 T-xxx」 + 下一步命令',1],
+    ['D','D','调度：先抢资源租约（同 key 独占）'],
+    ['D','L','state.changed　pending → ready → running'],
+    ['D','W','spawn：pi --mode json -p --session-id'],
+    ['W','D','（并行）工具调用：bash / read / write'],
+    ['W','D','need_input：「需要你决定 X」'],
+    ['D','L','question.asked　→ waiting_user'],
+    ['D','U','🔔 interrupt 通知'],
+    ['U','D','sa answer T-xxx "…"'],
+    ['D','L','answer.given　→ running'],
+    ['D','W','同 session-id 恢复，喂入你的回答'],
+    ['W','D','create_subtask：拆出子任务'],
+    ['D','L','ticket.admitted（子，depth+1）'],
+    ['D','S','spawn 子 Worker（独立 session · 继承父模型）'],
+    ['S','D','子任务完成',1],
+    ['D','L','子 → done'],
+    ['D','D','父 Worker 已退出且子全完成 → 读回子结果'],
+    ['D','W','同 session-id 恢复父 Worker，喂入子结果'],
+    ['W','D','done（验收自检 + 约束处理说明）'],
+    ['D','L','run.ended + result.md　→ done'],
+    ['D','U','🔔 quiet 通知'],
+    ['U','D','sa result / sa follow / sa tail'],
+    ['U','D','sa close T-xxx（验收完成）'],
+    ['D','D','两阶段回收：SIGTERM → SIGKILL 进程组 + 释放租约'],
+    ['D','L','resource.released　→ closed（终态）'],
+    ['D','D','若 Worker 意外死亡：租约过期检测 → 回 ready'],
+    ['D','L','state.changed　worker_died_auto_retry'],
+    ['D','W','重试：同一 session-id 继承上下文'],
+  ];
+
+  const y0 = 128, step = 36;
   evts.forEach((e,i)=>{
     const [f,t,label,ret] = e, y = y0 + i*step, n = i+1;
     const g = document.createElementNS(NS,'g');
     if(f===t){
       const x = P[f];
       const p = document.createElementNS(NS,'path');
-      p.setAttribute('d',`M${x+8},${y} C ${x+72},${y-8} ${x+72},${y+20} ${x+8},${y+22}`);
+      p.setAttribute('d',`M${x+8},${y} C ${x+78},${y-9} ${x+78},${y+21} ${x+8},${y+24}`);
       p.setAttribute('class','edge'+(ret?' dash':''));
       p.setAttribute('marker-end','url(#arr)');
       g.appendChild(p);
       const tx = document.createElementNS(NS,'text');
-      tx.setAttribute('class','elabel'); tx.setAttribute('x',x+82); tx.setAttribute('y',y+13); tx.setAttribute('text-anchor','start');
-      tx.textContent = label; g.appendChild(tx);
+      tx.setAttribute('class','elabel'); tx.setAttribute('x',x+86); tx.setAttribute('y',y+14);
+      tx.setAttribute('text-anchor','start'); tx.textContent = label; g.appendChild(tx);
       const nm = document.createElementNS(NS,'text');
-      nm.setAttribute('class','num'); nm.setAttribute('x',x-16); nm.setAttribute('y',y+5); nm.setAttribute('text-anchor','end');
-      nm.textContent = n; g.appendChild(nm);
+      nm.setAttribute('class','num'); nm.setAttribute('x',x-18); nm.setAttribute('y',y+5);
+      nm.setAttribute('text-anchor','end'); nm.textContent = n; g.appendChild(nm);
     } else {
       const x1 = P[f], x2 = P[t];
       const p = document.createElementNS(NS,'path');
-      p.setAttribute('d',`M${x1},${y} L${x2-(x2>x1?7:-7)},${y}`);
+      p.setAttribute('d',`M${x1},${y} L${x2-(x2>x1?8:-8)},${y}`);
       p.setAttribute('class','edge'+(ret?' dash':''));
       p.setAttribute('marker-end','url(#arr)');
+      p.dataset.from = f; p.dataset.to = t;
       g.appendChild(p);
       const mid = (x1+x2)/2;
       const nm = document.createElementNS(NS,'text');
-      nm.setAttribute('class','num'); nm.setAttribute('x',mid); nm.setAttribute('y',y-8); nm.setAttribute('text-anchor','middle');
-      nm.textContent = n; g.appendChild(nm);
+      nm.setAttribute('class','num'); nm.setAttribute('x',mid); nm.setAttribute('y',y-7);
+      nm.setAttribute('text-anchor','middle'); nm.textContent = n; g.appendChild(nm);
       const tx = document.createElementNS(NS,'text');
-      tx.setAttribute('class','elabel'); tx.setAttribute('x',mid); tx.setAttribute('y',y+16); tx.setAttribute('text-anchor','middle');
-      tx.textContent = label; g.appendChild(tx);
+      tx.setAttribute('class','elabel'); tx.setAttribute('x',mid); tx.setAttribute('y',y+17);
+      tx.textContent = label; tx.dataset.from = f; tx.dataset.to = t;
+      g.appendChild(tx);
     }
-    svg.appendChild(g);
+    evLayer.appendChild(g);
   });
 })();
 
@@ -622,7 +900,7 @@ document.addEventListener('click', ev=>{
   selected = id;
   const scope = node.closest('svg');
   const linked = new Set([id]);
-  scope.querySelectorAll('.edge,.elabel').forEach(e=>{
+  scope.querySelectorAll('.edge,.elabel,.life').forEach(e=>{
     if(e.dataset.from===id || e.dataset.to===id){
       e.classList.add('hl');
       linked.add(e.dataset.from); linked.add(e.dataset.to);

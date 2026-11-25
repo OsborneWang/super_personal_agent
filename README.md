@@ -25,7 +25,7 @@
 ### 1. 构建并安装到 PATH
 
 ```bash
-cd /path/to/super_personal_agent
+cd ~/super_personal_agent
 go build -o agent .
 
 # 把 agent 和 sa 装进 PATH（符号链接，重build自动生效）
@@ -97,12 +97,12 @@ daemon 是全局唯一的，你可以在**任意多个项目目录**开 pi 发�
 在项目目录下放 `.agent/config.yaml`：
 
 ```yaml
-# <project>/.agent/config.yaml
+# <你的项目>/.agent/config.yaml
 model:
   worker: ""          # 这个项目 Worker 用的模型（覆盖全局）
 rules:
-  - <project>/AGENTS.md      # 项目规则，注入该项目所有 Worker
-  - <project>/MODULE-CONVENTIONS.md
+  - <你的项目>/AGENTS.md              # 项目规则，注入该项目所有 Worker
+  - <你的项目>/CONVENTIONS.md
 waiting_timeout_minutes: 60               # 这个项目 waiting_user 超时时间
 max_attempts: 3                            # worker 死亡重试上限
 ```

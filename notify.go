@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
+	"os/user"
 )
 
 // notify sends a desktop notification with dedup via the ledger
@@ -28,6 +30,18 @@ func (d *Daemon) notify(t *Ticket, level string, kind string, message string) {
 	}()
 
 	d.log("notify[%s] %s", level, message)
+}
+
+// currentUser returns the OS user as "user:<name>" for ledger attribution.
+// Falls back to $USER, then "user" if neither is available.
+func currentUser() string {
+	if u, err := user.Current(); err == nil && u.Username != "" {
+		return "user:" + u.Username
+	}
+	if v := os.Getenv("USER"); v != "" {
+		return "user:" + v
+	}
+	return "user"
 }
 
 // helper for future use

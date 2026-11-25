@@ -191,7 +191,7 @@ func (s *Server) cmdTransition(req *Request) Response {
 	if id == "" || toStr == "" {
 		return Response{Success: false, Error: "missing id or to"}
 	}
-	err := s.daemon.sm.TransitionTicket(id, State(toStr), reason, Actor{Actor: "user", Who: "user:<name>"})
+	err := s.daemon.sm.TransitionTicket(id, State(toStr), reason, Actor{Actor: "user", Who: currentUser()})
 	if err != nil {
 		return Response{Success: false, Error: err.Error()}
 	}

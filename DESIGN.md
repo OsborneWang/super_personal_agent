@@ -15,7 +15,7 @@
 | J2 | **状态只由 `agentd` 写；pi 只能"申报意图"** | 单写者 + 代码校验 = 模型幻觉不污染状态 |
 | J3 | **调度骨架不给 LLM，认知工作全给 LLM** | 定时器、租约、进程回收必须确定；判断、拆分、重试策略交给 pi |
 
-**通用性检验**：同一内核、零代码改动，能同时跑「查今天的天气」（深度1）和「<big-change> S0→S3 + 三个仓 + 一个隔离库」（深度2，含跨任务依赖）。
+**通用性检验**：同一内核、零代码改动，能同时跑「查今天的天气」（深度1）和「一个跨多仓、分多阶段、带隔离环境的大型改动」（深度2~3，含跨任务依赖）。
 
 ---
 
@@ -96,7 +96,7 @@ max_depth: 3  # 硬限制，不可超过
 | 层 | 例子 | 属于谁 | 内核处理 |
 |---|---|---|---|
 | **L1 通用内核** | 任务必须有 goal；最多三层递归；同 key 资源互斥 | 所有项目共有 | ✅ 强制 |
-| **L2 项目规则** | <project> 禁主库、必须用 `scripts/slug`、禁止改冻结区 | 单个项目 | ❌ 不解析，只注入 |
+| **L2 项目规则** | 例如：禁写生产库、必须用某个脚本、禁止改某目录 | 单个项目 | ❌ 不解析，只注入 |
 | **L3 单任务约束** | 这张 ticket 不许碰前端、不许 commit、必须写报告 | 单个任务 | ❌ 不解析，只注入 |
 
 ### 机制
@@ -152,23 +152,23 @@ Worker 可以在拆子任务时显式覆盖，但覆盖必须写进子 ticket �
 ```yaml
 resources:
   - kind: worktree
-    key: <project>:worktree:<big-change>
+    key: <project>:worktree:build
     mode: exclusive
   - kind: port
-    key: <project>:port:8060
+    key: <project>:port:8010
     mode: exclusive
   - kind: port
-    key: <project>:port:8061
+    key: <project>:port:8011
     mode: exclusive
 ```
 
 **内核只负责"同一 key 同一时刻只有一个持有者"，不关心 worktree 是什么。**
 
-- <project> 适配器提供 `worktree` 和 `port` 两类资源
+- 某个项目适配器提供 `worktree` 和 `port` 两类资源
 - 换个项目适配器提供 `gpu` / `test-vm` / `license`
 - 内核一行不改
 
-**资源 key 带命名空间**：`<project>:worktree:<big-change>`，不同项目资源不撞名。
+**资源 key 带命名空间**：`<project>:worktree:build`，不同项目资源不撞名。
 
 ---
 
@@ -256,7 +256,7 @@ max_depth: 3  # 硬限制
 
 resources:
   - kind: worktree
-    key: <project>:worktree:<big-change>
+    key: <project>:worktree:build
     mode: exclusive
 
 model:

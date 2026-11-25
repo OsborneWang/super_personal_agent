@@ -150,7 +150,7 @@ func (d *Daemon) AdmitTicket(t *Ticket) error {
 	}
 	t.State = StatePending
 
-	_, err := d.ledger.Append("ticket.admitted", t.ID, Actor{Actor: "user", Who: "user:<name>"}, map[string]interface{}{
+	_, err := d.ledger.Append("ticket.admitted", t.ID, Actor{Actor: "user", Who: currentUser()}, map[string]interface{}{
 		"spec": t,
 	})
 	if err != nil {
@@ -201,14 +201,14 @@ func (d *Daemon) AnswerTicket(ticketID string, text string) error {
 	}
 
 	// Record the answer
-	if _, err := d.ledger.Append("answer.given", ticketID, Actor{Actor: "user", Who: "user:<name>"}, map[string]interface{}{
+	if _, err := d.ledger.Append("answer.given", ticketID, Actor{Actor: "user", Who: currentUser()}, map[string]interface{}{
 		"text": text,
 	}); err != nil {
 		return fmt.Errorf("record answer: %w", err)
 	}
 
 	// Transition back to running
-	if err := d.sm.TransitionTicket(ticketID, StateRunning, "user_answered", Actor{Actor: "user", Who: "user:<name>"}); err != nil {
+	if err := d.sm.TransitionTicket(ticketID, StateRunning, "user_answered", Actor{Actor: "user", Who: currentUser()}); err != nil {
 		return err
 	}
 
@@ -289,7 +289,7 @@ func (d *Daemon) CancelTicket(id string) error {
 	if t.State == StateClosed {
 		return nil // idempotent: already closed is fine
 	}
-	if err := d.sm.TransitionTicket(id, StateClosed, "user_cancel", Actor{Actor: "user", Who: "user:<name>"}); err != nil {
+	if err := d.sm.TransitionTicket(id, StateClosed, "user_cancel", Actor{Actor: "user", Who: currentUser()}); err != nil {
 		return err
 	}
 	d.closeTicket(t)

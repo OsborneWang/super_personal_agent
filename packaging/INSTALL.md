@@ -5,7 +5,7 @@
 ## 一次性安装
 
 ```bash
-cd /path/to/super_personal_agent
+cd ~/super_personal_agent
 
 # 1. 构建二进制
 go build -o agent .
@@ -45,4 +45,4 @@ sa --help            # 命令一览
 ## 注意
 
 - 这两个扩展是**软链接**进 `~/.pi/agent/extensions/` 的，所以改仓库里的代码即刻生效，无需重复安装。
-- `sa` 依赖 `packaging/router-system-prompt.txt`（Router 角色提示词，定义"传话筒"行为）。该文件在仓库里，`sa` 通过 `SA_HOME` 定位（默认 `/path/to/super_personal_agent`）。如果你把仓库放在别的位置，需要设置 `SA_HOME` 环境变量。
+- `sa` 依赖 `packaging/router-system-prompt.txt`（Router 角色提示词，定义"传话筒"行为）。`sa` 会从脚本自身位置推导仓库根目录，因此把仓库放在任何位置都能直接工作；如需覆盖可用 `SA_HOME` 环境变量。

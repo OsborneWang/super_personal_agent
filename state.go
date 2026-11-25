@@ -77,7 +77,7 @@ type Ticket struct {
 // Kind and Key are opaque to the kernel; Mode is exclusive|shared.
 type ResourceReq struct {
 	Kind string `json:"kind"`           // worktree | port | gpu | ...
-	Key  string `json:"key"`            // e.g. <project>:worktree:<big-change>
+	Key  string `json:"key"`            // e.g. <project-path>:worktree:build
 	Mode string `json:"mode,omitempty"` // exclusive (default) | shared
 }
 
