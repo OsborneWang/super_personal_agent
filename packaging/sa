@@ -13,13 +13,16 @@
 #    sa                        打开 Router 会话，用自然语言下发任务
 #
 #  ▶ 查看任务（Ticket）
-#    sa ls                     看板：所有任务状态，按项目分组
+#    sa ls                     看板：活跃任务（默认隐藏已关闭的）
+#    sa ls --all               看板：包含已关闭的
+#    sa ls --closed            只看已关闭的
 #    sa show <id>              单张任务的完整细节（目标/状态/深度/pid 等）
 #    sa result <id>            查看任务的最终结果（Worker 的产出）
 #    sa follow <id>            蹲守：等到它需要你/结束时，直接告诉你要敲什么命令
 #    sa tail <id> [-f]         实时看 Worker 具体在干什么（工具调用/输出/-f 跟流）
 #    sa answer <id> <回答>      回答 Worker 抛给你的问题（任务卡在 waiting_user 时）
-#    sa cancel <id>            强制取消一张任务（回收进程组 + 资源）
+#    sa close <id> [<id>...]   验收完成/不再关注：关闭并从看板移除（可批量）
+#    sa cancel <id>            同 close（中止一张正在跑的任务，回收进程组+资源）
 #
 #  ▶ 后台服务管理（systemd）
 #    sa status                 服务状态（= systemctl --user status super-agent）
@@ -56,11 +59,11 @@ case "$1" in
   start|stop|restart|status|logs|enable|disable|install|uninstall)
     exec agent daemon "$@"
     ;;
-  ls|show|result|follow|tail|answer|cancel|ping|test|init|reconcile)
+  ls|show|result|follow|tail|answer|close|cancel|ping|test|init|reconcile)
     exec agent "$@"
     ;;
   -h|--help|help)
-    sed -n '2,52p' "$0"
+    sed -n '2,55p' "$0"
     exit 0
     ;;
 esac

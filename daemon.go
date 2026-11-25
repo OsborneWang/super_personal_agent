@@ -287,7 +287,7 @@ func (d *Daemon) CancelTicket(id string) error {
 		return err
 	}
 	if t.State == StateClosed {
-		return fmt.Errorf("ticket %s already closed", id)
+		return nil // idempotent: already closed is fine
 	}
 	if err := d.sm.TransitionTicket(id, StateClosed, "user_cancel", Actor{Actor: "user", Who: "user:<name>"}); err != nil {
 		return err

@@ -127,13 +127,15 @@ rules: []           # 全局规则，所有项目的 Worker 都会注入
 | `sa start` / `stop` / `restart` | 后台服务控制（systemd） |
 | `sa status` / `sa logs [-f]` | 服务状态 / 日志 |
 | `sa enable` / `sa uninstall` | 登录自启 / 卸载 |
-| `sa ls` | **看板**：所有 Ticket 状态，按项目分组 |
+| `sa ls` | **看板**：活跃 Ticket（默认隐藏已关闭的），按项目分组 |
+| `sa ls --all` / `--closed` | 包含已关闭 / 只看已关闭 |
 | `sa result <id>` | **查看任务最终结果**（Worker 的产出） |
 | `sa show <id>` | 单张 Ticket 的元数据细节 |
 | `sa follow <id>` | 蹲守一张 Ticket：等它需要你时**直接把问题摆出来 + 给出回答命令**，结束时报告结局和查看命令 |
 | `sa tail <id> [-f]` | 实时看 Worker 具体在干什么（工具调用/输出，`-f` 持续跟流） |
 | `sa answer <id> <text>` | 回答 Worker 抛给你的问题 |
-| `sa cancel <id>` | 强制终止一张 Ticket（回收进程组 + 资源） |
+| `sa close <id...>` | **验收完成/不再关注**：关闭并从看板移除，支持批量 |
+| `sa cancel <id>` | 同 close（中止正在跑的任务，回收进程组 + 资源） |
 | `sa ping` | 健康检查（服务是否在跑） |
 | `sa --help` | sa 自身说明（含 sa/pi 区别） |
 

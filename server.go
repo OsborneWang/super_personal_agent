@@ -121,6 +121,9 @@ func (s *Server) dispatch(req *Request) Response {
 	case "answer":
 		return s.cmdAnswer(req)
 
+	case "close":
+		return s.cmdClose(req)
+
 	case "cancel":
 		return s.cmdCancel(req)
 
@@ -216,6 +219,19 @@ func (s *Server) cmdAnswer(req *Request) Response {
 		return Response{Success: false, Error: err.Error()}
 	}
 	return Response{Success: true}
+}
+
+// cmdClose is the user-facing "验收完成/不再关注" action: move to closed and
+// reclaim resources. Idempotent.
+func (s *Server) cmdClose(req *Request) Response {
+	id, _ := req.Args["id"].(string)
+	if id == "" {
+		return Response{Success: false, Error: "missing id"}
+	}
+	if err := s.daemon.CancelTicket(id); err != nil {
+		return Response{Success: false, Error: err.Error()}
+	}
+	return Response{Success: true, Data: map[string]interface{}{"closed": id}}
 }
 
 func (s *Server) cmdCancel(req *Request) Response {

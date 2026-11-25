@@ -39,7 +39,10 @@ func main() {
 	case "ping":
 		err = cmdClient("ping", nil)
 	case "ls":
-		err = cmdList()
+		err = cmdList(listOpts{
+			All:    hasFlag("--all", "-a"),
+			Closed: hasFlag("--closed", "-c"),
+		})
 	case "show":
 		err = cmdClient("show", map[string]interface{}{"id": arg(2)})
 	case "admit":
@@ -58,8 +61,10 @@ func main() {
 			}
 		}
 		err = cmdTail(arg(2), follow)
+	case "close":
+		err = cmdCloseMany(os.Args[2:])
 	case "cancel":
-		err = cmdClient("cancel", map[string]interface{}{"id": arg(2)})
+		err = cmdCloseMany(os.Args[2:])
 	default:
 		log.Fatalf("Unknown command: %s", command)
 	}
@@ -279,8 +284,65 @@ func prettyPrint(v interface{}) {
 	fmt.Println(string(data))
 }
 
+// hasFlag reports whether any of the given flags appear in os.Args
+func hasFlag(names ...string) bool {
+	for _, a := range os.Args[1:] {
+		for _, n := range names {
+			if a == n {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// listOpts controls which tickets the board shows
+type listOpts struct {
+	All    bool // include closed
+	Closed bool // show only closed
+}
+
+// cmdCloseMany closes one or more tickets (验收完成/不再关注)
+func cmdCloseMany(ids []string) error {
+	// Drop flags
+	var real []string
+	for _, id := range ids {
+		if strings.HasPrefix(id, "-") {
+			continue
+		}
+		real = append(real, id)
+	}
+	if len(real) == 0 {
+		return fmt.Errorf("usage: sa close <id> [<id> ...]")
+	}
+
+	client, err := NewClient(sockPath())
+	if err != nil {
+		return fmt.Errorf("connect to agentd: %w", err)
+	}
+	defer client.Close()
+
+	var failed int
+	for _, id := range real {
+		resp, err := client.Call("close", map[string]interface{}{"id": id})
+		if err != nil {
+			fmt.Printf("  ✗ %-20s %v\n", id, err)
+			failed++
+			continue
+		}
+		if !resp.Success {
+			fmt.Printf("  ✗ %-20s %s\n", id, resp.Error)
+			failed++
+			continue
+		}
+		fmt.Printf("  ✓ %-20s closed\n", id)
+	}
+	fmt.Printf("\n%d closed, %d failed\n", len(real)-failed, failed)
+	return nil
+}
+
 // cmdList prints a management view of all tickets, grouped by project
-func cmdList() error {
+func cmdList(opts listOpts) error {
 	client, err := NewClient(sockPath())
 	if err != nil {
 		return fmt.Errorf("connect to agentd (is it running? try 'agent daemon'): %w", err)
@@ -301,6 +363,31 @@ func cmdList() error {
 
 	if len(tickets) == 0 {
 		fmt.Println("no tickets")
+		return nil
+	}
+
+	// Filter by requested view
+	filtered := tickets[:0]
+	for _, t := range tickets {
+		isClosed := t.State == StateClosed
+		if opts.Closed {
+			if isClosed {
+				filtered = append(filtered, t)
+			}
+			continue
+		}
+		if opts.All || !isClosed {
+			filtered = append(filtered, t)
+		}
+	}
+	tickets = filtered
+
+	if len(tickets) == 0 {
+		if opts.Closed {
+			fmt.Println("no closed tickets")
+		} else {
+			fmt.Println("no tickets (use 'sa ls --all' to include closed)")
+		}
 		return nil
 	}
 
