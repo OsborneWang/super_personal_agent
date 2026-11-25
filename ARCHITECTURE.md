@@ -208,16 +208,20 @@ flowchart TB
 
 ---
 
-## 6. 里程碑进度
+## 6. 已实现能力
 
 ```mermaid
 flowchart LR
-    M0["✅ M0<br/>账本+状态机+reconcile<br/>kill -9 自愈已验证"]
-    M1["🔨 M1<br/>agentd 常驻+socket<br/>+定时器+假worker"]
-    M2["⬜ M2<br/>file_ticket 工具<br/>+ Router 扩展"]
-    M3["⬜ M3<br/>接 pi worker<br/>+三层限制"]
-    M4["⬜ M4<br/>ask_user+waiting_user<br/>+三级通知"]
-    M5["⬜ M5<br/>资源互斥<br/>+session-id 继承"]
+    A["✅ 账本 + 状态机<br/>重放 + reconcile<br/>kill -9 自愈"]
+    B["✅ agentd 常驻<br/>socket + 定时器<br/>资源租约"]
+    C["✅ Router 纯分诊<br/>file_ticket + 人工确认"]
+    D["✅ 真实 Worker<br/>bash / 联网 / 自检验收"]
+    E["✅ need_input 闭环<br/>answer 后同 session 续跑"]
+    F["✅ 递归子任务<br/>父等子 + 子结果回填"]
+    G["✅ 多项目隔离<br/>配置分层 / 规则隔离"]
+    H["✅ systemd 托管<br/>崩溃自动拉起"]
 
-    M0 --> M1 --> M2 --> M3 --> M4 --> M5
+    A --> B --> C --> D --> E --> F --> G --> H
 ```
+
+详细交互版架构图：**[architecture.html](architecture.html)**
