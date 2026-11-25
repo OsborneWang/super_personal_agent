@@ -23,7 +23,11 @@ func main() {
 	var err error
 	switch command {
 	case "daemon":
-		err = cmdDaemon()
+		var rest []string
+		if len(os.Args) > 3 {
+			rest = os.Args[3:]
+		}
+		err = daemonSubcommand(arg(2), rest)
 	case "init":
 		err = cmdInit()
 	case "test":
@@ -56,8 +60,14 @@ func main() {
 func usage() {
 	fmt.Println("super_personal_agent")
 	fmt.Println()
-	fmt.Println("Daemon:")
-	fmt.Println("  agent daemon              Start agentd (foreground)")
+	fmt.Println("Daemon (systemd user service):")
+	fmt.Println("  agent daemon start          Start in background (auto-installs)")
+	fmt.Println("  agent daemon stop           Stop")
+	fmt.Println("  agent daemon status         Show status")
+	fmt.Println("  agent daemon logs [-f]      Show/follow logs")
+	fmt.Println("  agent daemon enable         Start on login")
+	fmt.Println("  agent daemon                Run in foreground (debug)")
+	fmt.Println("  agent daemon uninstall      Remove the service")
 	fmt.Println()
 	fmt.Println("CLI (talks to running agentd via socket):")
 	fmt.Println("  agent ping                Health check")
