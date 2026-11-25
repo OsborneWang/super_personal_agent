@@ -1,0 +1,52 @@
+#!/bin/sh
+# sa — super-agent Router session
+#
+# `sa` launches pi as the ROUTER of the super_personal_agent system:
+# the file_ticket tool is available, tickets you confirm enter the daemon,
+# and Workers execute them in the background.
+#
+# Plain `pi` stays a normal coding assistant with no task system.
+#
+# Usage:
+#   sa [pi-args...]        interactive Router session (needs sa daemon running)
+#   sa status              -> sa daemon status (systemd)
+#   sa logs                -> sa daemon logs
+#   sa ls / follow / ...   -> sa daemon CLI (see `agent --help`)
+#
+# Distinguish:
+#   sa   = talk to the Router, work enters the super-agent system
+#   pi   = plain coding assistant, nothing is scheduled or tracked
+
+# Pass through daemon management / CLI convenience subcommands
+case "$1" in
+  start|stop|restart|status|logs|enable|disable|install|uninstall)
+    exec agent daemon "$@"
+    ;;
+  ls|show|follow|answer|cancel|ping|test|init|reconcile)
+    exec agent "$@"
+    ;;
+  -h|--help|help)
+    sed -n '2,30p' "$0"
+    exit 0
+    ;;
+esac
+
+# Ensure the daemon is up; if not, offer to start it
+if ! agent ping >/dev/null 2>&1; then
+  echo "[sa] super-agent daemon is not running."
+  printf "[sa] start it now via systemd? [Y/n] "
+  read -r ans
+  case "$ans" in
+    n|N|no|NO)
+      echo "[sa] aborted. Run 'sa start' first, or 'agent daemon' in a terminal."
+      exit 1
+      ;;
+    *)
+      agent daemon start || exit 1
+      ;;
+  esac
+fi
+
+# Mark this session as a super-agent Router session, then launch pi
+export SA_MODE=1
+exec pi "$@"

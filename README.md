@@ -22,12 +22,21 @@
 
 ## 启动服务（三步）
 
-### 1. 构建
+### 1. 构建并安装到 PATH
 
 ```bash
 cd /path/to/super_personal_agent
 go build -o agent .
+
+# 把 agent 装进 PATH（符号链接，重build自动生效；sa 脚本依赖它）
+ln -sf "$PWD/agent" ~/.local/bin/agent
+# sa Router 启动器（已存在于 ~/.local/bin/sa；没有的话见下文）
 ```
+
+> `sa` 和 `agent` 都放在 `~/.local/bin/`（该目录已在 PATH）。`agent` 用符号链接指向 build 产物，所以你每次 `go build` 后无需重新安装。
+>
+> 如果 `~/.local/bin/sa` 不存在，把仓库里的 `sa` 启动器链接过去：
+> `ln -sf "$PWD/packaging/sa" ~/.local/bin/sa`（或按下方"sa 启动器"一节创建）。
 
 ### 2. 启动后台服务（一次性，systemd 托管）
 
